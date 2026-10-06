@@ -1,0 +1,374 @@
+/* =========================================================
+   EXPERIENCIA — capa inmersiva de El Tío Sam Chifa
+   Se carga DESPUÉS de style.css. El motor scroll-world inyecta
+   sus estilos en @layer sw, así que todo lo de aquí (sin capa)
+   gana sin necesidad de !important.
+   ========================================================= */
+
+/* ---- Tema oscuro del motor (fondo = fondo de los stills) ---- */
+:root,
+.sw-root {
+  --sw-bg: #2B0A0A;
+  --sw-ink: #F8EBAB;
+  --sw-ink-soft: rgba(248, 235, 171, .68);
+  --sw-accent: #F7D87F;
+  --sw-font-display: 'Fraunces', Georgia, serif;
+  --sw-font-body: 'Work Sans', system-ui, sans-serif;
+}
+
+/* Lenis necesita scroll-behavior:auto (style.css trae smooth) */
+html { scroll-behavior: auto; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body.xp {
+  padding-top: 0;
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 200;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: .85rem;
+}
+.skip-link:focus { top: 76px; }
+
+/* El wrapper fijo del menú crea su propio contexto de apilamiento (z 40):
+   lo subimos por encima de la carta (.after-world, z 70) */
+.xp .staggered-menu-wrapper.fixed-wrapper { z-index: 90; }
+
+/* Cabecera del menú: degradado en vez de backdrop-filter
+   (el blur sobre vídeo scrubbeado cuesta FPS en móvil) */
+.xp .staggered-menu-header {
+  background: linear-gradient(rgba(43, 10, 10, .78), rgba(43, 10, 10, 0));
+  border-bottom: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* ---------------------------------------------------------
+   Ajustes del motor scroll-world para el tema oscuro
+--------------------------------------------------------- */
+.sw-topbar { display: none; }               /* usamos la cabecera del sitio */
+.sw-scrollbar { z-index: 101; }             /* barra de progreso sobre la cabecera */
+.sw-copylayer > .sw-copy:first-child { display: none; }  /* la escena 1 la cubre el hero */
+
+.sw-copy__tags li {
+  color: var(--cream);
+  background: rgba(248, 235, 171, .07);
+  border: 1px solid color-mix(in srgb, var(--sw-accent) 45%, transparent);
+}
+.sw-btn--primary { background: var(--gold); color: var(--ink); }
+.sw-btn--ghost { color: var(--cream); border-color: rgba(248, 235, 171, .4); }
+.sw-route__label { background: rgba(43, 10, 10, .88); color: var(--cream); }
+
+/* Partículas → brasas del wok */
+.sw-pt--dot::before {
+  background: radial-gradient(circle, rgba(247, 216, 127, .95) 0%, rgba(255, 122, 61, .45) 38%, transparent 70%);
+}
+.sw-pt--ring::before { border-color: rgba(255, 122, 61, .35); }
+
+/* Telón: mientras sube la carta, la película se queda en su último
+   cuadro, sube un poco (parallax) y se oscurece. --curtain lo pone JS (0→1). */
+.sw-root.sw-hold-last .sw-stage > .sw-scene:last-child { opacity: 1 !important; }
+.sw-root .sw-stage {
+  transform: translate3d(0, calc(var(--curtain, 0) * -10vh), 0) scale(calc(1 - var(--curtain, 0) * .05));
+  transform-origin: 50% 0;
+}
+.sw-root .sw-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  background: #000;
+  opacity: calc(var(--curtain, 0) * .6);
+  pointer-events: none;
+}
+.sw-root .sw-copylayer,
+.sw-root .sw-route,
+.sw-root .sw-hint { opacity: calc(1 - var(--curtain, 0) * 1.6); }
+/* Cubierto del todo: dejamos de componer las capas fijas */
+.sw-root.is-covered > :not(.sw-track) { visibility: hidden; }
+
+/* ---------------------------------------------------------
+   Split text (letra por letra con máscara)
+--------------------------------------------------------- */
+.split .w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: .1em .03em .14em;
+  margin: -.1em -.03em -.14em;
+}
+.split .c { display: inline-block; }
+
+/* ---------------------------------------------------------
+   HERO (fijo sobre la primera escena)
+--------------------------------------------------------- */
+.xp-hero {
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  text-align: center;
+  padding: 90px 22px 140px;
+  pointer-events: none;
+  color: var(--cream);
+}
+.xp-hero::before {   /* viñeta para contraste del título sobre el vídeo */
+  content: "";
+  position: absolute;
+  inset: -10%;
+  z-index: -1;
+  background: radial-gradient(48% 42% at 50% 50%, rgba(43, 10, 10, .78), rgba(43, 10, 10, 0) 72%);
+}
+.xp-hero__inner {
+  display: grid;
+  justify-items: center;
+}
+/* El sello trae la animación CSS stampIn (style.css); el scroll anima su
+   contenedor para no pelear con esa animación por la misma transform. */
+.xp-hero__sealwrap {
+  width: clamp(72px, 8vw, 108px);
+  margin-bottom: 18px;
+}
+.xp-hero__seal { width: 100%; height: auto; }
+.xp-hero__eyebrow {
+  font-size: .72rem;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+.xp-hero__title {
+  font-weight: 900;
+  font-size: clamp(3.2rem, 11vw, 9rem);
+  line-height: .92;
+  letter-spacing: -.01em;
+  text-shadow: 0 6px 40px rgba(0, 0, 0, .45);
+}
+.xp-hero__title em {
+  display: block;
+  font-style: normal;
+  font-weight: 400;
+  font-size: .32em;
+  letter-spacing: .6em;
+  padding-left: .6em;              /* compensa el tracking para centrar */
+  color: var(--gold);
+  margin-top: .35em;
+}
+.xp-hero__tag {
+  max-width: 36ch;
+  margin-top: 22px;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.55;
+  color: rgba(248, 235, 171, .88);
+}
+
+/* ---------------------------------------------------------
+   DESPUÉS DE LA PELÍCULA
+--------------------------------------------------------- */
+.after-world {
+  position: relative;
+  z-index: 70;
+  background: var(--ink);
+  border-radius: 32px 32px 0 0;
+  box-shadow: 0 -30px 80px rgba(0, 0, 0, .5);
+}
+.after-world > section,
+.after-world > footer { position: relative; z-index: 2; }
+
+/* Lienzo WebGL único: dibuja las fotos sobre el fondo y bajo el texto */
+.gl-stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ---- Los clásicos ---- */
+.clasicos {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: clamp(96px, 14vh, 170px) clamp(18px, 5vw, 64px) clamp(80px, 12vh, 140px);
+  outline: none;
+}
+.clasicos .eyebrow { color: var(--gold); }
+.clasicos__head h2 {
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1;
+  max-width: 14ch;
+}
+.clasicos__lede {
+  margin-top: 18px;
+  max-width: 42ch;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgba(248, 235, 171, .8);
+}
+.clasicos__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: clamp(16px, 2.5vw, 36px);
+  row-gap: clamp(40px, 8vh, 90px);
+  margin-top: clamp(56px, 10vh, 120px);
+}
+.dish { margin: 0; }
+.dish:nth-child(1) { grid-column: 1 / 6; grid-row: 1; }
+.dish:nth-child(2) { grid-column: 7 / 13; grid-row: 1 / 3; align-self: center; }
+.dish:nth-child(3) { grid-column: 2 / 7; grid-row: 2; margin-top: 6vh; }
+
+.dish__media {
+  --reveal: 1;
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  aspect-ratio: 4 / 5;
+  background: rgba(248, 235, 171, .05);
+}
+.dish:nth-child(2) .dish__media { aspect-ratio: 5 / 4; }
+.dish:nth-child(3) .dish__media { aspect-ratio: 1 / 1; }
+.dish__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* revelado con máscara (fallback sin WebGL): se descubre de abajo hacia arriba */
+  clip-path: inset(calc((1 - var(--reveal)) * 100%) 0 0 0);
+  transform: scale(calc(1.15 - var(--reveal) * .15));
+}
+/* Con WebGL activo la foto la pinta el lienzo; el <img> queda para layout/accesibilidad */
+.has-gl .dish__media { background: transparent; }
+.has-gl .dish__media img { opacity: 0; }
+
+.dish__cap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 16px;
+}
+.dish__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+  font-weight: 600;
+}
+.dish__desc {
+  font-size: .92rem;
+  line-height: 1.5;
+  color: rgba(248, 235, 171, .72);
+  max-width: 36ch;
+}
+.clasicos__more {
+  display: inline-flex;
+  gap: 10px;
+  margin-top: clamp(48px, 8vh, 90px);
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(247, 216, 127, .5);
+  color: var(--gold);
+  font-weight: 600;
+}
+.clasicos__more span { transition: transform .3s ease; }
+.clasicos__more:hover span { transform: translateX(6px); }
+
+/* ---- Testimonio ---- */
+.xp-quote {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: clamp(100px, 18vh, 200px) 22px;
+  text-align: center;
+}
+.xp-quote .eyebrow { justify-content: center; color: var(--gold); }
+.xp-quote__text {
+  margin: 18px 0 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.7rem, 4.2vw, 3.4rem);
+  line-height: 1.22;
+  color: var(--cream);
+}
+.xp-quote__text .wd { display: inline-block; }
+.xp-quote__by {
+  margin-top: 26px;
+  font-size: .8rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ---- CTA final ---- */
+.xp-cta {
+  height: 100vh;
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  text-align: center;
+  color: var(--ink);
+}
+.xp-cta__disc {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 60% at 50% 40%, #FFE6A0 0%, var(--gold) 55%, #E9B949 100%);
+  clip-path: circle(150% at 50% 60%);   /* estado final; JS lo anima desde 0% */
+}
+.xp-cta__inner {
+  position: relative;
+  padding: 0 22px;
+}
+.xp-cta h2 {
+  font-size: clamp(3rem, 10vw, 8.5rem);
+  font-weight: 900;
+  line-height: .95;
+}
+.xp-cta p {
+  max-width: 38ch;
+  margin: 22px auto 0;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.55;
+  color: rgba(43, 10, 10, .85);
+}
+.xp-cta__btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 34px;
+}
+.xp-cta .btn { font-size: 1rem; padding: 18px 34px; }
+.xp-btn--line { color: var(--ink); border: 1.5px solid rgba(43, 10, 10, .45); }
+.magnetic { will-change: transform; }
+.magnetic__label { display: inline-block; pointer-events: none; }
+
+/* ---------------------------------------------------------
+   Móvil
+--------------------------------------------------------- */
+@media (max-width: 860px) {
+  .xp-hero { padding-bottom: 170px; }
+  .clasicos__grid { grid-template-columns: 1fr; }
+  .dish:nth-child(n) { grid-column: 1; grid-row: auto; margin-top: 0; width: 86%; }
+  .dish:nth-child(2) { justify-self: end; }
+  .after-world { border-radius: 22px 22px 0 0; }
+}
+
+/* ---------------------------------------------------------
+   Menos movimiento: todo estático y legible
+--------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .sw-root .sw-stage { transform: none; }
+  .dish__media img { clip-path: none; transform: none; }
+}
