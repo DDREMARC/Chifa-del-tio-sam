@@ -139,37 +139,7 @@
   }
 
   /* ---------------------------------------------------------
-     3. Smooth scroll — Lenis solo en rueda/trackpad. En táctil se
-        deja el scroll nativo: su inercia ya es la "orgánica" y no
-        compite con el decodificador de vídeo del teléfono.
-  --------------------------------------------------------- */
-  let lenis = null;
-  function initSmoothScroll() {
-    ScrollTrigger.config({ ignoreMobileResize: true });
-    if (reduce || typeof Lenis === 'undefined') return;
-    lenis = new Lenis({ lerp: 0.1, smoothWheel: true, syncTouch: false, wheelMultiplier: 1 });
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((t) => lenis.raf(t * 1000));
-    gsap.ticker.lagSmoothing(0);
-  }
-
-  function initAnchors() {
-    document.addEventListener('click', (e) => {
-      const a = e.target.closest('a[href^="#"]');
-      if (!a) return;
-      const target = document.querySelector(a.getAttribute('href'));
-      if (!target) return;
-      e.preventDefault();
-      // El skip-link salta al instante (accesibilidad); el resto viaja suave.
-      const instant = a.classList.contains('skip-link') || !lenis;
-      if (lenis) lenis.scrollTo(target, { immediate: instant, duration: 1.8 });
-      else target.scrollIntoView();
-      target.focus({ preventScroll: true });
-    });
-  }
-
-  /* ---------------------------------------------------------
-     4. Hero — entra letra por letra; el primer scroll lo desarma
+     2. Hero — entra letra por letra; el primer scroll lo desarma
   --------------------------------------------------------- */
   function initHero() {
     const hero = document.querySelector('.xp-hero');
@@ -500,29 +470,6 @@
         { y: 30, opacity: 0, stagger: 0.1, duration: 0.3 }, 0.75);
   }
 
-  /* Botón magnético (solo puntero fino) */
-  function initMagnetic() {
-    if (coarse || reduce) return;
-    document.querySelectorAll('.magnetic').forEach((btn) => {
-      const zone = btn.closest('section') || document.body;
-      const label = btn.querySelector('.magnetic__label');
-      const bx = gsap.quickTo(btn, 'x', { duration: 0.6, ease: 'power3' });
-      const by = gsap.quickTo(btn, 'y', { duration: 0.6, ease: 'power3' });
-      const lx = label ? gsap.quickTo(label, 'x', { duration: 0.6, ease: 'power3' }) : () => {};
-      const ly = label ? gsap.quickTo(label, 'y', { duration: 0.6, ease: 'power3' }) : () => {};
-      zone.addEventListener('pointermove', (e) => {
-        const r = btn.getBoundingClientRect();
-        const cx = r.left + r.width / 2 - gsap.getProperty(btn, 'x');
-        const cy = r.top + r.height / 2 - gsap.getProperty(btn, 'y');
-        const dx = e.clientX - cx, dy = e.clientY - cy;
-        const near = Math.hypot(dx, dy) < Math.max(r.width, r.height) * 0.95;
-        bx(near ? dx * 0.35 : 0); by(near ? dy * 0.35 : 0);
-        lx(near ? dx * 0.15 : 0); ly(near ? dy * 0.15 : 0);
-      });
-      zone.addEventListener('pointerleave', () => { bx(0); by(0); lx(0); ly(0); });
-    });
-  }
-
   /* Sin GSAP (CDN caído): página usable, el hero se desvanece al bajar */
   function fallbackWithoutGSAP() {
     const hero = document.querySelector('.xp-hero');
@@ -543,13 +490,10 @@
   mountWorld();
   if (!hasGSAP) { fallbackWithoutGSAP(); return; }
   gsap.registerPlugin(ScrollTrigger);
-  initSmoothScroll();
-  initAnchors();
   initHero();
   initCurtain();
   initGL();
   initClasicos();
   initQuote();
   initCTA();
-  initMagnetic();
 })();

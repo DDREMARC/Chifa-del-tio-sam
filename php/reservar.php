@@ -1,5 +1,9 @@
 <?php
 // RESERVA DE MESA: recibe los campos enviados desde el formulario de contacto.html.
+// PRÓXIMAMENTE: la función aún no está disponible. Para abrirla, poner true aquí
+// y quitar "disabled" del <fieldset> (y el velo) en contacto.html.
+const RESERVAS_ACTIVAS = false;
+
 date_default_timezone_set("America/Lima");
 header("Content-Type: text/html; charset=utf-8");
 
@@ -12,6 +16,11 @@ function responder($mensaje) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // EN PAUSA: no se guarda nada mientras las reservas en línea no estén activas.
+    if (!RESERVAS_ACTIVAS) {
+        responder("Las reservas en línea estarán disponibles próximamente. Reserva por teléfono o WhatsApp al +51 987 654 321.");
+    }
+
     // DATOS POST: nombres coinciden con los atributos name del formulario.
     $nombres = trim($_POST["nombres"] ?? "");
     $telefono = trim($_POST["telefono"] ?? "");

@@ -1,8 +1,28 @@
 # El Tío Sam Chifa — Propuesta "Next Level" (scroll-world)
 
 > Estado: **código funcionando con escenas provisionales**. Los vídeos y stills reales
-> se generan con `produccion/render.sh` (Monid/Higgsfield). Tu `index.html` actual
-> no se ha tocado: la experiencia vive en `html/experiencia.html`.
+> se generan con `produccion/render.sh` (Monid/Higgsfield). La experiencia **es la portada**
+> (`html/index.html`); carta y contacto comparten las animaciones vía `js/sitio.js`.
+
+## 0. Estructura del sitio (sin duplicados)
+
+| Archivo | Para qué |
+|---|---|
+| `index.html` (raíz) | Redirige a `html/index.html` |
+| `html/index.html` | Portada inmersiva (scroll-world) |
+| `html/carta.html`, `html/contacto.html` | Páginas interiores con las mismas animaciones |
+| `css/style.css` | Estilos comunes + animaciones compartidas |
+| `css/experiencia.css` | Solo la portada |
+| `css/option-wheel.css`, `css/staggered-menu.css` | Componentes (ruleta de la carta, menú) |
+| `js/precarga.js` | En `<head>`: `?motion=full` y el telón de entrada |
+| `js/sitio.js` | Común: menú (su única configuración), Lenis, telón entre páginas, animaciones por atributos `data-anim` |
+| `js/experiencia.js` + `js/scroll-world.js` | Solo la portada |
+| `js/main.js`, `js/menu-data.js`, `js/option-wheel.js`, `js/staggered-menu.js` | Carta, ruleta y menú |
+| `php/` | Reservas en línea (en pausa: **Próximamente**) |
+
+**Animar algo nuevo en cualquier página** no requiere JS: basta un atributo en el HTML.
+`data-anim="letras"` (titular letra por letra), `"subir"`, `"cascada"` (hijos en escalera),
+`"mascara"` (revelado de imagen), `"sello"` (gira con el scroll) o `data-parallax="60"`.
 
 ---
 
@@ -219,20 +239,26 @@ bloquea las texturas WebGL y la carga de los clips, y el formulario de reservas 
 ```
 
 `-t` sirve **solo** el proyecto, sea cual sea la carpeta desde la que lo ejecutes, y `127.0.0.1`
-impide que otros equipos de la red lo vean. Después abre `http://localhost:5519/html/experiencia.html`.
+impide que otros equipos de la red lo vean. Después abre `http://localhost:5519/`.
 Si Windows tiene las animaciones desactivadas, el navegador informa "reducir movimiento" y verás la
-versión estática; añade `?motion=full` a la URL para revisar la versión completa.
+versión estática; añade `?motion=full` a la URL una vez y se mantendrá en toda la pestaña.
 
-## 8b. Reservas (PHP + MySQL, como en `proyecto_01`)
+## 8b. Reservas en línea — PRÓXIMAMENTE (PHP + MySQL, como en `proyecto_01`)
 
-El formulario "Reserva tu mesa" de `html/contacto.html#reservar` hace POST a `php/reservar.php`,
-que valida los datos, los guarda en MySQL con `mysqli` y responde con un aviso y regreso al
-formulario. Todos los botones "Reservar mesa" del sitio apuntan ahí.
+**Ahora mismo están en pausa.** En `html/contacto.html#reservar` se ve el formulario atenuado con
+el sello "Próximamente" y se remite al teléfono y WhatsApp. `php/reservar.php` tiene
+`RESERVAS_ACTIVAS = false`: aunque alguien envíe datos, no guarda nada. Los botones de la portada
+ya no ofrecen "Reservar mesa".
 
-1. Abre el **XAMPP Control Panel** y pulsa **Start** en **MySQL**.
-2. Crea la base: en phpMyAdmin, pestaña **Importar**, sube `php/tiosam_chifa.sql` (o
-   `mysql -u root < php/tiosam_chifa.sql`). Crea la base `tiosam_chifa` con la tabla `reservas`.
-3. Las reservas se ven en phpMyAdmin → `tiosam_chifa` → `reservas`.
+**Para activarlas cuando toque:**
+
+1. En `php/reservar.php`, pon `RESERVAS_ACTIVAS = true`.
+2. En `html/contacto.html`, quita `disabled` del `<fieldset>` y el bloque `.reserva-form__velo`
+   (y el badge "Próximamente" del título).
+3. Abre el **XAMPP Control Panel** y pulsa **Start** en **MySQL**.
+4. La base `tiosam_chifa` (tabla `reservas`) ya está creada en tu MySQL. En otro equipo,
+   impórtala desde phpMyAdmin con `php/tiosam_chifa.sql`.
+5. Las reservas se ven en phpMyAdmin → `tiosam_chifa` → `reservas`.
 
 Diferencias con `envio.php` del proyecto anterior: consultas **preparadas** (los datos nunca se
 pegan dentro del SQL), **validación en el servidor** (teléfono, fecha desde hoy, lunes cerrado,

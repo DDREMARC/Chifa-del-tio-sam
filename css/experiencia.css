@@ -1,6 +1,6 @@
 /* =========================================================
-   EXPERIENCIA — capa inmersiva de El Tío Sam Chifa
-   Se carga DESPUÉS de style.css. El motor scroll-world inyecta
+   EXPERIENCIA — capa inmersiva de la portada (index.html)
+   Se carga DESPUÉS de style.css (que trae Lenis, split y telón). El motor scroll-world inyecta
    sus estilos en @layer sw, así que todo lo de aquí (sin capa)
    gana sin necesidad de !important.
    ========================================================= */
@@ -15,12 +15,6 @@
   --sw-font-display: 'Fraunces', Georgia, serif;
   --sw-font-body: 'Work Sans', system-ui, sans-serif;
 }
-
-/* Lenis necesita scroll-behavior:auto (style.css trae smooth) */
-html { scroll-behavior: auto; }
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-stopped { overflow: hidden; }
 
 body.xp {
   padding-top: 0;
@@ -98,18 +92,6 @@ body.xp {
 .sw-root .sw-hint { opacity: calc(1 - var(--curtain, 0) * 1.6); }
 /* Cubierto del todo: dejamos de componer las capas fijas */
 .sw-root.is-covered > :not(.sw-track) { visibility: hidden; }
-
-/* ---------------------------------------------------------
-   Split text (letra por letra con máscara)
---------------------------------------------------------- */
-.split .w {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: top;
-  padding: .1em .03em .14em;
-  margin: -.1em -.03em -.14em;
-}
-.split .c { display: inline-block; }
 
 /* ---------------------------------------------------------
    HERO (fijo sobre la primera escena)

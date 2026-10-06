@@ -152,6 +152,10 @@
         yPercent: -100, duration: 0.9, ease: "expo.inOut", delay: 0.05,
         onComplete: () => gsap.set(telon, { visibility: "hidden" }),
       });
+      // Red de seguridad: si el navegador pausa las animaciones, nunca dejar la página tapada
+      setTimeout(() => {
+        if (gsap.getProperty(telon, "yPercent") > -100) gsap.set(telon, { yPercent: -100, visibility: "hidden" });
+      }, 2500);
     } else {
       gsap.set(telon, { yPercent: 100, visibility: "hidden" });
     }
@@ -165,7 +169,11 @@
       if (url.pathname === location.pathname && url.hash) return; // misma página: lo resuelve el ancla
       e.preventDefault();
       try { sessionStorage.setItem("tsTelon", "1"); } catch (err) { /* sin telón de entrada */ }
-      gsap.timeline({ onComplete: () => { location.href = url.href; } })
+      // Navega al terminar el telón, o a los 900 ms pase lo que pase (animaciones pausadas)
+      let fue = false;
+      const ir = () => { if (!fue) { fue = true; location.href = url.href; } };
+      setTimeout(ir, 900);
+      gsap.timeline({ onComplete: ir })
         .fromTo(telon, { yPercent: 100, visibility: "visible" }, { yPercent: 0, duration: 0.65, ease: "expo.inOut" })
         .fromTo(sello, { opacity: 0, scale: 0.6, rotation: -90 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(1.6)" }, 0.3);
     });

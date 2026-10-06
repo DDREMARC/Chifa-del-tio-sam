@@ -30,8 +30,8 @@
 /* ---------------------------------------------------------
    Reset
 --------------------------------------------------------- */
-*,*::before,*::after{ box-sizing:border-box; }
-html{ scroll-behavior:smooth; }
+*,*::before,*::after{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
 body{
   margin:0;
   font-family:var(--font-body);
@@ -41,9 +41,9 @@ body{
   padding-top:60px;
 }
 img{ max-width:100%; display:block; }
-a{ color:inherit; text-decoration:none; }
+a{ color:inherit; text-decoration:none; touch-action:manipulation; }
 ul{ list-style:none; margin:0; padding:0; }
-button{ font-family:inherit; cursor:pointer; }
+button{ font-family:inherit; cursor:pointer; touch-action:manipulation; }
 h1,h2,h3{ font-family:var(--font-display); margin:0; line-height:1.08; }
 p{ margin:0; }
 
@@ -62,57 +62,6 @@ p{ margin:0; }
     transition-duration:.001ms !important;
     scroll-behavior:auto !important;
   }
-}
-
-/* ---------------------------------------------------------
-   Barra superior
---------------------------------------------------------- */
-.topbar{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:16px 22px;
-  background:var(--ink);
-  color:var(--cream);
-
-  top: 0;
-  left: 0;
-  width: 100%;
-  position: fixed;
-  z-index: 1000;
-}
-.topbar__mark{ width:34px; height:34px; flex-shrink:0; color:var(--gold); }
-.topbar__word{
-  font-family:var(--font-display);
-  font-weight:700;
-  font-size:1.05rem;
-  letter-spacing:.02em;
-
-
-}
-
-.topbar__word small{
-  display:block;
-  font-family:var(--font-body);
-  font-weight:500;
-  font-size:.6rem;
-  letter-spacing:.28em;
-  color:var(--gold);
-  text-transform:uppercase;
-  margin-top:1px;
-
-
-}
-
-.topbar__page{
-  margin-left:auto;
-  font-size:.72rem;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:var(--gold);
-  opacity:.85;
-
-
 }
 
 /* ---------------------------------------------------------
@@ -136,97 +85,6 @@ p{ margin:0; }
   0%{ transform:scale(2.6) rotate(-16deg); opacity:0; }
   60%{ transform:scale(.92) rotate(4deg); opacity:1; }
   100%{ transform:scale(1) rotate(0deg); opacity:1; }
-}
-
-/* ---------------------------------------------------------
-   Hero
---------------------------------------------------------- */
-.hero{
-  position:relative;
-  overflow:hidden;
-  background:
-    radial-gradient(120% 90% at 50% -10%, var(--red) 0%, var(--red-deep) 46%, var(--ink) 100%);
-  color:var(--cream);
-  padding:34px 0 54px;
-  text-align:center;
-}
-.hero__lanterns{
-  display:flex;
-  justify-content:space-between;
-  padding:0 8%;
-  margin-bottom:6px;
-}
-.lantern{
-  width:16.6vw;
-  max-width:64px;
-  min-width:36px;
-  transform-origin:top center;
-  animation:swing 4.6s ease-in-out infinite;
-}
-.lantern:nth-child(1){ animation-duration:4.2s; }
-.lantern:nth-child(2){ animation-duration:5.1s; animation-delay:.3s; }
-.lantern:nth-child(3){ animation-duration:4.7s; animation-delay:.1s; }
-.lantern:nth-child(4){ animation-duration:5.4s; animation-delay:.45s; }
-@keyframes swing{
-  0%,100%{ transform:rotate(-6deg); }
-  50%{ transform:rotate(6deg); }
-}
-
-.hero__seal-wrap{
-  width:104px;
-  height:104px;
-  margin:10px auto 18px;
-}
-.hero__seal-wrap .seal{ width:100%; height:100%; }
-
-.hero__eyebrow{
-  display:block;
-  font-size:.68rem;
-  letter-spacing:.34em;
-  text-transform:uppercase;
-  color:var(--gold);
-  margin-bottom:10px;
-  opacity:0;
-  animation:fadeUp .7s ease both;
-  animation-delay:.55s;
-}
-.hero h1{
-  font-size:clamp(2.4rem,9vw,3.2rem);
-  font-weight:900;
-  letter-spacing:.01em;
-  opacity:0;
-  animation:fadeUp .8s ease both;
-  animation-delay:.68s;
-}
-.hero h1 em{
-  display:block;
-  font-style:normal;
-  font-weight:400;
-  font-size:.42em;
-  letter-spacing:.5em;
-  color:var(--gold);
-  margin-top:6px;
-}
-.hero__tag{
-  max-width:340px;
-  margin:16px auto 0;
-  font-size:.98rem;
-  color:var(--cream);
-  opacity:0;
-  animation:fadeUp .8s ease both;
-  animation-delay:.8s;
-  line-height:1.5;
-}
-.hero__cta{
-  margin-top:26px;
-  opacity:0;
-  animation:fadeUp .8s ease both;
-  animation-delay:.95s;
-}
-
-@keyframes fadeUp{
-  from{ opacity:0; transform:translateY(14px); }
-  to{ opacity:1; transform:translateY(0); }
 }
 
 /* ---------------------------------------------------------
@@ -264,12 +122,8 @@ p{ margin:0; }
 .btn--block{ width:100%; justify-content:center; }
 
 /* ---------------------------------------------------------
-   Secciones generales
+   Encabezados y divisores
 --------------------------------------------------------- */
-.section{ padding:52px 0; }
-.section--tint{ background:var(--cream); }
-.section--dark{ background:var(--ink); color:var(--cream); }
-
 .eyebrow{
   display:flex;
   align-items:center;
@@ -280,24 +134,11 @@ p{ margin:0; }
   color:var(--red);
   margin-bottom:10px;
 }
-.section--dark .eyebrow{ color:var(--gold); }
 .eyebrow::before{
   content:'';
   width:22px; height:1px;
   background:currentColor;
 }
-
-.section h2{
-  font-size:1.7rem;
-  font-weight:700;
-  margin-bottom:14px;
-}
-.section p.lede{
-  font-size:.98rem;
-  line-height:1.65;
-  color:rgba(43,10,10,.78);
-}
-.section--dark p.lede{ color:rgba(248,235,171,.82); }
 
 /* divisor con motivo de sello */
 .divider{
@@ -316,122 +157,6 @@ p{ margin:0; }
 }
 .divider .seal{ width:22px; height:22px; flex-shrink:0; }
 
-/* ---------------------------------------------------------
-   Tarjetas de platos destacados
---------------------------------------------------------- */
-.dish-row{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-top:22px;
-}
-.dish-chip{
-  background:var(--paper);
-  border-radius:var(--radius-md);
-  padding:16px 8px 12px;
-  text-align:center;
-  box-shadow:var(--shadow-card);
-}
-.dish-chip__icon{ font-size:1.9rem; display:block; margin-bottom:6px; }
-.dish-chip__name{ font-size:.72rem; font-weight:600; line-height:1.25; }
-
-/* ---------------------------------------------------------
-   Cinta CTA
---------------------------------------------------------- */
-.cta-band{
-  background:linear-gradient(120deg,var(--red-deep),var(--red));
-  color:var(--cream);
-  border-radius:var(--radius-lg);
-  padding:30px 24px;
-  text-align:center;
-  margin:0 22px;
-  box-shadow:var(--shadow-pop);
-}
-.cta-band h3{ font-size:1.3rem; margin-bottom:8px; }
-.cta-band p{ font-size:.88rem; opacity:.88; margin-bottom:18px; }
-
-/* ---------------------------------------------------------
-   Testimonio único (index)
---------------------------------------------------------- */
-.quote{
-  font-family:var(--font-display);
-  font-style:italic;
-  font-size:1.15rem;
-  line-height:1.5;
-  text-align:center;
-  color:var(--ink);
-}
-.quote__by{
-  display:block;
-  margin-top:14px;
-  font-family:var(--font-body);
-  font-style:normal;
-  font-size:.78rem;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:var(--red);
-}
-
-/* ---------------------------------------------------------
-   Nav inferior (móvil)
---------------------------------------------------------- */
-.bottomnav{
-  position:fixed;
-  left:0; right:0; bottom:0;
-  height:var(--nav-h);
-  background:var(--ink);
-  display:flex;
-  z-index:1000;
-  box-shadow:0 -8px 24px -10px rgba(0,0,0,.4);
-
-
-  left: 0;
-  width: 100%;
-
-}
-.bottomnav a{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:4px;
-  color:rgba(248,235,171,.55);
-  font-size:.64rem;
-  letter-spacing:.04em;
-  font-weight:600;
-  position:relative;
-  transition:color .2s ease;
-
-  
-  left: 0;
-  width: 100%;
-}
-.bottomnav a svg{ width:20px; height:20px; }
-.bottomnav a.active{ color:var(--gold); }
-.bottomnav a.active::before{
-  content:'';
-  position:absolute;
-  top:6px;
-  width:26px; height:3px;
-  border-radius:3px;
-  background:var(--gold);
-
-  
-  left: 0;
-  width: 100%;
-}
-
-/* ---------------------------------------------------------
-   Reveal al hacer scroll
---------------------------------------------------------- */
-.reveal{
-  opacity:0;
-  transform:translateY(22px);
-  transition:opacity .7s ease, transform .7s ease;
-}
-.reveal.is-visible{ opacity:1; transform:translateY(0); }
-
 /* ===========================================================
    CARTA (menú)
 =========================================================== */
@@ -441,32 +166,6 @@ p{ margin:0; }
   padding:26px 0 20px;
 }
 .menu-header h1{ font-size:1.8rem; font-weight:800; }
-
-.chips{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding:16px 22px 4px;
-  scrollbar-width:none;
-}
-.chips::-webkit-scrollbar{ display:none; }
-.chip{
-  flex:0 0 auto;
-  padding:9px 16px;
-  border-radius:999px;
-  background:var(--paper);
-  border:1.5px solid rgba(190,26,26,.18);
-  font-size:.78rem;
-  font-weight:600;
-  color:var(--ink);
-  white-space:nowrap;
-  transition:background .2s ease, color .2s ease, border-color .2s ease;
-}
-.chip.active{
-  background:var(--red);
-  border-color:var(--red);
-  color:var(--cream);
-}
 
 /* ── Menu grid (domino cards) ── */
 .menu-grid{
@@ -555,63 +254,6 @@ p{ margin:0; }
 /* ===========================================================
    CONTACTO
 =========================================================== */
-.info-card{
-  background:var(--paper);
-  border-radius:var(--radius-md);
-  padding:20px;
-  box-shadow:var(--shadow-card);
-  margin-bottom:14px;
-}
-.info-card__row{
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-  padding:8px 0;
-}
-.info-card__row + .info-card__row{ border-top:1px solid rgba(190,26,26,.1); }
-.info-card__icon{
-  width:34px; height:34px;
-  border-radius:10px;
-  background:var(--cream);
-  display:flex; align-items:center; justify-content:center;
-  flex-shrink:0;
-  color:var(--red);
-}
-.info-card__icon svg{ width:17px; height:17px; }
-.info-card__label{ font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--red); font-weight:700; }
-.info-card__value{ font-size:.9rem; margin-top:2px; }
-
-.map-card{
-  border-radius:var(--radius-md);
-  overflow:hidden;
-  position:relative;
-  height:150px;
-  margin-bottom:14px;
-  background:
-    repeating-linear-gradient(0deg, rgba(190,26,26,.08) 0 1px, transparent 1px 22px),
-    repeating-linear-gradient(90deg, rgba(190,26,26,.08) 0 1px, transparent 1px 22px),
-    var(--cream);
-}
-.map-card__pin{
-  position:absolute;
-  left:50%; top:50%;
-  transform:translate(-50%,-60%);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  color:var(--red);
-}
-.map-card__pin svg{ width:34px; height:34px; filter:drop-shadow(0 6px 8px rgba(43,10,10,.3)); }
-.map-card__pin span{
-  margin-top:4px;
-  background:var(--ink);
-  color:var(--cream);
-  font-size:.66rem;
-  font-weight:700;
-  padding:4px 10px;
-  border-radius:999px;
-}
-
 .map-embed{
   border-radius:var(--radius-md);
   overflow:hidden;
@@ -624,21 +266,68 @@ p{ margin:0; }
   min-height:250px;
 }
 
-/* ── Formulario de reserva (se guarda con php/reservar.php) ── */
+/* ── Reservas en línea: PRÓXIMAMENTE (php/reservar.php ya está listo) ── */
 .reserva{
   margin-top:36px;
   scroll-margin-top:84px;          /* el ancla #reservar no queda bajo la cabecera */
 }
-.reserva__lede{ font-size:.9rem; color:rgba(43,10,10,.7); }
+.reserva__lede{ font-size:.9rem; line-height:1.55; color:rgba(43,10,10,.75); }
+.reserva__lede a{ color:var(--red-deep); font-weight:700; text-decoration:underline; }
+.badge-pronto{
+  display:inline-block;
+  vertical-align:middle;
+  margin-left:6px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:var(--gold);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:.62rem;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
 .reserva-form{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px 12px;
+  position:relative;
   margin-top:18px;
   padding:20px;
   background:var(--paper);
   border-radius:var(--radius-md);
   box-shadow:var(--shadow-card);
+  overflow:hidden;
+}
+.reserva-form fieldset{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px 12px;
+  min-width:0;
+  margin:0;
+  padding:0;
+  border:0;
+}
+.reserva-form fieldset:disabled{ opacity:.45; filter:grayscale(.4); }
+.reserva-form__velo{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(180deg, rgba(255,251,240,.2), rgba(255,251,240,.75));
+}
+.reserva-form__velo span{
+  padding:10px 22px;
+  border-radius:999px;
+  background:var(--ink);
+  color:var(--gold);
+  font-family:var(--font-display);
+  font-size:1.1rem;
+  font-weight:700;
+  letter-spacing:.04em;
+  box-shadow:var(--shadow-pop);
+  transform:rotate(-4deg);
+}
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
 }
 .campo{ display:flex; flex-direction:column; gap:6px; min-width:0; }
 .campo--full{ grid-column:1 / -1; }
@@ -675,7 +364,7 @@ p{ margin:0; }
 .reserva-form .btn{ margin-top:4px; }
 
 @media (max-width:420px){
-  .reserva-form{ grid-template-columns:1fr; }
+  .reserva-form fieldset{ grid-template-columns:1fr; }
 }
 
 /* ===========================================================
@@ -947,8 +636,6 @@ p{ margin:0; }
 =========================================================== */
 @media (min-width:720px){
   :root{ --container:640px; }
-  body{ padding-bottom:0; }
-  .bottomnav{ display:none; }
 }
 
 /* ===========================================================
@@ -1148,4 +835,86 @@ p{ margin:0; }
     width:120px; height:80px;
     border-radius:14px;
   }
+}
+
+/* ===========================================================
+   ANIMACIONES COMPARTIDAS (js/sitio.js) — todas las páginas
+=========================================================== */
+
+/* Lenis: el smooth scroll necesita scroll-behavior:auto mientras actúa */
+html.lenis, html.lenis body{ height:auto; }
+.lenis.lenis-smooth{ scroll-behavior:auto !important; }
+.lenis.lenis-stopped{ overflow:hidden; }
+
+/* Split text: cada palabra es una máscara y cada letra sube dentro de ella */
+.split .w{
+  display:inline-block;
+  overflow:hidden;
+  vertical-align:top;
+  padding:.1em .03em .14em;
+  margin:-.1em -.03em -.14em;
+}
+.split .c{ display:inline-block; }
+
+/* Telón entre páginas (precarga.js lo pinta desde el primer cuadro) */
+.telon,
+html.telon-entrada::after{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  background:
+    radial-gradient(70% 55% at 50% 45%, var(--red-deep) 0%, var(--ink) 75%);
+}
+html.telon-entrada::after{ content:""; }
+.telon{
+  display:grid;
+  place-items:center;
+  visibility:hidden;
+  transform:translateY(100%);
+}
+.telon svg{ width:clamp(72px,10vw,110px); height:auto; color:var(--gold); }
+
+/* Barra de progreso de lectura (carta, contacto) */
+.progreso{
+  position:fixed;
+  top:0; left:0; right:0;
+  height:3px;
+  z-index:200;
+  background:var(--gold);
+  transform-origin:0 50%;
+  transform:scaleX(0);
+  pointer-events:none;
+}
+
+/* Botón magnético: el movimiento lo pone GSAP, sin transición que lo frene */
+.magnetic{ transition:box-shadow .18s ease; }
+
+/* Cabecera de las páginas interiores: más presencia + sello que gira con el scroll */
+.page-head{
+  position:relative;
+  overflow:hidden;
+  padding:clamp(40px,8vh,80px) 0 clamp(30px,6vh,56px);
+}
+.page-head .container{ position:relative; z-index:1; }
+.page-head .eyebrow{ color:var(--gold); }
+.page-head h1{
+  font-size:clamp(2.4rem,9vw,4rem);
+  font-weight:900;
+  line-height:1;
+}
+.page-head p{
+  margin-top:12px;
+  max-width:38ch;
+  color:rgba(248,235,171,.8);
+  line-height:1.5;
+}
+.page-head__sello{
+  position:absolute;
+  right:-60px;
+  top:-40px;
+  width:clamp(200px,40vw,320px);
+  height:auto;
+  color:var(--gold);
+  opacity:.09;
+  pointer-events:none;
 }
