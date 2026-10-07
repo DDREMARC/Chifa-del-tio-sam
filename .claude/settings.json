@@ -1,0 +1,15 @@
+{
+  "extraKnownMarketplaces": {
+    "superpowers-dev": {
+      "source": { "source": "github", "repo": "obra/superpowers" }
+    },
+    "supermemory-plugins": {
+      "source": { "source": "github", "repo": "supermemoryai/claude-supermemory" }
+    }
+  },
+  "enabledPlugins": {
+    "figma@claude-plugins-official": true,
+    "superpowers@superpowers-dev": true,
+    "supermemory@supermemory-plugins": true
+  }
+}
