@@ -68,21 +68,21 @@
         fuente que carta.html: nombres y precios siempre coinciden.
         Se pinta ANTES de que main.js corra setupFlowingMenu().
   --------------------------------------------------------- */
-  const DESTACADOS = ['Arroz Chaufa', 'Tallarín Saltado', 'Lomo Saltado', 'Aeropuerto', 'Wantán Frito'];
-  const CORTO = { 'Arroz Chaufa': 'Chaufa', 'Tallarín Saltado': 'Tallarín' };  // texto del marquee
-
+  // Una fila por categoría: no depende de nombres de platos concretos,
+  // así sigue funcionando mientras la carta tenga marcadores.
   function filasCarta() {
-    if (typeof MENU_ITEMS === 'undefined') return [];
-    const filas = DESTACADOS
-      .map((n) => MENU_ITEMS.find((i) => i.name === n))
-      .filter(Boolean)
-      .map((i) => ({ name: i.name, price: i.price, src: i.img, short: CORTO[i.name] || i.name }));
-    const dulces = MENU_ITEMS.filter((i) => i.cat === 'dulces');
-    if (dulces.length) {
-      const min = Math.min(...dulces.map((d) => parseFloat(d.price.replace(/[^\d.]/g, ''))));
-      filas.push({ name: 'Dulces', price: 'Desde S/ ' + min, src: dulces[0].img, short: 'Dulces' });
-    }
-    return filas;
+    if (typeof MENU_ITEMS === 'undefined' || typeof MENU_CATEGORIES === 'undefined') return [];
+    return MENU_CATEGORIES.map((c) => {
+      const items = MENU_ITEMS.filter((i) => i.cat === c.id);
+      if (!items.length) return null;
+      const conFoto = items.find((i) => i.img);
+      return {
+        name: c.label,
+        price: items.length + (items.length === 1 ? ' plato' : ' platos'),
+        src: conFoto ? conFoto.img : '',
+        short: c.label,
+      };
+    }).filter(Boolean);
   }
 
   function renderFlowing() {
@@ -90,10 +90,11 @@
     if (!nav) return;
     const arrow = '<svg class="item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
     nav.innerHTML = filasCarta().map(({ name, price, src, short }) => {
-      const part = `<div class="marquee__part"><span>${short}</span><div class="marquee__img" style="background-image:url('${src}')"></div><div class="marquee__dot"></div></div>`;
+      const img = src ? `<div class="marquee__img" style="background-image:url('${src}')"></div>` : '';
+      const part = `<div class="marquee__part"><span>${short}</span>${img}<div class="marquee__dot"></div></div>`;
       return `<div class="menu__item">
         <a class="menu__item-link" href="carta.html">
-          <span class="item-emoji"><img src="${src}" alt="${name}" loading="lazy"></span>
+          ${src ? `<span class="item-emoji"><img src="${src}" alt="" loading="lazy"></span>` : ''}
           <span class="item-info"><span class="item-name">${name}</span><span class="item-price">${price}</span></span>
           ${arrow}
         </a>

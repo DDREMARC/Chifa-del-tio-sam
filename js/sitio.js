@@ -252,7 +252,7 @@
       });
 
       // La tarjeta tiene "transition: transform" para el hover: se apaga mientras anima
-      const cards = grid.querySelectorAll(".menu-item");
+      const cards = grid.querySelectorAll('.menu-item[data-anim="subir"]');
       gsap.set(cards, { opacity: 0, y: 40, transition: "none" });
       triggers = triggers.concat(ScrollTrigger.batch(cards, {
         start: "top 94%",

@@ -171,8 +171,11 @@ p{ margin:0; }
 .menu-grid{
   padding:10px 0 4px;
   display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
+  grid-template-columns:1fr;          /* móvil: una tarjeta por fila, objetivo táctil amplio */
+  gap:14px;
+}
+@media (min-width:520px){
+  .menu-grid{ grid-template-columns:repeat(2,1fr); gap:12px; }
 }
 .menu-item{
   display:flex;
@@ -230,17 +233,52 @@ p{ margin:0; }
   font-weight:700;
   font-size:.82rem;
   white-space:nowrap;
-  background:linear-gradient(135deg, var(--red-deep), var(--red));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
+  color:var(--red-deep);
 }
 .menu-item__desc{
-  font-size:.72rem;
-  color:rgba(43,10,10,.55);
-  margin-top:4px;
-  line-height:1.4;
+  font-size:.82rem;
+  color:rgba(43,10,10,.6);
+  margin-top:6px;
+  line-height:1.45;
 }
+/* Tarjeta de plato: foto (o placeholder), nombre/precio, descripción y pedido */
+.menu-item__icon{
+  background:linear-gradient(160deg, #3a1212 0%, var(--ink) 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.menu-item__placeholder{
+  font-size:.7rem;
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(248,235,171,.55);
+}
+.menu-item__name{ margin:0; }
+.menu-item__body{ padding:16px 16px 18px; gap:0; }
+.menu-item__order{
+  margin-top:14px;
+  min-height:44px;                    /* objetivo táctil mínimo */
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:0 16px;
+  border-radius:999px;
+  background:var(--red);
+  color:var(--paper);
+  font-family:var(--font-body);
+  font-size:.85rem;
+  font-weight:600;
+  text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .2s ease, background-color .2s ease;
+}
+.menu-item__order svg{ width:18px; height:18px; flex-shrink:0; }
+.menu-item__order:hover{ background:var(--red-deep); }
+.menu-item__order:active{ transform:scale(.98); }
+.menu-item__order:focus-visible{ outline:3px solid var(--gold); outline-offset:3px; }
 
 /* Category title */
 .menu-category-title{
