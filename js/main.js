@@ -6,6 +6,9 @@
    Las animaciones de scroll viven en sitio.js.
    ========================================================= */
 
+// Helper compartido (sitio.js carga antes que este archivo)
+const { escapeHtml } = window.TioSam;
+
 document.addEventListener("DOMContentLoaded", () => {
   setupMenuPage();
   setupSpotlightCards();
@@ -167,20 +170,23 @@ function setupMenuPage() {
     const card = document.createElement("article");
     card.className = "menu-item";
     card.dataset.anim = "subir";
+    const name = escapeHtml(item.name);
+    const desc = escapeHtml(item.desc);
+    const price = escapeHtml(item.price);
     // Sin foto: contenedor con placeholder en lugar de <img>
     const media = item.img
-      ? `<img src="${item.img}" alt="${item.name}" loading="lazy">`
+      ? `<img src="${escapeHtml(item.img)}" alt="${name}" loading="lazy">`
       : `<span class="menu-item__placeholder">Foto próximamente</span>`;
     const pedido = `https://wa.me/${MENU_WHATSAPP}?text=${encodeURIComponent(`Hola, quisiera pedir: ${item.name}`)}`;
     card.innerHTML = `
       <div class="menu-item__icon">${media}</div>
       <div class="menu-item__body">
         <div class="menu-item__top">
-          <h3 class="menu-item__name">${item.name}</h3>
-          <span class="menu-item__price">${item.price}</span>
+          <h3 class="menu-item__name">${name}</h3>
+          <span class="menu-item__price">${price}</span>
         </div>
-        <p class="menu-item__desc">${item.desc}</p>
-        <a class="menu-item__order" href="${pedido}" target="_blank" rel="noopener">
+        <p class="menu-item__desc">${desc}</p>
+        <a class="menu-item__order" href="${escapeHtml(pedido)}" target="_blank" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
           Pedir por WhatsApp
         </a>
