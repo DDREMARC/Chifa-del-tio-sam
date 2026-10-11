@@ -121,6 +121,12 @@ p{ margin:0; }
   color:var(--cream);
 }
 .btn--block{ width:100%; justify-content:center; }
+/* Enlaces de texto a la ubicación: mismo área táctil que un botón */
+a[href*="maps.app.goo.gl"]:not(.btn){
+  display:inline-flex;
+  align-items:center;
+  min-height:48px;                    /* área táctil mínima */
+}
 
 /* ---------------------------------------------------------
    Encabezados y divisores
