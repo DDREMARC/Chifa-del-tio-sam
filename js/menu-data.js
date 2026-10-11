@@ -3,50 +3,70 @@
    Separado de main.js para mantener el contenido editable
    sin tocar la lógica de la página.
 
-   MARCADOR: los 23 platos son espacios en blanco (placeholder).
-   Para un plato real: poner name, desc, price y, si hay foto,
-   img (ruta relativa a html/, p. ej. "../img/chaufa_pollo.jpg").
+   Fuente: img/carta_tio_sam.jpeg (38 platos, mismas secciones).
+   Precios: la carta no los muestra; quedan en "S/ —" hasta confirmarlos.
+   Descripción: solo el texto que trae la carta entre paréntesis;
+   el resto queda "Descripción por confirmar." hasta tenerla.
+   Para poner una foto: img = ruta relativa a html/, p. ej. "../img/lomo_saltado.jpeg".
    ========================================================= */
 
 const MENU_CATEGORIES = [
-  { id: "chaufas",        label: "Chaufas" },
-  { id: "sopas",          label: "Sopas y Entradas" },
-  { id: "fondos",         label: "Platos de Fondo" },
-  { id: "especialidades", label: "Especialidades" },
+  { id: "sopas",       label: "Sopas" },
+  { id: "chaufas",     label: "Chaufas" },
+  { id: "combinados",  label: "Combinados y tallarines" },
+  { id: "saltados",    label: "Platos saltados" },
+  { id: "dulces",      label: "Platos dulces" },
 ];
 
 // Número que recibe los pedidos por WhatsApp (formato internacional, sin +)
 const MENU_WHATSAPP = "51987654321";
 
 const MENU_ITEMS = [
+  // ---- Sopas ----
+  { cat: "sopas", img: "", name: "Sopa o wantan especial", desc: "Chancho, pollo o langostinos", price: "S/ —" },
+  { cat: "sopas", img: "", name: "Sopa de pollo", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "sopas", img: "", name: "Sopa de kion", desc: "Descripción por confirmar.", price: "S/ —" },
+
   // ---- Chaufas ----
-  { cat: "chaufas", img: "", name: "Plato 01", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "chaufas", img: "", name: "Plato 02", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "chaufas", img: "", name: "Plato 03", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "chaufas", img: "", name: "Plato 04", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "chaufas", img: "", name: "Plato 05", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "chaufas", img: "", name: "Plato 06", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Chaufa de pollo", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Chaufa de chancho", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Chaufa de carne", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Chaufa mixto", desc: "Pollo, chancho", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Chaufa especial", desc: "Chancho, pollo, langostino", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Chaufa con pollo a la parrilla", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Chaufa con chuleta a la parrilla", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Chaufa con broaster", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Aeropuerto de pollo", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Aeropuerto de chancho", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Aeropuerto especial", desc: "Chancho, pollo, langostino", price: "S/ —" },
 
-  // ---- Sopas y Entradas ----
-  { cat: "sopas", img: "", name: "Plato 07", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "sopas", img: "", name: "Plato 08", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "sopas", img: "", name: "Plato 09", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "sopas", img: "", name: "Plato 10", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "sopas", img: "", name: "Plato 11", desc: "Descripción por confirmar.", price: "S/ —" },
+  // ---- Combinados y tallarines ----
+  { cat: "combinados", img: "", name: "Combinado", desc: "Chaufa + tallarín saltado", price: "S/ —" },
+  { cat: "combinados", img: "", name: "Combinado de chancho", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "combinados", img: "", name: "Combinado especial", desc: "Pollo, chancho y langostino", price: "S/ —" },
+  { cat: "combinados", img: "", name: "Tallarín Taypa", desc: "Pollo, chancho y langostino", price: "S/ —" },
+  { cat: "combinados", img: "", name: "Tallarín saltado de pollo", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "combinados", img: "", name: "Tallarín saltado de chancho", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "combinados", img: "", name: "Tallarín saltado mixto", desc: "Pollo + chancho", price: "S/ —" },
 
-  // ---- Platos de Fondo ----
-  { cat: "fondos", img: "", name: "Plato 12", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "fondos", img: "", name: "Plato 13", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "fondos", img: "", name: "Plato 14", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "fondos", img: "", name: "Plato 15", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "fondos", img: "", name: "Plato 16", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "fondos", img: "", name: "Plato 17", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "fondos", img: "", name: "Plato 18", desc: "Descripción por confirmar.", price: "S/ —" },
+  // ---- Platos saltados ----
+  { cat: "saltados", img: "", name: "Chi jau kay + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "saltados", img: "", name: "Pollo con verdura + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "saltados", img: "", name: "Chancho con verdura + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "saltados", img: "", name: "Pollo con frijolito chino + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "saltados", img: "", name: "Pollo con champiñones + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "saltados", img: "", name: "Saltado de pollo + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "saltados", img: "", name: "Lomo saltado + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "saltados", img: "", name: "Taypa especial + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "saltados", img: "", name: "Pollo enrollado + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
 
-  // ---- Especialidades ----
-  { cat: "especialidades", img: "", name: "Plato 19", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "especialidades", img: "", name: "Plato 20", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "especialidades", img: "", name: "Plato 21", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "especialidades", img: "", name: "Plato 22", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "especialidades", img: "", name: "Plato 23", desc: "Descripción por confirmar.", price: "S/ —" },
+  // ---- Platos dulces ----
+  { cat: "dulces", img: "", name: "Kam lu wantan + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "dulces", img: "", name: "Tipa kay + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "dulces", img: "", name: "Chancho con piña + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "dulces", img: "", name: "Pollo con piña + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "dulces", img: "", name: "Chancho con tamarindo + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "dulces", img: "", name: "Pollo con tamarindo + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "dulces", img: "", name: "Limón kay + chaufa", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "dulces", img: "", name: "Porción de wantan frito", desc: "Descripción por confirmar.", price: "S/ —" },
 ];
