@@ -71,7 +71,10 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.3rem;
+  min-width: 48px;                    /* área táctil mínima */
+  min-height: 48px;
   background: transparent;
   border: none;
   cursor: pointer;
