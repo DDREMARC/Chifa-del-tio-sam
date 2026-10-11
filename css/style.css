@@ -956,3 +956,107 @@ html.telon-entrada::after{ content:""; }
   opacity:.09;
   pointer-events:none;
 }
+
+/* ===========================================================
+   ACABADO NOCTURNO — cristal oscuro, filo dorado, toque orgánico
+=========================================================== */
+:root{
+  --night:      rgba(13,13,13,.75);
+  --gold-edge:  #E5A93B;
+  --tacto:      transform .15s cubic-bezier(.16,1,.3,1);
+}
+
+/* Tarjetas de la carta: cristal oscuro con filo dorado suave */
+.menu-item{
+  background:var(--night);
+  border:1px solid rgba(229,169,59,.28);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+  color:var(--cream);
+  box-shadow:0 10px 30px -14px rgba(0,0,0,.6), inset 0 1px 0 rgba(229,169,59,.12);
+  transition:transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s ease, border-color .3s ease;
+}
+.menu-item:hover{
+  border-color:rgba(229,169,59,.5);
+  box-shadow:0 18px 38px -14px rgba(0,0,0,.7), inset 0 1px 0 rgba(229,169,59,.2);
+}
+.menu-item__name{ color:var(--cream); }
+.menu-item__price{ color:var(--gold-edge); }
+.menu-item__desc{ color:rgba(248,235,171,.72); }
+
+/* Foto: degradado nocturno en la parte superior para que el plato resalte */
+.menu-item__icon{ position:relative; }
+.menu-item__icon::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(13,13,13,.62) 0%, rgba(13,13,13,.18) 38%, transparent 62%);
+  pointer-events:none;
+}
+
+/* Botón de pedido: mismo lenguaje de cristal con dorado */
+.menu-item__order{
+  background:rgba(229,169,59,.14);
+  color:var(--gold);
+  border:1px solid rgba(229,169,59,.55);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+}
+.menu-item__order:hover{ background:rgba(229,169,59,.26); }
+
+/* Toque táctil: todo lo clicable se hunde un poco al presionar */
+.btn,
+.menu-item__order,
+.menu-item,
+.foot-social a,
+.wheel-trigger,
+.clasicos__more,
+.ruta-card{
+  transition:var(--tacto), box-shadow .2s ease, background-color .2s ease, border-color .2s ease;
+}
+.btn:active,
+.menu-item__order:active,
+.menu-item:active,
+.foot-social a:active,
+.wheel-trigger:active,
+.clasicos__more:active,
+.ruta-card:active{
+  transform:scale(.96);
+}
+/* Los botones magnéticos mueven su transform con GSAP: usan la propiedad scale aparte */
+.magnetic:active{ transform:none; scale:.96; }
+.magnetic{ transition:scale .15s cubic-bezier(.16,1,.3,1), box-shadow .18s ease; }
+
+/* Tarjeta de acceso a Google Maps (mínimo 48px, táctil) */
+.ruta-card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-height:64px;
+  margin-bottom:18px;
+  padding:14px 18px;
+  border-radius:var(--radius-md);
+  background:var(--night);
+  border:1px solid rgba(229,169,59,.45);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+  color:var(--cream);
+  box-shadow:var(--shadow-card);
+}
+.ruta-card:hover{ border-color:var(--gold-edge); box-shadow:var(--shadow-pop); }
+.ruta-card:focus-visible{ outline:3px solid var(--gold); outline-offset:3px; }
+.ruta-card__icon{
+  flex-shrink:0;
+  display:grid;
+  place-items:center;
+  width:44px; height:44px;
+  border-radius:12px;
+  background:rgba(229,169,59,.16);
+  color:var(--gold-edge);
+}
+.ruta-card__icon svg{ width:22px; height:22px; }
+.ruta-card__text{ flex:1; display:flex; flex-direction:column; gap:2px; }
+.ruta-card__title{ font-family:var(--font-display); font-weight:700; font-size:1.05rem; }
+.ruta-card__sub{ font-size:.8rem; color:rgba(248,235,171,.7); }
+.ruta-card__go{ color:var(--gold-edge); font-size:1.3rem; transition:transform .3s cubic-bezier(.16,1,.3,1); }
+.ruta-card:hover .ruta-card__go{ transform:translateX(4px); }

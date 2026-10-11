@@ -20,33 +20,33 @@ const MENU_WHATSAPP = "51987654321";
 
 const MENU_ITEMS = [
   // ---- Chaufas ----
-  { cat: "chaufas", img: "", name: "Plato 01", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "chaufas", img: "", name: "Plato 02", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "chaufas", img: "", name: "Plato 03", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "chaufas", img: "", name: "Plato 04", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "chaufas", img: "", name: "Plato 05", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "chaufas", img: "", name: "Plato 06", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Plato 01", desc: "Salteado en wok a fuego vivo, con kion y sillao. Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Plato 02", desc: "Salteado en wok a fuego vivo, con kion y sillao. Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Plato 03", desc: "Salteado en wok a fuego vivo, con kion y sillao. Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Plato 04", desc: "Salteado en wok a fuego vivo, con kion y sillao. Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Plato 05", desc: "Salteado en wok a fuego vivo, con kion y sillao. Descripción por confirmar.", price: "S/ —" },
+  { cat: "chaufas", img: "", name: "Plato 06", desc: "Salteado en wok a fuego vivo, con kion y sillao. Descripción por confirmar.", price: "S/ —" },
 
   // ---- Sopas y Entradas ----
-  { cat: "sopas", img: "", name: "Plato 07", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "sopas", img: "", name: "Plato 08", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "sopas", img: "", name: "Plato 09", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "sopas", img: "", name: "Plato 10", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "sopas", img: "", name: "Plato 11", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "sopas", img: "", name: "Plato 07", desc: "Caldo de la casa con cebolla china y un toque de kion. Descripción por confirmar.", price: "S/ —" },
+  { cat: "sopas", img: "", name: "Plato 08", desc: "Caldo de la casa con cebolla china y un toque de kion. Descripción por confirmar.", price: "S/ —" },
+  { cat: "sopas", img: "", name: "Plato 09", desc: "Caldo de la casa con cebolla china y un toque de kion. Descripción por confirmar.", price: "S/ —" },
+  { cat: "sopas", img: "", name: "Plato 10", desc: "Caldo de la casa con cebolla china y un toque de kion. Descripción por confirmar.", price: "S/ —" },
+  { cat: "sopas", img: "", name: "Plato 11", desc: "Caldo de la casa con cebolla china y un toque de kion. Descripción por confirmar.", price: "S/ —" },
 
   // ---- Platos de Fondo ----
-  { cat: "fondos", img: "", name: "Plato 12", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "fondos", img: "", name: "Plato 13", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "fondos", img: "", name: "Plato 14", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "fondos", img: "", name: "Plato 15", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "fondos", img: "", name: "Plato 16", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "fondos", img: "", name: "Plato 17", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "fondos", img: "", name: "Plato 18", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "fondos", img: "", name: "Plato 12", desc: "Sazón de barrio, al wok y a fuego vivo. Descripción por confirmar.", price: "S/ —" },
+  { cat: "fondos", img: "", name: "Plato 13", desc: "Sazón de barrio, al wok y a fuego vivo. Descripción por confirmar.", price: "S/ —" },
+  { cat: "fondos", img: "", name: "Plato 14", desc: "Sazón de barrio, al wok y a fuego vivo. Descripción por confirmar.", price: "S/ —" },
+  { cat: "fondos", img: "", name: "Plato 15", desc: "Sazón de barrio, al wok y a fuego vivo. Descripción por confirmar.", price: "S/ —" },
+  { cat: "fondos", img: "", name: "Plato 16", desc: "Sazón de barrio, al wok y a fuego vivo. Descripción por confirmar.", price: "S/ —" },
+  { cat: "fondos", img: "", name: "Plato 17", desc: "Sazón de barrio, al wok y a fuego vivo. Descripción por confirmar.", price: "S/ —" },
+  { cat: "fondos", img: "", name: "Plato 18", desc: "Sazón de barrio, al wok y a fuego vivo. Descripción por confirmar.", price: "S/ —" },
 
   // ---- Especialidades ----
-  { cat: "especialidades", img: "", name: "Plato 19", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "especialidades", img: "", name: "Plato 20", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "especialidades", img: "", name: "Plato 21", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "especialidades", img: "", name: "Plato 22", desc: "Descripción por confirmar.", price: "S/ —" },
-  { cat: "especialidades", img: "", name: "Plato 23", desc: "Descripción por confirmar.", price: "S/ —" },
+  { cat: "especialidades", img: "", name: "Plato 19", desc: "Receta de la casa, con sillao y cebolla china. Descripción por confirmar.", price: "S/ —" },
+  { cat: "especialidades", img: "", name: "Plato 20", desc: "Receta de la casa, con sillao y cebolla china. Descripción por confirmar.", price: "S/ —" },
+  { cat: "especialidades", img: "", name: "Plato 21", desc: "Receta de la casa, con sillao y cebolla china. Descripción por confirmar.", price: "S/ —" },
+  { cat: "especialidades", img: "", name: "Plato 22", desc: "Receta de la casa, con sillao y cebolla china. Descripción por confirmar.", price: "S/ —" },
+  { cat: "especialidades", img: "", name: "Plato 23", desc: "Receta de la casa, con sillao y cebolla china. Descripción por confirmar.", price: "S/ —" },
 ];
