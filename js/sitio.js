@@ -11,6 +11,7 @@
         data-anim="mascara"  revelado de abajo hacia arriba
         data-parallax="60"   parallax en px (positivo baja, negativo sube)
    5. Botones .magnetic y barra de progreso
+   6. Piezas de React Bits: luz del farol y chispas del wok (js/reactbits.js)
    Expone window.TioSam para experiencia.js (portada) y main.js (carta).
    Con "reducir movimiento" pasa a modo calmo (solo fundidos) y sin GSAP no anima.
    ========================================================= */
@@ -307,12 +308,34 @@
   }
 
   /* ---------------------------------------------------------
+     6. Piezas de React Bits (js/reactbits.js). No usan GSAP: funcionan
+        aunque el CDN falle, y cada una se apaga sola en modo calmo.
+  --------------------------------------------------------- */
+  function initReactBits() {
+    const RB = window.ReactBits;
+    if (!RB) return;
+    // Chispas del wok al pedir (WhatsApp) o al pulsar un botón de farol
+    RB.ChispasWok('a[href*="wa.me"], .btn--farol');
+    // Luz del farol: los haces nacen en el farol grande de cada cabecera
+    document.querySelectorAll(".cabecera").forEach((cab) => {
+      const foco = cab.querySelector(".farol .farol__luz");
+      RB.LuzFarol(cab, {
+        origen: foco ? () => {
+          const c = cab.getBoundingClientRect(), f = foco.getBoundingClientRect();
+          return [f.left - c.left + f.width / 2, f.top - c.top + f.height * 0.35];
+        } : null,
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------
      Arranque
   --------------------------------------------------------- */
   initRedes();
   initMenu();
   initTelon();
   initAnchors();
+  initReactBits();
   if (!hasGSAP) return;
   gsap.registerPlugin(ScrollTrigger);
   if (hasSplit) gsap.registerPlugin(SplitText);

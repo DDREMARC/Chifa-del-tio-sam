@@ -463,3 +463,87 @@ html.telon-entrada::after{ content:""; }
     color 200ms var(--ease-out);
 }
 .magnetic__label{ display:inline-block; pointer-events:none; }
+
+/* ---------------------------------------------------------
+   Piezas de React Bits (js/reactbits.js), con la luz del diorama
+--------------------------------------------------------- */
+/* Luz del farol (LightRays): haces ámbar sobre la cabecera, detrás del texto.
+   El degradado de .cabecera::before queda debajo como respaldo (modo calmo, sin WebGL). */
+.luz-farol{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 1400ms var(--ease-out);
+}
+.luz-farol.is-on{ opacity:1; }
+
+/* Chispas del wok (ClickSpark): un lienzo fijo para toda la página, bajo el telón */
+.chispas-wok{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  z-index:9000;
+  pointer-events:none;
+}
+
+/* Texto circular (CircularText): cada letra cuelga de un radio y gira con el anillo */
+.texto-circular{
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+  font-family:var(--font-body);
+  font-weight:600;
+  line-height:1;
+  text-transform:uppercase;
+  color:var(--farol);
+  will-change:transform;
+}
+.texto-circular span{
+  position:absolute;
+  left:50%;
+  top:0;
+  width:1em;
+  height:50%;
+  margin-left:-.5em;
+  text-align:center;
+  transform-origin:50% 100%;
+}
+
+/* Letrero de platos (ScrollVelocity): filas que corren; la segunda solo con el filo de la letra */
+.letrero{
+  display:grid;
+  gap:var(--s-2);
+  padding-block:clamp(var(--s-6), 6vw, var(--s-8));
+  overflow:hidden;
+  border-block:1px solid var(--linea);
+  -webkit-user-select:none;
+  user-select:none;
+}
+.letrero__fila{ overflow:hidden; }
+.letrero__riel{ display:flex; width:max-content; will-change:transform; }
+.letrero__copia{
+  display:flex;
+  align-items:center;
+  flex-shrink:0;
+  font-family:var(--font-display);
+  font-size:clamp(2.6rem, 7.5vw, 6rem);
+  font-weight:500;
+  line-height:1.1;
+  letter-spacing:-.01em;
+  white-space:nowrap;
+  color:var(--papel);
+}
+.letrero__fila:nth-child(even) .letrero__copia{
+  color:transparent;
+  -webkit-text-stroke:1px var(--papel-3);
+}
+.letrero__punto{
+  padding-inline:.32em;
+  color:var(--farol);
+  -webkit-text-stroke:0;
+}
+.letrero__fila:nth-child(even) .letrero__punto{ color:var(--farol-hondo); }

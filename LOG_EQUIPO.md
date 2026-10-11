@@ -150,3 +150,32 @@ Rama de trabajo propia: `claude/stoic-archimedes-y1rvtt` (PR 1 hacia `main`: htt
   - Navegando con el teclado (Enter) la luz del farol salía de la esquina superior izquierda; ahora sale del centro del enlace.
   - El botón magnético de la portada no se hundía al pulsar (GSAP pisaba la escala) y su transición CSS iba encadenada con la de GSAP; ahora GSAP hace la pulsación y no hay transición CSS sobre transform.
 - **Pendiente heredado:** teléfono/WhatsApp `51987654321` y horario siguen sin confirmar.
+
+
+## Piezas de React Bits (Claude 3, UI/UX)
+
+### 2026-10-11
+
+- **Pedido:** subir el nivel del sitio con componentes de https://reactbits.dev. Se clonó el repositorio oficial (`DavidHDev/react-bits`) y se eligieron 5 de ~200 que encajan con `DESIGN.md` (una sola luz, sin cristal, sin texto con degradado, sin halos).
+- **Nuevo `js/reactbits.js`:** los 5 pasados a JS sin React ni librerías (`window.ReactBits`). Lleva el aviso de licencia de React Bits (MIT + Commons Clause): no quitarlo.
+  - `LuzFarol` ← LightRays: WebGL puro (sin ogl), haces ámbar desde el farol de la cabecera de Carta y Contacto; DPR máx. 1,5 (1,25 en táctil), se pausa fuera de pantalla y con la pestaña oculta.
+  - `TextoCircular` ← CircularText: anillo "El Tío Sam · Chifa · Barrios Altos" alrededor del logo del hero; acelera con el ratón encima.
+  - `LetreroVelocidad` ← ScrollVelocity: banda de la portada con nombres reales de `menu-data.js` (sin "+ chaufa"), dos filas en sentidos opuestos que se aceleran con el scroll. `aria-hidden`.
+  - `PlatoInclinado` ← TiltedCard: tarjetas con foto de la carta, giro 3D con muelle (damping 30, stiffness 100, mass 2) y luz soft-light que sigue al cursor. Solo con ratón; usa `rotate`/`scale` para no pisar el `transform` de las entradas y salidas.
+  - `ChispasWok` ← ClickSpark: chispas ámbar al pulsar enlaces `wa.me` y `.btn--farol`; un solo lienzo fijo que solo dibuja mientras hay chispas.
+- **Archivos:**
+  - `html/index.html`: `.xp-hero__sello` envuelve el logo; `#letreroPlatos` entre los clásicos y la carta rápida.
+  - Las 3 páginas cargan `reactbits.js` antes de `sitio.js`.
+  - CSS: `css/style.css` (bloque "Piezas de React Bits"), `css/experiencia.css` (sello) y `css/carta.css` (perspectiva y luz de la tarjeta).
+  - JS: `js/sitio.js` (`initReactBits`: chispas + luz), `js/experiencia.js` (`initSello`, `initLetrero`; la animación del hero ahora mueve `.xp-hero__sello`) y `js/main.js` (inclinación tras pintar).
+  - Docs: `CLAUDE.md` y `DESIGN.md` (tabla de piezas).
+- **Modo calmo:** ninguna pieza se mueve. El anillo y el letrero se muestran quietos; no hay luz WebGL ni chispas. Ninguna depende de GSAP.
+- **Verificación (Chromium con GSAP local, 1440 y 390 px):**
+  - Sin errores en consola en las 3 páginas.
+  - Luz encendida en Carta y Contacto.
+  - Anillo de 37 letras girando y letrero en movimiento.
+  - Tarjeta inclinada (`rotate` 6,3°, `scale` 1,02) y de vuelta a cero al salir.
+  - Chispas visibles al pulsar.
+  - Modo calmo comprobado.
+  - El detector de impeccable no suma avisos nuevos: los 3 que da ya estaban en `main`.
+- **No verificado:** rendimiento del WebGL de la cabecera en un móvil real de gama media.

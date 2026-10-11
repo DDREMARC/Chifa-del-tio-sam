@@ -134,14 +134,27 @@ body.xp{ padding-top:0; background:var(--noche-0); }
   background:radial-gradient(50% 46% at 50% 50%, oklch(0.145 0.012 45 / .74), transparent 72%);
 }
 .xp-hero__inner{ display:grid; justify-items:center; }
+/* Sello: el logo con un rótulo que gira alrededor (TextoCircular, js/reactbits.js) */
+.xp-hero__sello{
+  --logo:clamp(96px, 11vw, 132px);
+  --hueco:clamp(22px, 2.4vw, 28px);  /* del borde del logo al borde del anillo */
+  position:relative;
+  width:var(--logo);
+  aspect-ratio:1;
+  margin:var(--hueco) 0 calc(var(--s-5) + var(--hueco));
+}
 .xp-hero__logo{
-  width:clamp(96px, 11vw, 132px);
+  width:100%;
   height:auto;
   aspect-ratio:1;
-  margin-bottom:var(--s-5);
   border-radius:50%;
   object-fit:cover;
   background:#000;
+}
+.xp-hero__anillo{
+  inset:calc(var(--hueco) * -1);
+  font-size:clamp(11px, 1vw, 12.5px);
+  letter-spacing:.02em;
 }
 .xp-hero__title{
   font-size:clamp(3.5rem, 12vw, 6rem);

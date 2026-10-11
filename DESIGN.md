@@ -66,6 +66,18 @@ Tres capas, de la más ligera a la más pesada. Cada una degrada sola si falla l
 - **Mapa** (`.mapa`): iframe de Google filtrado a tono noche; los datos van en lista (`.datos`), no en tarjetas.
 - **Logo oficial** `img/logo_tio_sam.jpeg`: portada, pie, telón y cabecera. Recortado en círculo.
 
+## Piezas de React Bits (`js/reactbits.js`)
+
+Cinco componentes de reactbits.dev pasados a JS sin React y llevados a la luz del diorama. Todos se apagan en `calm` y solo corren mientras se ven.
+
+| Pieza | Origen | Dónde | Qué hace |
+|---|---|---|---|
+| Luz del farol | LightRays | cabeceras de Carta y Contacto | Haces ámbar que nacen en el farol grande y bajan; con ratón se tuercen apenas hacia el cursor. Intensidad baja: el título conserva su contraste. |
+| Sello giratorio | CircularText | logo del hero (portada) | "El Tío Sam · Chifa · Barrios Altos" en un anillo que gira (28 s por vuelta) y acelera 4× con el ratón encima. |
+| Letrero de platos | ScrollVelocity | portada, entre los clásicos y la carta rápida | Dos filas con nombres reales de la carta (la segunda solo con el filo de la letra) que corren y se aceleran con la velocidad del scroll. |
+| Plato inclinado | TiltedCard | tarjetas con foto de la carta | La tarjeta gira en 3D hacia el ratón con física de muelle y una luz cálida (soft-light) la recorre. Solo con ratón. |
+| Chispas del wok | ClickSpark | botones de pedido (WhatsApp) y `.btn--farol` | Ocho chispas ámbar saltan desde el dedo al pulsar. |
+
 ## No hacer
 
 Rojo o dorado planos a pantalla completa · cristal/`backdrop-filter` · halos de color · degradado en texto · tarjetas iguales de icono + título + texto · rótulos sobre títulos · numeración de secciones · inventar platos, precios, horarios o reseñas.

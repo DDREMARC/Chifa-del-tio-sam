@@ -203,6 +203,8 @@
     pintar(id);
     if (!primera) volverAlInicio();
     observarEntradas();
+    // Plato inclinado (TiltedCard, js/reactbits.js): solo con ratón y fuera del modo calmo
+    if (window.ReactBits) grid.querySelectorAll(".plato--foto").forEach((t) => ReactBits.PlatoInclinado(t));
   }
 
   const categoriaDeHash = () => decodeURIComponent(location.hash.slice(1));

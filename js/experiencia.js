@@ -107,6 +107,40 @@
     });
   }
 
+  /* ---------------------------------------------------------
+     1b. Piezas de React Bits (js/reactbits.js), sin GSAP:
+         - sello: el rótulo gira alrededor del logo del hero
+         - letrero: nombres reales de la carta corriendo con el scroll,
+           mezclados por categoría para que cada fila se lea variada
+  --------------------------------------------------------- */
+  function initSello() {
+    const anillo = document.querySelector('.xp-hero__anillo');
+    if (!anillo || !window.ReactBits) return;
+    ReactBits.TextoCircular(anillo, 'El Tío Sam · Chifa · Barrios Altos · ', {
+      zonaHover: anillo.parentElement,
+    });
+  }
+
+  function initLetrero() {
+    const caja = document.getElementById('letreroPlatos');
+    if (!caja || !window.ReactBits || typeof MENU_ITEMS === 'undefined') return;
+    // "Lomo saltado + chaufa" → "Lomo saltado": en el letrero basta el nombre del plato
+    const nombre = (i) => i.name.replace(/\s*\+\s*chaufa$/i, '');
+    const fila = (cats) => {
+      const grupos = cats.map((c) => MENU_ITEMS.filter((i) => i.cat === c).map(nombre));
+      const mezcla = [];
+      for (let k = 0; mezcla.length < 10 && grupos.some((g) => g[k]); k++) {
+        grupos.forEach((g) => { if (g[k] && !mezcla.includes(g[k])) mezcla.push(g[k]); });
+      }
+      return mezcla.slice(0, 10)
+        .map((n) => `<span>${escapeHtml(n)}</span><span class="letrero__punto">·</span>`).join('');
+    };
+    ReactBits.LetreroVelocidad(caja, [fila(['chaufas', 'aeropuertos', 'sopas']), fila(['saltados', 'dulces', 'combinados'])], {
+      velocidad: 36,
+      copias: 2,
+    });
+  }
+
   /* La banda de cada fila entra por el borde más cercano al puntero (solo con ratón) */
   function initFlowing() {
     if (calm || coarse) return;
@@ -223,7 +257,7 @@
     const partes = dividir(title);
     const words = partes ? partes.words : [];
     const resto = hero.querySelectorAll('.xp-hero__tag, .xp-hero__lugar, .xp-hero__acciones');
-    const logo = hero.querySelector('.xp-hero__logo');
+    const logo = hero.querySelector('.xp-hero__sello') || hero.querySelector('.xp-hero__logo');   // el anillo se va con el logo
 
     // Intro (al cargar): las letras suben desde su máscara, luego el resto
     if (partes) gsap.from(partes.chars, { yPercent: LETRA_ABAJO, duration: 1, ease: 'expo.out', stagger: 0.03, delay: 0.3 });
@@ -559,6 +593,8 @@
   --------------------------------------------------------- */
   renderFlowing();
   initFlowing();
+  initSello();
+  initLetrero();
   mountWorld();
   if (!hasGSAP) { fallbackWithoutGSAP(); return; }
   gsap.registerPlugin(ScrollTrigger);
