@@ -5,7 +5,7 @@
    dentro de una caja de laca oscura, iluminada por faroles de papel.
    - La profundidad se hace con planos de tono (noche 0 → 3), no con sombras.
    - El farol (ámbar) es la única luz. El bermellón solo vive en los faroles.
-   - Tipografía: Newsreader (serif editorial) para los títulos y
+   - Tipografía: Cormorant Garamond (serif editorial) para los títulos y
      DM Sans para textos y botones. Sin cursivas: ninguna letra se inclina.
    Cada página suma su propia hoja: carta.css, contacto.css, experiencia.css.
    ========================================================= */
@@ -30,7 +30,7 @@
   /* Papel de arroz: texto (todos pasan 4.5:1 sobre noche-0 a noche-3) */
   --papel:   oklch(0.945 0.022 88);
   --papel-2: oklch(0.80 0.025 82);
-  --papel-3: oklch(0.68 0.025 75);
+  --papel-3: oklch(0.72 0.025 75);
 
   /* Luz */
   --farol:       oklch(0.80 0.135 78);
@@ -42,12 +42,20 @@
   --linea:        oklch(0.945 0.022 88 / .10);
   --linea-fuerte: oklch(0.945 0.022 88 / .20);
 
-  --font-display: "Newsreader", Georgia, serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
   --font-body:    "DM Sans", "DM Sans Fallback", sans-serif;
 
-  /* Escala de espaciado: 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128. Todo margen, relleno y hueco sale de aquí */
-  --s-1:4px;  --s-2:8px;  --s-3:12px;  --s-4:16px;  --s-5:24px;
-  --s-6:32px; --s-7:48px; --s-8:64px;  --s-9:96px;  --s-10:128px;
+  /* Escala fluida: conserva el ritmo entre móvil y escritorio sin saltos de breakpoint. */
+  --s-1:clamp(3px, .2rem + .08vw, 4px);
+  --s-2:clamp(6px, .34rem + .14vw, 8px);
+  --s-3:clamp(9px, .5rem + .2vw, 12px);
+  --s-4:clamp(12px, .68rem + .3vw, 16px);
+  --s-5:clamp(18px, 1rem + .45vw, 24px);
+  --s-6:clamp(24px, 1.4rem + .5vw, 32px);
+  --s-7:clamp(36px, 2rem + .75vw, 48px);
+  --s-8:clamp(48px, 2.7rem + 1vw, 64px);
+  --s-9:clamp(72px, 4rem + 1.5vw, 96px);
+  --s-10:clamp(96px, 5.3rem + 2vw, 128px);
 
   /* Medidas */
   --gutter: clamp(20px, 5vw, 48px);
@@ -62,7 +70,7 @@
   --zoom: 1.08;
 
   /* Movimiento: salida rápida con frenado suave, entrada algo más lenta */
-  --ease-out: cubic-bezier(.23, 1, .32, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
   --ease-in:  cubic-bezier(.55, 0, 1, .45);
   --ease-in-out: cubic-bezier(.77, 0, .175, 1);
   --spring: cubic-bezier(.23, 1, .32, 1);   /* sin soporte de linear(): cae en un ease-out fuerte */
@@ -222,14 +230,14 @@ html[data-motion="calm"] .farol{ animation:none; }
   white-space:nowrap;
   cursor:pointer;
   transition:
-    transform 380ms var(--spring),
+    transform 220ms var(--ease-out),
     background-color 200ms var(--ease-out),
     border-color 200ms var(--ease-out),
     color 200ms var(--ease-out);
 }
 .btn svg{ width:18px; height:18px; flex-shrink:0; }
-/* Al pulsar responde en 90 ms; al soltar vuelve más despacio: se siente táctil */
-.btn:active{ transform:scale(.97); transition:transform 90ms var(--ease-out), background-color 200ms var(--ease-out), border-color 200ms var(--ease-out), color 200ms var(--ease-out); }
+/* La respuesta táctil se siente inmediata y termina dentro de 180–220 ms. */
+.btn:active{ transform:scale(.98); transition:transform 180ms var(--ease-out), background-color 200ms var(--ease-out), border-color 200ms var(--ease-out), color 200ms var(--ease-out); }
 .btn--farol{ background:var(--farol); color:var(--noche-0); }
 .btn--borde{ border-color:var(--linea-fuerte); color:var(--papel); }
 .btn--bloque{ width:100%; }
@@ -261,14 +269,8 @@ html[data-motion="calm"] .farol{ animation:none; }
   border-bottom:1px solid var(--linea);
   padding:clamp(var(--s-6), 8vh, var(--s-9)) 0 clamp(var(--s-6), 6vh, var(--s-8));
 }
-/* La luz sale de los faroles: un solo foco, arriba a la derecha */
-.cabecera::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:radial-gradient(48% 90% at 86% 0%, oklch(0.80 0.135 78 / .10), transparent 70%);
-}
+/* La cabecera mantiene el plano mate; el farol real concentra la luz. */
+.cabecera::before{ content:none; }
 .cabecera__cuerpo{ position:relative; }
 .cabecera h1{ font-size:clamp(3rem, 9.5vw, 5.5rem); }
 .cabecera p{
@@ -457,8 +459,7 @@ html.telon-entrada::after{ content:""; }
 /* ---------------------------------------------------------
    Piezas de React Bits (js/reactbits.js), con la luz del diorama
 --------------------------------------------------------- */
-/* Luz del farol (LightRays): haces ámbar sobre la cabecera, detrás del texto.
-   El degradado de .cabecera::before queda debajo como respaldo (modo calmo, sin WebGL). */
+/* Luz del farol (LightRays): haces ámbar sobre la cabecera, detrás del texto. */
 .luz-farol{
   position:absolute;
   inset:0;

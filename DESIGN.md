@@ -7,7 +7,7 @@ Diorama nocturno: una calle de Barrios Altos dentro de una caja de laca oscura, 
 | Token | Valor | Uso |
 |---|---|---|
 | `--noche-0…3` | L .145 / .185 / .225 / .275, C .012–.018, H 45 | Planos del fondo al frente: página, secciones, tarjetas, hover |
-| `--papel / -2 / -3` | L .945 / .80 / .68, H 80–88 | Texto principal, secundario, atenuado (todos ≥ 4.5:1 sobre noche) |
+| `--papel / -2 / -3` | L .945 / .80 / .72, H 80–88 | Texto principal, secundario y atenuado con contraste reforzado |
 | `--farol` (+ `-claro`, `-hondo`) | L .80, C .135, H 78 | La única luz: botón principal, marcas activas, foco |
 | `--bermellon` | L .62, C .16, H 32 | Solo en los faroles y en estados de error |
 | `--linea / --linea-fuerte` | papel al 10 % / 20 % | Filos de 1 px; la profundidad sale de planos de tono, no de sombras |
@@ -16,18 +16,18 @@ Fuera de esto no se inventan colores. El bermellón no se usa para texto.
 
 ## Tipografía
 
-- **Newsreader** (`--font-display`): serif editorial, variable 400–700 con eje óptico 6–72 (Google Fonts). Títulos, nombres de plato, menú y datos grandes. Sus formas abiertas mantienen la lectura clara en pantalla pequeña; `font-variant-numeric: lining-nums` alinea las cifras.
+- **Cormorant Garamond** (`--font-display`): serif editorial, pesos 400–700 (Google Fonts). Títulos, nombres de plato, menú y datos grandes; `font-variant-numeric: lining-nums` alinea las cifras.
 - **DM Sans** (`--font-body`): sans geométrica limpia, 400–700 con eje óptico 9–40 (Google Fonts). Texto, filas de la carta, botones y números tabulares en los precios.
 - **Sin cursivas.** `em, i, cite, dfn, var, address` quedan en `font-style: normal` y `font-synthesis: none`; el énfasis sale de peso, tamaño o color (el "CHIFA" de la portada es un rótulo en mayúsculas con interletrado, en ámbar). Georgia es el respaldo serif; DM Sans conserva el respaldo métrico calibrado.
 - Máximo 6rem en pantalla; sin rótulos sobre los títulos ni numeración de secciones; interletrado entre −0.015em y 0.
 
 ## Forma y espacio
 
-- Espaciado: una sola escala, `--s-1…--s-10` = 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128 px. Padding y margen salen de ahí; no se inventan valores sueltos.
+- Espaciado: escala fluida `--s-1…--s-10` con límites `clamp()` para adaptar el ritmo entre móvil y escritorio.
 - Radios: 8 (etiquetas), 12 (botones, campos), 16 (tarjetas, mapa, fotos). Sin píldoras.
 - Área táctil mínima de 48 px. Contenedor máximo 1120 px, `--gutter` fluido.
 - Más aire sobre un título que debajo; secciones de la carta separadas por 44–80 px.
-- Una sola elevación por pieza (tono + filo). La única sombra es la hoja que sube sobre la película en la portada.
+- La profundidad sale de los planos de tono y filos finos; no se usan sombras decorativas.
 
 ## Movimiento
 
@@ -48,8 +48,8 @@ Tres capas, de la más ligera a la más pesada. Cada una degrada sola si falla l
 
 **Valores** (en `css/style.css`):
 
-- Curvas: `--ease-out` `cubic-bezier(.23,1,.32,1)` (entradas), `--ease-in` (salidas), `--ease-in-out` (telón y bandas), `--spring` (`linear()`, ζ .82, rebasa 1,1 %: marca de pestañas, soltar botones, icono del menú).
-- Entradas ≈ 440 ms con cascada de 45 ms (máx. 8); las fotos de carta se descubren en 480 ms y su texto aparece 90 ms después; salidas ≈ 150 ms; pulsar = `scale(.97)` en 90 ms y volver en ~380 ms; menú: abre 560–720 ms con cascada, cierra 300 ms sin cascada.
+- Curvas: `--ease-out` `cubic-bezier(.16,1,.3,1)` para desaceleraciones; `--ease-in` para salidas y `--ease-in-out` para telón y bandas.
+- Entradas ≈ 440 ms con cascada de 45 ms (máx. 8); las fotos de carta se descubren en 480 ms y su texto aparece 90 ms después; pulsación y navegación responden en 180–300 ms.
 - `--dist` (14 px, 0 en `calm`), `--zoom` y `--desenfoque` controlan cuánto se mueve y se enfoca una entrada.
 - Solo `transform`, `opacity` y (acotado) `filter`. Hover solo con `@media (hover:hover)`. Estados en CSS para que se puedan interrumpir.
 
@@ -68,15 +68,13 @@ Tres capas, de la más ligera a la más pesada. Cada una degrada sola si falla l
 
 ## Piezas de React Bits (`js/reactbits.js`)
 
-Cinco componentes de reactbits.dev pasados a JS sin React y llevados a la luz del diorama. Todos se apagan en `calm` y solo corren mientras se ven.
+Tres componentes visibles de reactbits.dev pasados a JS sin React y llevados a la luz del diorama. Se apagan en `calm` y solo corren mientras se ven; TiltedCard y ClickSpark quedan sin activar.
 
 | Pieza | Origen | Dónde | Qué hace |
 |---|---|---|---|
 | Luz del farol | LightRays | cabeceras de Carta y Contacto | Haces ámbar que nacen en el farol grande y bajan; con ratón se tuercen apenas hacia el cursor. Intensidad baja: el título conserva su contraste. |
 | Sello giratorio | CircularText | logo del hero (portada) | "El Tío Sam · Chifa · Barrios Altos" en un anillo que gira (28 s por vuelta) y acelera 4× con el ratón encima. |
 | Letrero de platos | ScrollVelocity | portada, entre los clásicos y la carta rápida | Dos filas con nombres reales de la carta (la segunda solo con el filo de la letra) que corren y se aceleran con la velocidad del scroll. |
-| Plato inclinado | TiltedCard | tarjetas con foto de la carta | La tarjeta gira en 3D hacia el ratón con física de muelle y una luz cálida (soft-light) la recorre. Solo con ratón. |
-| Chispas del wok | ClickSpark | botones de pedido (WhatsApp) y `.btn--farol` | Ocho chispas ámbar saltan desde el dedo al pulsar. |
 
 ## No hacer
 

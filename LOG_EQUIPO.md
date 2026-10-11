@@ -190,3 +190,13 @@ Rama de trabajo propia: `claude/stoic-archimedes-y1rvtt` (PR 1 hacia `main`: htt
 - **Tipografía:** Newsreader reemplaza a Cormorant Garamond en títulos y nombres de platos; DM Sans se mantiene para lectura y controles. Se actualizaron los tres enlaces a Google Fonts, el fallback serif y la configuración de la portada. Detalles en `DESIGN.md`.
 - **Archivos:** `js/main.js`, `css/carta.css`, `css/style.css`, `css/experiencia.css`, `html/index.html`, `html/carta.html`, `html/contacto.html`, `DESIGN.md`, `CLAUDE.md`, `LOG_EQUIPO.md`.
 - **Verificación:** revisión del video en cuadros de móvil y comparación con el flujo de entrada de las tarjetas. No se ejecutaron pruebas automatizadas; falta confirmar la apariencia en un teléfono real y la carga de Google Fonts en producción.
+
+## Dirección editorial nocturna
+
+### 2026-10-11
+
+- **Errores visuales detectados:** la identidad de titulares no coincidía con la dirección editorial solicitada; el espaciado era fijo; la cabecera y las pestañas usaban degradados decorativos; la portada tenía una sombra amplia; las tarjetas combinaban inclinación 3D con una luz que seguía al cursor; las chispas y la apertura del menú duraban demasiado; la portada dejaba su `<h1>` fuera del `<main>`.
+- **Correcciones:** Cormorant Garamond para titulares y DM Sans para lectura y controles; escala de espacios fluida con `clamp()`; curva de desaceleración `cubic-bezier(.16, 1, .3, 1)`; pulsación de 180 ms y menú más breve; retirada de los halos decorativos, brillos de tarjeta, chispas y sombra exagerada. Las pestañas de la carta indican el desborde con filos finos. Se mantiene el revelado sutil de platos y Lenis para rueda/trackpad, con tacto nativo y modo calmo respetado.
+- **Accesibilidad y estructura:** se reforzó el tono del texto secundario atenuado, se conservan los focos visibles y las áreas táctiles de 48 px, y el hero de portada ahora vive dentro del `<main>`.
+- **Archivos:** `css/style.css`, `css/carta.css`, `css/experiencia.css`, `css/staggered-menu.css`, `html/index.html`, `html/carta.html`, `html/contacto.html`, `js/main.js`, `js/sitio.js`, `DESIGN.md`, `CLAUDE.md`, `LOG_EQUIPO.md`.
+- **Verificación:** página de Carta renderizada y estructura de navegación/platos accesible en navegador; `git diff --check` limpio; detector Impeccable revisado, con falsos positivos de borde/espaciado donde ya hay padding existente. No se ejecutaron pruebas automatizadas.

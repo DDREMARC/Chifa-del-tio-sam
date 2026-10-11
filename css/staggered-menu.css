@@ -59,7 +59,7 @@
   display:block;
   margin-top:3px;
   font-family:var(--font-body);
-  font-size:.7rem;
+  font-size:.8rem;
   font-weight:600;
   letter-spacing:.14em;
   text-transform:uppercase;
@@ -82,7 +82,7 @@
   line-height:1.2;
   transition:transform 340ms var(--spring);
 }
-.sm-toggle:active{ transform:scale(.96); transition-duration:90ms; }
+.sm-toggle:active{ transform:scale(.98); transition-duration:180ms; }
 .sm-toggle-textWrap{
   display:block;
   height:1.2em;
@@ -148,7 +148,7 @@
 .sm-capa:nth-child(2){ background:oklch(0.24 0.05 32); }
 .staggered-menu-wrapper[data-open="true"] .sm-capa{
   transform:translateX(0);
-  transition:transform 560ms var(--ease-out);
+  transition:transform 360ms var(--ease-out);
 }
 .staggered-menu-wrapper[data-open="true"] .sm-capa:nth-child(2){ transition-delay:60ms; }
 
@@ -174,7 +174,7 @@
   visibility:visible;
   transform:translateX(0);
   pointer-events:auto;
-  transition:transform 620ms var(--ease-out) 100ms, visibility 0s;
+  transition:transform 420ms var(--ease-out) 60ms, visibility 0s;
 }
 
 .sm-lista{ display:flex; flex-direction:column; gap:var(--s-1); }
@@ -197,7 +197,7 @@
 }
 .staggered-menu-wrapper[data-open="true"] .sm-item > span{
   transform:translateY(0);
-  transition:transform 720ms var(--ease-out) calc(260ms + var(--i, 0) * 70ms);
+  transition:transform 380ms var(--ease-out) calc(120ms + var(--i, 0) * 38ms);
 }
 .sm-item[aria-current="page"]{ color:var(--papel); }
 .sm-item[aria-current="page"] > span::after{
@@ -242,7 +242,7 @@
 .sm-redes a{
   display:inline-flex;
   align-items:center;
-  min-height:44px;
+  min-height:48px;
   color:var(--papel-2);
   font-weight:500;
   transition:color 200ms var(--ease-out);

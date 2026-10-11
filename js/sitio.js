@@ -314,8 +314,6 @@
   function initReactBits() {
     const RB = window.ReactBits;
     if (!RB) return;
-    // Chispas del wok al pedir (WhatsApp) o al pulsar un botón de farol
-    RB.ChispasWok('a[href*="wa.me"], .btn--farol');
     // Luz del farol: los haces nacen en el farol grande de cada cabecera
     document.querySelectorAll(".cabecera").forEach((cab) => {
       const foco = cab.querySelector(".farol .farol__luz");
