@@ -18,6 +18,10 @@
 
 body.xp{ padding-top:0; background:var(--noche-0); }
 
+/* El recorrido ocupa una pantalla antes de que el motor monte su pista de scroll: así la carta
+   (.after-world) nace fuera de la vista y no "parpadea" ni salta al arrancar */
+#world{ min-height:100svh; }
+
 /* En la portada la cabecera flota sobre la película: se desvanece, sin bloque */
 .xp .sm-header{
   background:linear-gradient(oklch(0.145 0.012 45 / .85), oklch(0.145 0.012 45 / 0));
@@ -48,7 +52,7 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 }
 .sw-copy__body{ color:var(--papel-2); text-shadow:none; }
 .sw-copy__tags li{
-  padding:6px 12px;
+  padding:var(--s-2) var(--s-3);
   border-radius:var(--r-s);
   border:1px solid var(--linea-fuerte);
   background:oklch(0.945 0.022 88 / .06);
@@ -60,7 +64,7 @@ body.xp{ padding-top:0; background:var(--noche-0); }
   display:inline-flex;
   align-items:center;
   min-height:48px;
-  padding:0 24px;
+  padding:0 var(--s-5);
   border-radius:var(--r-m);
   transition:transform 160ms var(--ease-out), background-color 200ms var(--ease-out);
 }
@@ -119,7 +123,7 @@ body.xp{ padding-top:0; background:var(--noche-0); }
   place-content:center;
   justify-items:center;
   text-align:center;
-  padding:calc(var(--header-h) + 16px) var(--gutter) 150px;
+  padding:calc(var(--header-h) + var(--s-4)) var(--gutter) 150px;
   pointer-events:none;
 }
 .xp-hero::before{                 /* velo para que el título se lea sobre la película */
@@ -134,7 +138,7 @@ body.xp{ padding-top:0; background:var(--noche-0); }
   width:clamp(96px, 11vw, 132px);
   height:auto;
   aspect-ratio:1;
-  margin-bottom:20px;
+  margin-bottom:var(--s-5);
   border-radius:50%;
   object-fit:cover;
   background:#000;
@@ -154,18 +158,18 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 }
 .xp-hero__tag{
   max-width:34ch;
-  margin-top:22px;
+  margin-top:var(--s-5);
   font-size:clamp(1.05rem, 1.7vw, 1.25rem);
   line-height:1.5;
   color:var(--papel);
 }
-.xp-hero__lugar{ margin-top:8px; font-size:.95rem; color:var(--papel-2); }
+.xp-hero__lugar{ margin-top:var(--s-2); font-size:.95rem; color:var(--papel-2); }
 .xp-hero__acciones{
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
-  gap:12px;
-  margin-top:28px;
+  gap:var(--s-3);
+  margin-top:var(--s-6);
   pointer-events:auto;
 }
 
@@ -196,12 +200,12 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 .clasicos{
   max-width:1240px;
   margin:0 auto;
-  padding:clamp(96px, 14vh, 160px) var(--gutter) clamp(80px, 12vh, 140px);
+  padding:clamp(var(--s-9), 14vh, 160px) var(--gutter) clamp(var(--s-9), 12vh, var(--s-10));
   outline:none;
 }
 .clasicos__head h2{ font-size:clamp(2.5rem, 6vw, 4.5rem); line-height:1; max-width:14ch; }
 .clasicos__lede{
-  margin-top:20px;
+  margin-top:var(--s-5);
   max-width:42ch;
   font-size:1.1rem;
   line-height:1.6;
@@ -210,9 +214,9 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 .clasicos__grid{
   display:grid;
   grid-template-columns:repeat(12, 1fr);
-  column-gap:clamp(16px, 2.5vw, 36px);
-  row-gap:clamp(40px, 8vh, 90px);
-  margin-top:clamp(56px, 10vh, 112px);
+  column-gap:clamp(var(--s-4), 2.5vw, var(--s-6));
+  row-gap:clamp(var(--s-7), 8vh, var(--s-9));
+  margin-top:clamp(var(--s-8), 10vh, var(--s-10));
 }
 .dish{ margin:0; }
 .dish:nth-child(1){ grid-column:1 / 6; grid-row:1; }
@@ -241,21 +245,21 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 .has-gl .dish__media{ background:transparent; }
 .has-gl .dish__media img{ opacity:0; }
 
-.dish__cap{ display:flex; flex-direction:column; gap:6px; margin-top:18px; }
+.dish__cap{ display:flex; flex-direction:column; gap:var(--s-2); margin-top:var(--s-4); }
 .dish__name{ font-family:var(--font-display); font-size:clamp(1.5rem, 2.4vw, 2rem); line-height:1.1; }
 .dish__desc{ max-width:36ch; font-size:.975rem; line-height:1.5; color:var(--papel-2); }
-.clasicos__mas{ margin-top:clamp(48px, 8vh, 88px); }
+.clasicos__mas{ margin-top:clamp(var(--s-7), 8vh, var(--s-9)); }
 
 /* ---- Carta rápida: una fila por categoría ---- */
 .flowing{
   position:relative;
-  padding:clamp(72px, 12vh, 140px) 0 0;
+  padding:clamp(var(--s-8), 12vh, var(--s-10)) 0 0;
   background:var(--noche-0);
   overflow:hidden;
 }
 .flowing__title{
   width:min(100% - 2 * var(--gutter), var(--ancho));
-  margin:0 auto clamp(28px, 5vw, 48px);
+  margin:0 auto clamp(var(--s-6), 5vw, var(--s-7));
 }
 .flowing__title h2{ font-size:clamp(2.25rem, 5vw, 3.75rem); }
 .flowing .menu{ border-top:1px solid var(--linea); }
@@ -269,9 +273,9 @@ body.xp{ padding-top:0; background:var(--noche-0); }
   z-index:1;
   display:flex;
   align-items:center;
-  gap:16px;
+  gap:var(--s-4);
   min-height:88px;
-  padding:16px max(var(--gutter), calc((100% - var(--ancho)) / 2));
+  padding:var(--s-4) max(var(--gutter), calc((100% - var(--ancho)) / 2));
 }
 .flowing .item-thumb{
   flex-shrink:0;
@@ -326,8 +330,8 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 .flowing .marquee__part{
   display:inline-flex;
   align-items:center;
-  gap:20px;
-  padding:0 20px;
+  gap:var(--s-5);
+  padding:0 var(--s-5);
   flex-shrink:0;
 }
 .flowing .marquee__part span{
@@ -356,7 +360,7 @@ body.xp{ padding-top:0; background:var(--noche-0); }
   display:grid;
   place-items:center;
   min-height:min(100svh, 780px);
-  padding:clamp(120px, 20vh, 200px) var(--gutter) clamp(72px, 12vh, 140px);
+  padding:clamp(var(--s-10), 20vh, 200px) var(--gutter) clamp(var(--s-8), 12vh, var(--s-10));
   overflow:hidden;
   text-align:center;
 }
@@ -369,7 +373,7 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 .cena .faroles{
   right:auto;
   left:50%;
-  gap:clamp(28px, 8vw, 110px);
+  gap:clamp(var(--s-6), 8vw, var(--s-10));
   transform:translateX(-50%);
 }
 .cena .farol{ width:clamp(40px, 7vw, 64px); }
@@ -378,20 +382,20 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 .cena h2{ font-size:clamp(2.75rem, 8vw, 5.5rem); line-height:1; }
 .cena p{
   max-width:38ch;
-  margin:22px auto 0;
+  margin:var(--s-5) auto 0;
   font-size:clamp(1.05rem, 1.6vw, 1.2rem);
   line-height:1.55;
   color:var(--papel-2);
 }
-.cena__btns{ display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:32px; }
+.cena__btns{ display:flex; flex-wrap:wrap; justify-content:center; gap:var(--s-3); margin-top:var(--s-6); }
 .cena .btn{ min-height:56px; padding-inline:2rem; font-size:1rem; }
 
 /* ---------------------------------------------------------
    Pantallas bajas y móvil
 --------------------------------------------------------- */
 @media (max-height:720px){
-  .xp-hero{ padding-bottom:110px; }
-  .xp-hero__logo{ width:72px; margin-bottom:12px; }
+  .xp-hero{ padding-bottom:var(--s-9); }
+  .xp-hero__logo{ width:72px; margin-bottom:var(--s-3); }
 }
 @media (max-width:860px){
   .xp-hero{ padding-bottom:170px; }
@@ -404,7 +408,5 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 /* ---------------------------------------------------------
    Menos movimiento: todo estático y legible
 --------------------------------------------------------- */
-@media (prefers-reduced-motion:reduce){
-  .sw-root .sw-stage{ transform:none; }
-  .dish__media img{ clip-path:none; transform:none; }
-}
+html[data-motion="calm"] .sw-root .sw-stage{ transform:none; }
+html[data-motion="calm"] .dish__media img{ clip-path:none; transform:none; }

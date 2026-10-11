@@ -10,7 +10,7 @@
 
   const TS = window.TioSam || {};
   const escapeHtml = TS.escapeHtml || ((s) => String(s));
-  const reduce = !!TS.reduce;
+  const calm = !!TS.calm;   // movimiento reducido: las piezas solo funden
 
   const grid = document.getElementById("menuGrid");
   const riel = document.getElementById("categorias");
@@ -34,12 +34,13 @@
   function colocarMarca(conAnimacion) {
     const tab = tabs.find((t) => t.getAttribute("aria-pressed") === "true");
     if (!tab) return;
-    riel.style.setProperty("--x", tab.offsetLeft + 14 + "px");
-    riel.style.setProperty("--w", tab.offsetWidth - 28 + "px");
+    const relleno = parseFloat(getComputedStyle(tab).paddingLeft) || 0;   // la marca subraya solo el texto
+    riel.style.setProperty("--x", tab.offsetLeft + relleno + "px");
+    riel.style.setProperty("--w", tab.offsetWidth - relleno * 2 + "px");
     riel.classList.toggle("is-listo", !!conAnimacion);
     // Mantiene a la vista la pestaña elegida (en móvil el riel se desplaza)
     const izq = tab.offsetLeft - (riel.clientWidth - tab.offsetWidth) / 2;
-    riel.scrollTo({ left: Math.max(0, izq), behavior: conAnimacion && !reduce ? "smooth" : "auto" });
+    riel.scrollTo({ left: Math.max(0, izq), behavior: conAnimacion && !calm ? "smooth" : "auto" });
   }
 
   tabs.forEach((tab) => tab.addEventListener("click", () => elegir(tab.dataset.cat)));
@@ -138,7 +139,7 @@
 
   function observarEntradas() {
     const piezas = grid.querySelectorAll(".revelar");
-    if (!observador || reduce) { piezas.forEach((p) => p.classList.remove("revelar")); return; }
+    if (!observador) { piezas.forEach((p) => p.classList.remove("revelar")); return; }
     piezas.forEach((p) => observador.observe(p));
   }
 
@@ -147,15 +148,17 @@
      de cambiar el contenido. Salir es más veloz que entrar.
   --------------------------------------------------------- */
   function salir() {
-    if (reduce || !grid.firstElementChild) return Promise.resolve();
+    if (!grid.firstElementChild) return Promise.resolve();
     const alto = window.innerHeight;
     const visibles = Array.from(grid.querySelectorAll(".seccion-carta__cab, .plato"))
       .filter((el) => { const r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < alto; })
       .slice(0, 12);
     if (!visibles.length) return Promise.resolve();
     const animaciones = visibles.map((el, i) => el.animate(
-      [{ opacity: 1, transform: "translateY(0)" }, { opacity: 0, transform: "translateY(-6px)" }],
-      { duration: 150, delay: i * 12, easing: "cubic-bezier(.55, 0, 1, .45)", fill: "forwards" }
+      calm
+        ? [{ opacity: 1 }, { opacity: 0 }]
+        : [{ opacity: 1, transform: "translateY(0)" }, { opacity: 0, transform: "translateY(-6px)" }],
+      { duration: calm ? 120 : 150, delay: i * (calm ? 0 : 12), easing: "cubic-bezier(.55, 0, 1, .45)", fill: "forwards" }
     ));
     const fin = Promise.all(animaciones.map((a) => a.finished.catch(() => {})));
     return Promise.race([fin, new Promise((ok) => setTimeout(ok, 450))]);

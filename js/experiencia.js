@@ -5,7 +5,7 @@
    3. Telón: la carta sube sobre el último cuadro de la película
    4. Los clásicos: máscara + parallax asimétrico + distorsión WebGL suave
    5. Carta rápida (una fila por categoría) y cierre con la luz del farol
-   Lo común (menú, Lenis, anclas, split, botón magnético) viene de sitio.js.
+   Lo común (menú, Lenis, anclas, SplitText, botón magnético) viene de sitio.js.
    ========================================================= */
 (function () {
   'use strict';
@@ -22,10 +22,10 @@
   const BASE = '../assets/';
 
   const TS = window.TioSam || {};
-  const reduce = !!TS.reduce;
+  const calm = !!TS.calm;   // movimiento reducido: sin WebGL, sin parallax, solo fundidos
   const coarse = !!TS.coarse;
   const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
-  const split = TS.split || (() => []);
+  const dividir = TS.dividir || (() => null);   // GSAP SplitText: null si la librería no cargó
   const escapeHtml = TS.escapeHtml; // sin fallback: si falta, debe fallar a la vista
 
   /* Escenas del recorrido (orden = orden de la película).
@@ -108,7 +108,7 @@
 
   /* La banda de cada fila entra por el borde más cercano al puntero (solo con ratón) */
   function initFlowing() {
-    if (reduce || coarse) return;
+    if (calm || coarse) return;
     document.querySelectorAll('.flowing .menu__item').forEach((item) => {
       const link = item.querySelector('.menu__item-link');
       const inner = item.querySelector('.marquee__inner');
@@ -185,6 +185,10 @@
       connectors: ASSETS.video ? conn('') : [],
       connectorsMobile: ASSETS.mobile ? conn('-m') : [],
     });
+    // Los puntos de la ruta son botones sin texto (en móvil el rótulo se oculta): se les da nombre
+    worldEl.querySelectorAll('.sw-route__dot').forEach((dot, i) => {
+      if (SCENES[i]) dot.setAttribute('aria-label', 'Ir a la escena: ' + SCENES[i].label);
+    });
   }
 
   /* Estado compartido entre GSAP (revelado/hover) y el renderer WebGL */
@@ -203,7 +207,8 @@
     const inner = hero.querySelector('.xp-hero__inner');
     const end = () => window.innerHeight * 0.9;
 
-    if (reduce) {
+    if (calm) {
+      gsap.from(inner, { opacity: 0, duration: 0.9, ease: 'power2.out', delay: 0.2 });
       gsap.to(inner, { opacity: 0, ease: 'none', scrollTrigger: { start: 0, end, scrub: true } });
       ScrollTrigger.create({
         start: end, end: 'max',
@@ -214,12 +219,14 @@
     }
 
     const title = hero.querySelector('[data-split]');
-    const words = split(title, 'chars');
+    const partes = dividir(title);
+    const words = partes ? partes.words : [];
     const resto = hero.querySelectorAll('.xp-hero__tag, .xp-hero__lugar, .xp-hero__acciones');
     const logo = hero.querySelector('.xp-hero__logo');
 
     // Intro (al cargar): las letras suben desde su máscara, luego el resto
-    gsap.from(title.querySelectorAll('.c'), { yPercent: 105, duration: 1, ease: 'expo.out', stagger: 0.03, delay: 0.3 });
+    if (partes) gsap.from(partes.chars, { yPercent: 105, duration: 1, ease: 'expo.out', stagger: 0.03, delay: 0.3 });
+    else gsap.from(title, { opacity: 0, duration: 0.9, ease: 'power2.out', delay: 0.3 });
     gsap.from(logo, { opacity: 0, scale: 0.92, duration: 1, ease: 'expo.out', delay: 0.1 });
     gsap.from(resto, { opacity: 0, y: 14, duration: 0.8, ease: 'expo.out', stagger: 0.1, delay: 0.65 });
 
@@ -266,10 +273,16 @@
   function initClasicos() {
     const h2 = document.querySelector('.clasicos__head h2');
     if (!h2) return;
-    if (reduce) return;
+    if (calm) {      // solo fundidos: cabecera, platos y su pie
+      gsap.from('.clasicos__head > *', { opacity: 0, duration: 0.7, ease: 'power2.out', stagger: 0.1, scrollTrigger: { trigger: '.clasicos__head', start: 'top 85%' } });
+      document.querySelectorAll('.dish').forEach((fig) => {
+        gsap.from(fig, { opacity: 0, duration: 0.7, ease: 'power2.out', scrollTrigger: { trigger: fig, start: 'top 88%' } });
+      });
+      return;
+    }
 
-    split(h2, 'chars');
-    gsap.from(h2.querySelectorAll('.c'), {
+    const partesH2 = dividir(h2);
+    if (partesH2) gsap.from(partesH2.chars, {
       yPercent: 105, duration: 1, ease: 'expo.out', stagger: 0.02,
       scrollTrigger: { trigger: h2, start: 'top 82%' },
     });
@@ -314,7 +327,7 @@
   function initGL() {
     const canvas = document.querySelector('.gl-stage');
     const imgs = Array.from(document.querySelectorAll('img[data-gl]'));
-    if (!canvas || !imgs.length || reduce) return;
+    if (!canvas || !imgs.length || calm) return;
     const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: true });
     if (!gl) return;
 
@@ -509,15 +522,21 @@
   --------------------------------------------------------- */
   function initCena() {
     const sec = document.querySelector('.cena');
-    if (!sec || reduce) return;
+    if (!sec) return;
+    if (calm) {
+      gsap.from(sec.querySelectorAll('.cena__inner > *'), { opacity: 0, duration: 0.7, ease: 'power2.out', stagger: 0.1, scrollTrigger: { trigger: sec, start: 'top 65%', once: true } });
+      return;
+    }
     const h2 = sec.querySelector('h2');
-    split(h2, 'chars');
+    const partesH2 = dividir(h2);
     gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 65%', once: true } })
       .fromTo(sec.querySelector('.cena__luz'),
         { clipPath: 'circle(0% at 50% 46%)' },
         { clipPath: 'circle(150% at 50% 46%)', duration: 1.6, ease: 'expo.out' })
       .from(sec.querySelectorAll('.farol'), { opacity: 0, duration: 1.2, ease: 'power2.out', stagger: 0.12 }, 0.1)
-      .from(h2.querySelectorAll('.c'), { yPercent: 105, duration: 0.9, ease: 'expo.out', stagger: 0.025 }, 0.15)
+      .from(partesH2 ? partesH2.chars : h2, partesH2
+        ? { yPercent: 105, duration: 0.9, ease: 'expo.out', stagger: 0.025 }
+        : { opacity: 0, duration: 0.8, ease: 'power2.out' }, 0.15)
       .from(sec.querySelectorAll('.cena__inner p, .cena__btns'), { y: 18, opacity: 0, duration: 0.8, ease: 'expo.out', stagger: 0.1 }, 0.4);
   }
 

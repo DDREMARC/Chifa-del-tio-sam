@@ -15,6 +15,7 @@
 
 /* ---- Cabecera ---- */
 .sm-header{
+  view-transition-name:cabecera-sitio;     /* durante la transición entre páginas la cabecera se queda quieta */
   position:absolute;
   top:0; left:0; right:0;
   z-index:4;
@@ -36,7 +37,7 @@
 .sm-logo{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:var(--s-3);
   min-height:48px;
   transition:transform 160ms var(--ease-out);
 }
@@ -68,19 +69,19 @@
 .sm-toggle{
   display:inline-flex;
   align-items:center;
-  gap:10px;
+  gap:var(--s-2);
   min-width:48px;
   min-height:48px;
-  padding:0 2px 0 12px;
+  padding:0 2px 0 var(--s-3);
   background:transparent;
   border:0;
   color:var(--farol);
   font-size:.95rem;
   font-weight:600;
   line-height:1.2;
-  transition:transform 160ms var(--ease-out);
+  transition:transform 340ms var(--spring);
 }
-.sm-toggle:active{ transform:scale(.96); }
+.sm-toggle:active{ transform:scale(.96); transition-duration:90ms; }
 .sm-toggle-textWrap{
   display:block;
   height:1.2em;
@@ -99,7 +100,7 @@
   position:relative;
   width:16px; height:16px;
   flex:0 0 16px;
-  transition:transform 420ms var(--ease-out);
+  transition:transform 520ms var(--spring);
 }
 .sm-icon i{
   position:absolute;
@@ -159,8 +160,8 @@
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  gap:32px;
-  padding:calc(var(--header-h) + 28px) var(--gutter) max(28px, env(safe-area-inset-bottom));
+  gap:var(--s-6);
+  padding:calc(var(--header-h) + var(--s-6)) var(--gutter) max(var(--s-6), env(safe-area-inset-bottom));
   background:var(--noche-1);
   overflow-y:auto;
   visibility:hidden;
@@ -175,7 +176,7 @@
   transition:transform 620ms var(--ease-out) 100ms, visibility 0s;
 }
 
-.sm-lista{ display:flex; flex-direction:column; gap:4px; }
+.sm-lista{ display:flex; flex-direction:column; gap:var(--s-1); }
 .sm-lista li{ overflow:hidden; padding-block:.06em; }
 .sm-item{
   display:inline-block;
@@ -222,8 +223,8 @@
 /* ---- Pie del panel ---- */
 .sm-pie{
   display:grid;
-  gap:16px;
-  padding-top:24px;
+  gap:var(--s-4);
+  padding-top:var(--s-5);
   border-top:1px solid var(--linea);
   opacity:0;
   transform:translateY(12px);
@@ -235,7 +236,7 @@
   transition:opacity 500ms var(--ease-out) 480ms, transform 500ms var(--ease-out) 480ms;
 }
 .sm-direccion{ font-size:.95rem; line-height:1.5; color:var(--papel-2); }
-.sm-redes{ display:flex; flex-wrap:wrap; gap:6px 20px; }
+.sm-redes{ display:flex; flex-wrap:wrap; gap:var(--s-2) var(--s-5); }
 .sm-redes a{
   display:inline-flex;
   align-items:center;
@@ -251,3 +252,25 @@
 @media (max-width:720px){
   .staggered-menu-wrapper{ --sm-w:100%; }
 }
+
+/* ---- Modo calmo: el panel funde en lugar de deslizar; sin capas ni máscaras ---- */
+html[data-motion="calm"] .sm-capa{ display:none; }
+html[data-motion="calm"] .sm-panel{
+  transform:none;
+  opacity:0;
+  transition:opacity 180ms var(--ease-out), visibility 0s linear 180ms;
+}
+html[data-motion="calm"] .staggered-menu-wrapper[data-open="true"] .sm-panel{
+  opacity:1;
+  transition:opacity 260ms var(--ease-out), visibility 0s;
+}
+html[data-motion="calm"] .sm-item > span{
+  transform:none;
+  opacity:0;
+  transition:opacity 0s linear 200ms;
+}
+html[data-motion="calm"] .staggered-menu-wrapper[data-open="true"] .sm-item > span{
+  opacity:1;
+  transition:opacity 320ms var(--ease-out) calc(60ms + var(--i, 0) * 50ms);
+}
+html[data-motion="calm"] .sm-pie{ transform:none; }

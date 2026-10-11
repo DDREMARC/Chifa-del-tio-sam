@@ -12,6 +12,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.css">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/staggered-menu.css">
   <link rel="stylesheet" href="../css/carta.css">
@@ -22,16 +24,16 @@
   <a class="skip-link" href="#menuGrid">Saltar a los platos</a>
   <div id="staggeredMenu"></div>
 
-  <header class="cabecera cabecera--carta">
+  <section class="cabecera cabecera--carta" aria-labelledby="titulo-pagina">
     <div class="contenedor cabecera__cuerpo">
-      <h1 data-anim="letras">La Carta</h1>
+      <h1 id="titulo-pagina" data-anim="letras">La Carta</h1>
       <p data-anim="subir">Sopas, chaufas, aeropuertos, combinados y tallarines, platos saltados y platos dulces.</p>
     </div>
     <div class="faroles" aria-hidden="true">
       <svg class="farol" viewBox="0 0 56 150" focusable="false"><path class="farol__hilo" d="M28 0V30"/><rect class="farol__metal" x="17" y="30" width="22" height="7" rx="2"/><path class="farol__cuerpo" d="M28 37C8 40 2 62 2 78c0 17 7 34 26 38 19-4 26-21 26-38 0-16-6-38-26-41Z"/><ellipse class="farol__luz" cx="28" cy="77" rx="13" ry="25"/><path class="farol__costillas" d="M28 37c-10 15-13 63 0 79M28 37c10 15 13 63 0 79M28 37v79"/><rect class="farol__metal" x="17" y="116" width="22" height="7" rx="2"/><path class="farol__hilo" d="M28 123v15"/><path class="farol__metal" d="M24 138h8l-2 12h-4Z"/></svg>
       <svg class="farol farol--chico" style="--d:-3.2s" viewBox="0 0 56 150" focusable="false"><path class="farol__hilo" d="M28 0V30"/><rect class="farol__metal" x="17" y="30" width="22" height="7" rx="2"/><path class="farol__cuerpo" d="M28 37C8 40 2 62 2 78c0 17 7 34 26 38 19-4 26-21 26-38 0-16-6-38-26-41Z"/><ellipse class="farol__luz" cx="28" cy="77" rx="13" ry="25"/><path class="farol__costillas" d="M28 37c-10 15-13 63 0 79M28 37c10 15 13 63 0 79M28 37v79"/><rect class="farol__metal" x="17" y="116" width="22" height="7" rx="2"/><path class="farol__hilo" d="M28 123v15"/><path class="farol__metal" d="M24 138h8l-2 12h-4Z"/></svg>
     </div>
-  </header>
+  </section>
 
   <!-- Categorías: la lista de botones la pinta main.js a partir de menu-data.js -->
   <nav class="categorias" aria-label="Categorías de la carta">
@@ -47,7 +49,7 @@
 
   <footer class="pie">
     <div class="contenedor">
-      <div class="pie__rejilla">
+      <div class="pie__rejilla" data-anim="cascada">
         <div class="pie__marca">
           <img class="pie__logo" src="../img/logo_tio_sam.jpeg" alt="" width="72" height="72" loading="lazy" decoding="async">
           <p class="pie__nombre">El Tío Sam <span>Chifa</span></p>
@@ -81,9 +83,10 @@
     </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
   <script src="../js/menu-data.js"></script>
   <script src="../js/staggered-menu.js"></script>
   <script src="../js/sitio.js"></script>

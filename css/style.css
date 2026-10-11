@@ -35,6 +35,10 @@
   --font-display: 'Gloock', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
   --font-body:    'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
+  /* Escala de espaciado: 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128. Todo margen, relleno y hueco sale de aquí */
+  --s-1:4px;  --s-2:8px;  --s-3:12px;  --s-4:16px;  --s-5:24px;
+  --s-6:32px; --s-7:48px; --s-8:64px;  --s-9:96px;  --s-10:128px;
+
   /* Medidas */
   --gutter: clamp(20px, 5vw, 48px);
   --ancho: 1120px;
@@ -43,10 +47,23 @@
   --r-m: 12px;
   --r-l: 16px;
 
+  /* Recorrido de las entradas (en modo calmo valen 0: solo funden) */
+  --dist: 14px;
+  --zoom: 1.06;
+  --desenfoque: 6px;
+
   /* Movimiento: salida rápida con frenado suave, entrada algo más lenta */
   --ease-out: cubic-bezier(.23, 1, .32, 1);
   --ease-in:  cubic-bezier(.55, 0, 1, .45);
   --ease-in-out: cubic-bezier(.77, 0, .175, 1);
+  --spring: cubic-bezier(.23, 1, .32, 1);   /* sin soporte de linear(): cae en un ease-out fuerte */
+}
+/* Muelle amortiguado (zeta .82, rebasa 1,1 %) escrito como easing CSS: física de spring sin librería.
+   Se usa donde algo "vuelve a su sitio": marca de pestañas, soltar un botón, icono del menú. */
+@supports (transition-timing-function: linear(0, 1)) {
+  :root{
+    --spring: linear(0, 0.051, 0.167, 0.31, 0.454, 0.585, 0.698, 0.789, 0.86, 0.913, 0.951, 0.976, 0.993, 1.003, 1.009, 1.011, 1.011, 1.01, 1.009, 1.007, 1.006, 1.004, 1.003, 1.002, 1);
+  }
 }
 
 /* ---------------------------------------------------------
@@ -61,9 +78,7 @@ html{
   font-synthesis:none;              /* Gloock solo tiene un peso: nada de negritas falsas */
   background:var(--noche-0);
 }
-@media (prefers-reduced-motion:no-preference){
-  html{ scroll-behavior:smooth; }
-}
+html[data-motion="full"]{ scroll-behavior:smooth; }
 html.bloqueado{ overflow:hidden; }
 body{
   margin:0;
@@ -80,6 +95,12 @@ img,svg{ display:block; max-width:100%; }
 a{ color:inherit; text-decoration:none; touch-action:manipulation; }
 ul,ol{ list-style:none; margin:0; padding:0; }
 button{ font:inherit; color:inherit; cursor:pointer; touch-action:manipulation; }
+/* Controles táctiles: un toque largo no selecciona el texto ni abre menús del sistema (se siente app nativa) */
+.btn, button, .plato__pedir, .categorias__tab, .sm-item, .sm-logo{
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
 h1,h2,h3{
   margin:0;
   font-family:var(--font-display);
@@ -115,7 +136,7 @@ input,select,textarea{ caret-color:var(--farol); accent-color:var(--farol); }
   display:inline-flex;
   align-items:center;
   min-height:48px;
-  padding:0 18px;
+  padding:0 var(--s-4);
   border-radius:var(--r-m);
   background:var(--farol);
   color:var(--noche-0);
@@ -124,16 +145,19 @@ input,select,textarea{ caret-color:var(--farol); accent-color:var(--farol); }
 }
 .skip-link:focus{ top:calc(var(--header-h) + 8px); }
 
-/* Menos movimiento: todo cambia sin transición */
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation-duration:.001ms !important;
-    animation-iteration-count:1 !important;
-    transition-duration:.001ms !important;
-    transition-delay:0s !important;
-    scroll-behavior:auto !important;
-  }
+/* ---------------------------------------------------------
+   Modo de movimiento (lo decide js/precarga.js en html[data-motion])
+   calm = el sistema pide "reducir animaciones". Se conservan los fundidos,
+   los cambios de color y la respuesta al pulsar; se quitan el scroll suave,
+   el parallax, los desplazamientos grandes y todo lo que se repite solo.
+--------------------------------------------------------- */
+html[data-motion="calm"]{
+  --dist:0px;                 /* las entradas solo funden */
+  --zoom:1;
+  --desenfoque:0px;
+  scroll-behavior:auto;
 }
+html[data-motion="calm"] .farol{ animation:none; }
 
 /* ---------------------------------------------------------
    Faroles (decoración de las cabeceras)
@@ -144,7 +168,7 @@ input,select,textarea{ caret-color:var(--farol); accent-color:var(--farol); }
   right:clamp(14px, 6vw, 96px);
   display:flex;
   align-items:flex-start;
-  gap:clamp(10px, 2vw, 22px);
+  gap:clamp(var(--s-2), 2vw, var(--s-5));
   pointer-events:none;
 }
 .farol{
@@ -156,7 +180,7 @@ input,select,textarea{ caret-color:var(--farol); accent-color:var(--farol); }
   animation:columpio 7s ease-in-out infinite;
   animation-delay:var(--d, 0s);
 }
-.farol--chico{ width:clamp(26px, 4.8vw, 42px); margin-top:clamp(14px, 3vw, 34px); }
+.farol--chico{ width:clamp(26px, 4.8vw, 42px); margin-top:clamp(var(--s-3), 3vw, var(--s-6)); }
 .farol__cuerpo{ fill:var(--bermellon); fill-opacity:.3; stroke:var(--bermellon); stroke-width:1.5; }
 .farol__costillas{ fill:none; stroke:var(--bermellon); stroke-opacity:.6; stroke-width:1; }
 .farol__luz{ fill:currentColor; fill-opacity:.26; }
@@ -186,13 +210,14 @@ input,select,textarea{ caret-color:var(--farol); accent-color:var(--farol); }
   white-space:nowrap;
   cursor:pointer;
   transition:
-    transform 160ms var(--ease-out),
+    transform 380ms var(--spring),
     background-color 200ms var(--ease-out),
     border-color 200ms var(--ease-out),
     color 200ms var(--ease-out);
 }
 .btn svg{ width:18px; height:18px; flex-shrink:0; }
-.btn:active{ transform:scale(.97); }
+/* Al pulsar responde en 90 ms; al soltar vuelve más despacio: se siente táctil */
+.btn:active{ transform:scale(.97); transition:transform 90ms var(--ease-out), background-color 200ms var(--ease-out), border-color 200ms var(--ease-out), color 200ms var(--ease-out); }
 .btn--farol{ background:var(--farol); color:var(--noche-0); }
 .btn--borde{ border-color:var(--linea-fuerte); color:var(--papel); }
 .btn--bloque{ width:100%; }
@@ -222,7 +247,7 @@ input,select,textarea{ caret-color:var(--farol); accent-color:var(--farol); }
   overflow:hidden;
   background:var(--noche-1);
   border-bottom:1px solid var(--linea);
-  padding:clamp(36px, 8vh, 80px) 0 clamp(32px, 6vh, 60px);
+  padding:clamp(var(--s-6), 8vh, var(--s-9)) 0 clamp(var(--s-6), 6vh, var(--s-8));
 }
 /* La luz sale de los faroles: un solo foco, arriba a la derecha */
 .cabecera::before{
@@ -235,7 +260,7 @@ input,select,textarea{ caret-color:var(--farol); accent-color:var(--farol); }
 .cabecera__cuerpo{ position:relative; }
 .cabecera h1{ font-size:clamp(2.5rem, 8vw, 4.75rem); }
 .cabecera p{
-  margin-top:16px;
+  margin-top:var(--s-4);
   max-width:38ch;
   color:var(--papel-2);
   font-size:clamp(1rem, 1.5vw, 1.15rem);
@@ -248,14 +273,14 @@ input,select,textarea{ caret-color:var(--farol); accent-color:var(--farol); }
 .pie{
   background:var(--noche-1);
   border-top:1px solid var(--linea);
-  padding:clamp(48px, 8vw, 88px) 0 28px;
+  padding:clamp(var(--s-7), 8vw, var(--s-9)) 0 var(--s-6);
 }
 .pie__rejilla{
   display:grid;
   grid-template-columns:1fr;
-  gap:40px;
+  gap:var(--s-7);
 }
-.pie__marca{ display:grid; justify-items:start; gap:14px; }
+.pie__marca{ display:grid; justify-items:start; gap:var(--s-3); }
 .pie__logo{ width:72px; height:72px; border-radius:50%; object-fit:cover; background:#000; }
 .pie__nombre{
   font-family:var(--font-display);
@@ -265,7 +290,7 @@ input,select,textarea{ caret-color:var(--farol); accent-color:var(--farol); }
 .pie__nombre span{ color:var(--farol); }
 .pie__lema{ max-width:30ch; color:var(--papel-2); line-height:1.55; }
 .pie__titulo{
-  margin-bottom:12px;
+  margin-bottom:var(--s-3);
   font-family:var(--font-body);
   font-size:.875rem;
   font-weight:600;
@@ -275,8 +300,8 @@ input,select,textarea{ caret-color:var(--farol); accent-color:var(--farol); }
 .pie__dato{
   display:flex;
   align-items:flex-start;
-  gap:12px;
-  padding:6px 0;
+  gap:var(--s-3);
+  padding:var(--s-2) 0;
   color:var(--papel-2);
   line-height:1.5;
 }
@@ -291,8 +316,8 @@ input,select,textarea{ caret-color:var(--farol); accent-color:var(--farol); }
 @media (hover:hover){
   .pie__dato a:hover{ color:var(--farol); }
 }
-.pie__redes{ margin-top:18px; }
-.pie__redes ul{ display:flex; flex-wrap:wrap; gap:10px; }
+.pie__redes{ margin-top:var(--s-4); }
+.pie__redes ul{ display:flex; flex-wrap:wrap; gap:var(--s-2); }
 .pie__redes a{
   display:grid;
   place-items:center;
@@ -312,37 +337,50 @@ input,select,textarea{ caret-color:var(--farol); accent-color:var(--farol); }
   flex-wrap:wrap;
   align-items:center;
   justify-content:space-between;
-  gap:16px 24px;
-  margin-top:clamp(36px, 6vw, 64px);
-  padding-top:24px;
+  gap:var(--s-4) var(--s-5);
+  margin-top:clamp(var(--s-6), 6vw, var(--s-8));
+  padding-top:var(--s-5);
   border-top:1px solid var(--linea);
   font-size:.875rem;
   color:var(--papel-3);
 }
 @media (min-width:760px){
-  .pie__rejilla{ grid-template-columns:1.3fr 1fr 1fr; gap:48px; }
+  .pie__rejilla{ grid-template-columns:1.3fr 1fr 1fr; gap:var(--s-7); }
 }
 
 /* ---------------------------------------------------------
    Animaciones compartidas (js/sitio.js)
 --------------------------------------------------------- */
-/* Lenis: el smooth scroll necesita scroll-behavior:auto mientras actúa */
-html.lenis, html.lenis body{ height:auto; }
+/* Lenis: lenis.css (jsDelivr) trae lo básico (height, overflow al pausar, iframes, data-lenis-prevent).
+   Aquí solo se asegura que el scroll nativo suave no compita con el de Lenis. */
 .lenis.lenis-smooth{ scroll-behavior:auto !important; }
-.lenis.lenis-stopped{ overflow:hidden; }
 
-/* Split text: cada palabra es una máscara y cada letra sube dentro de ella */
-.split .w{
-  display:inline-block;
-  overflow:hidden;
-  vertical-align:top;
-  padding:.1em .03em .14em;
-  margin:-.1em -.03em -.14em;
+/* SplitText: cada palabra es una máscara y cada letra sube dentro de ella.
+   El relleno negativo deja pasar acentos y colas de letra sin cortarlas. */
+.split-mask{
+  white-space:nowrap;
+  padding:.12em .04em .16em;
+  margin:-.12em -.04em -.16em;
 }
-.split .c{ display:inline-block; }
-.split .w{ white-space:nowrap; }
 
-/* Telón entre páginas: cae la noche (precarga.js lo pinta desde el primer cuadro) */
+/* ---------------------------------------------------------
+   Transición nativa entre páginas (Chrome/Edge 126+, Safari 18.2+).
+   La página nueva "se enciende" como la luz de un farol desde donde tocaste.
+   Sin soporte, js/sitio.js usa el telón de abajo; en modo calmo es un fundido.
+--------------------------------------------------------- */
+@view-transition{ navigation:auto; }
+::view-transition-old(root),
+::view-transition-new(root){ animation-duration:560ms; mix-blend-mode:normal; }
+::view-transition-old(root){ animation:none; }            /* la página vieja queda debajo hasta que la nueva la cubre */
+::view-transition-new(root){ animation:vt-farol 560ms cubic-bezier(.33, 1, .68, 1) both; }
+@keyframes vt-farol{
+  from{ clip-path:circle(0 at var(--vt-x, 50%) var(--vt-y, 60%)); }
+  to{ clip-path:circle(150% at var(--vt-x, 50%) var(--vt-y, 60%)); }
+}
+html[data-motion="calm"]::view-transition-new(root){ animation:vt-fundido 220ms ease-out both; }
+@keyframes vt-fundido{ from{ opacity:0; } }
+
+/* Telón entre páginas (solo navegadores sin View Transitions): cae la noche al salir, se retira al entrar (precarga.js lo pinta desde el primer cuadro) */
 .telon,
 html.telon-entrada::after{
   position:fixed;
@@ -358,7 +396,8 @@ html.telon-entrada::after{ content:""; }
 }
 .telon img{ width:clamp(96px, 14vw, 132px); height:auto; aspect-ratio:1; border-radius:50%; object-fit:cover; }
 
-/* Barra de progreso de lectura */
+/* Barra de progreso de lectura: con scroll-driven animations nativas va fuera del hilo
+   principal; sin soporte, sitio.js la mueve con GSAP */
 .progreso{
   position:fixed;
   top:0; left:0; right:0;
@@ -368,6 +407,21 @@ html.telon-entrada::after{ content:""; }
   transform-origin:0 50%;
   transform:scaleX(0);
   pointer-events:none;
+}
+@supports (animation-timeline: scroll()) {
+  .progreso--css{
+    animation:progreso-lectura linear both;
+    animation-timeline:scroll(root block);
+  }
+  @keyframes progreso-lectura{ to{ transform:scaleX(1); } }
+
+  /* Profundidad de diorama: los faroles se quedan un poco atrás al bajar */
+  html:not([data-motion="calm"]) .cabecera .faroles{
+    animation:faroles-atras linear both;
+    animation-timeline:scroll(root block);
+    animation-range:0 70vh;
+  }
+  @keyframes faroles-atras{ to{ transform:translateY(46px); } }
 }
 
 /* Botón magnético: el movimiento lo pone GSAP */

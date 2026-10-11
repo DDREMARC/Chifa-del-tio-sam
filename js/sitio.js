@@ -12,14 +12,19 @@
         data-parallax="60"   parallax en px (positivo baja, negativo sube)
    5. Botones .magnetic y barra de progreso
    Expone window.TioSam para experiencia.js (portada) y main.js (carta).
-   Todo respeta "reducir movimiento" y funciona sin GSAP (sin animar).
+   Con "reducir movimiento" pasa a modo calmo (solo fundidos) y sin GSAP no anima.
    ========================================================= */
 (function () {
   "use strict";
 
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* Modo de movimiento: lo decide precarga.js (html[data-motion]).
+     "calm" = el sistema pide reducir animaciones: se quitan scroll suave, parallax,
+     desplazamientos y telón, pero los fundidos y la respuesta al pulsar se mantienen. */
+  const calm = document.documentElement.dataset.motion === "calm";
   const coarse = matchMedia("(hover: none) and (pointer: coarse)").matches;
   const hasGSAP = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined";
+  /* ¿El navegador hace la transición entre páginas por sí mismo (View Transitions)? */
+  const nativeNav = document.documentElement.classList.contains("vt-nativo");
 
   /* Redes sociales: pega aquí la dirección real de cada una (https://…).
      Mientras estén vacías no se muestra ningún icono ni enlace muerto. */
@@ -58,7 +63,7 @@
     if (TioSam.lenis) TioSam.lenis.start();
   }
 
-  const TioSam = (window.TioSam = { reduce, coarse, hasGSAP, lenis: null, split, escapeHtml, lockScroll, unlockScroll });
+  const TioSam = (window.TioSam = { calm, coarse, hasGSAP, nativeNav, lenis: null, dividir, escapeHtml, lockScroll, unlockScroll });
 
   const LOGO = '<img src="../img/logo_tio_sam.jpeg" alt="" width="132" height="132" decoding="async">';
 
@@ -98,44 +103,14 @@
   }
 
   /* ---------------------------------------------------------
-     Split text accesible: el lector de pantalla lee el texto
-     completo (aria-label); las letras sueltas quedan ocultas.
+     Títulos por palabras y letras con máscara (GSAP SplitText, gratis desde 3.13).
+     Deja aria-label en el título y oculta las letras sueltas a los lectores de pantalla.
+     Sin SplitText (CDN caído) devuelve null y el título queda tal cual.
   --------------------------------------------------------- */
-  function split(el, mode) {
-    if (!el || el.dataset.splitDone) return [];
-    el.dataset.splitDone = "1";
-    el.classList.add("split");
-    const chars = mode !== "words";
-    if (chars) el.setAttribute("aria-label", el.textContent.replace(/\s+/g, " ").trim());
-    const out = [];
-    (function walk(node) {
-      Array.from(node.childNodes).forEach((n) => {
-        if (n.nodeType === 1) { walk(n); return; }
-        if (n.nodeType !== 3) return;
-        const frag = document.createDocumentFragment();
-        n.textContent.split(/(\s+)/).forEach((tok) => {
-          if (!tok) return;
-          if (/^\s+$/.test(tok)) { frag.appendChild(document.createTextNode(" ")); return; }
-          const w = document.createElement("span");
-          w.className = chars ? "w" : "wd";
-          if (chars) {
-            w.setAttribute("aria-hidden", "true");
-            Array.from(tok).forEach((ch) => {
-              const c = document.createElement("span");
-              c.className = "c";
-              c.textContent = ch;
-              w.appendChild(c);
-            });
-          } else {
-            w.textContent = tok;
-          }
-          out.push(w);
-          frag.appendChild(w);
-        });
-        n.replaceWith(frag);
-      });
-    })(el);
-    return out;
+  const hasSplit = hasGSAP && typeof SplitText !== "undefined";
+  function dividir(el, opciones) {
+    if (!el || !hasSplit) return null;
+    return SplitText.create(el, Object.assign({ type: "words,chars", mask: "words", maskClass: "split-mask" }, opciones));
   }
 
   /* ---------------------------------------------------------
@@ -144,7 +119,7 @@
   --------------------------------------------------------- */
   function initSmoothScroll() {
     ScrollTrigger.config({ ignoreMobileResize: true });
-    if (reduce || typeof Lenis === "undefined") return;
+    if (calm || typeof Lenis === "undefined") return;
     const lenis = new Lenis({ lerp: 0.1, smoothWheel: true, syncTouch: false, wheelMultiplier: 1 });
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add((t) => lenis.raf(t * 1000));
@@ -175,7 +150,8 @@
   --------------------------------------------------------- */
   function initTelon() {
     const root = document.documentElement;
-    const anim = hasGSAP && !reduce;
+    // Con View Transitions nativas (o en modo calmo) no hace falta el telón de JS
+    const anim = hasGSAP && !calm && !nativeNav;
     if (!anim) { root.classList.remove("telon-entrada"); return; }
 
     const telon = document.createElement("div");
@@ -230,32 +206,46 @@
      4. Animaciones por atributos (sutiles: poco recorrido, salida fuerte)
   --------------------------------------------------------- */
   function initAnimaciones() {
+    // En modo calmo todo es un fundido: sin desplazamiento, sin letras sueltas, sin parallax
+    const dy = calm ? 0 : 18;
+    const dur = calm ? 0.55 : 0.8;
+    const ease = calm ? "power2.out" : "expo.out";
+
     document.querySelectorAll('[data-anim="letras"]').forEach((el) => {
-      split(el, "chars");
-      gsap.from(el.querySelectorAll(".c"), {
+      const partes = calm ? null : dividir(el);
+      if (!partes) {
+        gsap.from(el, { opacity: 0, duration: dur, ease, scrollTrigger: { trigger: el, start: "top 92%" } });
+        return;
+      }
+      gsap.from(partes.chars, {
         yPercent: 105, duration: 0.9, ease: "expo.out", stagger: 0.02,
         scrollTrigger: { trigger: el, start: "top 92%" },
       });
     });
     document.querySelectorAll('[data-anim="subir"]').forEach((el) => {
       gsap.from(el, {
-        y: 18, opacity: 0, duration: 0.8, ease: "expo.out",
+        y: dy, opacity: 0, duration: dur, ease,
         scrollTrigger: { trigger: el, start: "top 92%" },
       });
     });
     document.querySelectorAll('[data-anim="cascada"]').forEach((el) => {
       gsap.from(el.children, {
-        y: 16, opacity: 0, duration: 0.7, ease: "expo.out", stagger: 0.06,
+        y: dy * 0.9, opacity: 0, duration: dur * 0.9, ease, stagger: calm ? 0.05 : 0.06,
         scrollTrigger: { trigger: el, start: "top 90%" },
       });
     });
     document.querySelectorAll('[data-anim="mascara"]').forEach((el) => {
+      if (calm) {
+        gsap.from(el, { opacity: 0, duration: dur, ease, scrollTrigger: { trigger: el, start: "top 90%" } });
+        return;
+      }
       gsap.fromTo(el,
         { clipPath: "inset(100% 0% 0% 0%)" },
         { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "expo.out",
           scrollTrigger: { trigger: el, start: "top 90%" },
           onComplete: () => gsap.set(el, { clearProps: "clipPath" }) });
     });
+    if (calm) return;
     document.querySelectorAll("[data-parallax]").forEach((el) => {
       const d = parseFloat(el.dataset.parallax) * (coarse ? 0.5 : 1);
       gsap.fromTo(el, { y: -d }, {
@@ -269,7 +259,7 @@
      5. Botones magnéticos (solo puntero fino) y barra de progreso
   --------------------------------------------------------- */
   function initMagnetic() {
-    if (coarse) return;
+    if (coarse || calm) return;
     document.querySelectorAll(".magnetic").forEach((btn) => {
       const zone = btn.closest("section") || btn.parentElement;
       const label = btn.querySelector(".magnetic__label");
@@ -296,6 +286,8 @@
     bar.className = "progreso";
     bar.setAttribute("aria-hidden", "true");
     document.body.appendChild(bar);
+    // Con scroll-driven animations nativas la barra la mueve el navegador (ver .progreso--css)
+    if (window.CSS && CSS.supports("animation-timeline: scroll()")) { bar.classList.add("progreso--css"); return; }
     gsap.fromTo(bar, { scaleX: 0 }, { scaleX: 1, ease: "none", scrollTrigger: { start: 0, end: "max", scrub: 0.3 } });
   }
 
@@ -308,8 +300,8 @@
   initAnchors();
   if (!hasGSAP) return;
   gsap.registerPlugin(ScrollTrigger);
+  if (hasSplit) gsap.registerPlugin(SplitText);
   initSmoothScroll();
-  if (reduce) return;
   initAnimaciones();
   initMagnetic();
   initProgreso();

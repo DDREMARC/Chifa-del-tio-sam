@@ -29,10 +29,29 @@ Fuera de esto no se inventan colores. El bermellón no se usa para texto.
 
 ## Movimiento
 
-- Curvas: `--ease-out` (entradas), `--ease-in` (salidas), `--ease-in-out` (telón, bandas).
-- Entradas ≈ 440 ms con cascada de 45 ms (máx. 8); salidas ≈ 150 ms; pulsar = `scale(.97)`.
-- Solo `transform` y `opacity`. Interrumpible: estados en CSS, no en temporizadores.
-- `prefers-reduced-motion` quita el movimiento; `?motion=full` lo fuerza para probar.
+Tres capas, de la más ligera a la más pesada. Cada una degrada sola si falla la siguiente.
+
+1. **CSS y navegador** (sin librerías): transiciones y muelles `linear()`, `@view-transition` entre páginas, scroll-driven animations (barra de progreso, faroles, foto de cada plato), `position: sticky` en pestañas y títulos de sección.
+2. **JS propio** (sin librerías): menú lateral, pestañas, entradas de la carta con IntersectionObserver y Web Animations.
+3. **GSAP 3.15 + ScrollTrigger + SplitText y Lenis 1.3.26** (jsDelivr, versión fijada): scroll suave, títulos por letras, revelados de portada y contacto, la película del recorrido.
+
+**Dos modos** (`html[data-motion]`, lo decide `js/precarga.js`):
+
+| Modo | Cuándo | Qué hace |
+|---|---|---|
+| `full` | normal | todo lo anterior |
+| `calm` | el sistema pide "reducir animaciones" (en Windows basta con apagar *Efectos de animación*) | solo fundidos, cambios de color y respuesta al pulsar. Sin scroll suave, parallax, desplazamientos, telón, WebGL ni faroles que se mecen |
+
+`?motion=full` fuerza `full` en esa pestaña. Un sitio totalmente quieto no es "reducir": se siente roto.
+
+**Valores** (en `css/style.css`):
+
+- Curvas: `--ease-out` `cubic-bezier(.23,1,.32,1)` (entradas), `--ease-in` (salidas), `--ease-in-out` (telón y bandas), `--spring` (`linear()`, ζ .82, rebasa 1,1 %: marca de pestañas, soltar botones, icono del menú).
+- Entradas ≈ 440 ms con cascada de 45 ms (máx. 8); salidas ≈ 150 ms; pulsar = `scale(.97)` en 90 ms y volver en ~380 ms; menú: abre 560–720 ms con cascada, cierra 300 ms sin cascada.
+- `--dist` (14 px, 0 en `calm`), `--zoom` y `--desenfoque` controlan cuánto se mueve y se enfoca una entrada.
+- Solo `transform`, `opacity` y (acotado) `filter`. Hover solo con `@media (hover:hover)`. Estados en CSS para que se puedan interrumpir.
+
+**Momento central: la luz del farol.** Al cambiar de página la nueva "se enciende" desde donde tocaste (View Transitions, `clip-path: circle`); al cerrar la portada, la luz del farol se abre sobre la mesa. Sin View Transitions (Firefox, navegadores viejos) entra el telón de `sitio.js`.
 
 ## Componentes clave
 
