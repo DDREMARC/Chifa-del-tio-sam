@@ -16,9 +16,9 @@ Fuera de esto no se inventan colores. El bermellón no se usa para texto.
 
 ## Tipografía
 
-- **Cormorant Garamond** (`--font-display`): serif de alto contraste, variable 500–700 (Google Fonts). Títulos, nombres de plato, menú y datos grandes. Trae cifras de caja baja por defecto: `font-variant-numeric: lining-nums` las alinea. Sus acentos y signos (¿ ¡ ,) sobresalen mucho de la línea, así que las máscaras de los títulos animados llevan relleno de más (`.split-word-mask`).
+- **Newsreader** (`--font-display`): serif editorial, variable 400–700 con eje óptico 6–72 (Google Fonts). Títulos, nombres de plato, menú y datos grandes. Sus formas abiertas mantienen la lectura clara en pantalla pequeña; `font-variant-numeric: lining-nums` alinea las cifras.
 - **DM Sans** (`--font-body`): sans geométrica limpia, 400–700 con eje óptico 9–40 (Google Fonts). Texto, filas de la carta, botones y números tabulares en los precios.
-- **Sin cursivas ni letras del sistema.** `em, i, cite, dfn, var, address` quedan en `font-style: normal` y `font-synthesis: none`; el énfasis sale de peso, tamaño o color (el "CHIFA" de la portada es un rótulo en mayúsculas con interletrado, en ámbar). Los respaldos `Cormorant Garamond Fallback` y `DM Sans Fallback` existen solo para que el texto no salte mientras carga la fuente: llevan las métricas calzadas (`size-adjust`, `ascent-override`, `descent-override`).
+- **Sin cursivas.** `em, i, cite, dfn, var, address` quedan en `font-style: normal` y `font-synthesis: none`; el énfasis sale de peso, tamaño o color (el "CHIFA" de la portada es un rótulo en mayúsculas con interletrado, en ámbar). Georgia es el respaldo serif; DM Sans conserva el respaldo métrico calibrado.
 - Máximo 6rem en pantalla; sin rótulos sobre los títulos ni numeración de secciones; interletrado entre −0.015em y 0.
 
 ## Forma y espacio
@@ -49,7 +49,7 @@ Tres capas, de la más ligera a la más pesada. Cada una degrada sola si falla l
 **Valores** (en `css/style.css`):
 
 - Curvas: `--ease-out` `cubic-bezier(.23,1,.32,1)` (entradas), `--ease-in` (salidas), `--ease-in-out` (telón y bandas), `--spring` (`linear()`, ζ .82, rebasa 1,1 %: marca de pestañas, soltar botones, icono del menú).
-- Entradas ≈ 440 ms con cascada de 45 ms (máx. 8); salidas ≈ 150 ms; pulsar = `scale(.97)` en 90 ms y volver en ~380 ms; menú: abre 560–720 ms con cascada, cierra 300 ms sin cascada.
+- Entradas ≈ 440 ms con cascada de 45 ms (máx. 8); las fotos de carta se descubren en 480 ms y su texto aparece 90 ms después; salidas ≈ 150 ms; pulsar = `scale(.97)` en 90 ms y volver en ~380 ms; menú: abre 560–720 ms con cascada, cierra 300 ms sin cascada.
 - `--dist` (14 px, 0 en `calm`), `--zoom` y `--desenfoque` controlan cuánto se mueve y se enfoca una entrada.
 - Solo `transform`, `opacity` y (acotado) `filter`. Hover solo con `@media (hover:hover)`. Estados en CSS para que se puedan interrumpir.
 

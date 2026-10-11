@@ -27,6 +27,22 @@ body{ --riel-h:53px; }
   margin-inline:calc(var(--gutter) * -1);
   padding-inline:calc(var(--gutter) - var(--s-3));
 }
+.categorias__riel::before,
+.categorias__riel::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  top:0;
+  bottom:1px;
+  width:24px;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 160ms var(--ease-out);
+}
+.categorias__riel::before{ left:0; background:linear-gradient(90deg, var(--noche-0), transparent); }
+.categorias__riel::after{ right:0; background:linear-gradient(270deg, var(--noche-0), transparent); }
+.categorias__riel[data-inicio="true"]::before,
+.categorias__riel[data-final="true"]::after{ opacity:1; }
 .categorias__riel::-webkit-scrollbar{ display:none; }
 .categorias__tab{
   flex:0 0 auto;
@@ -260,14 +276,14 @@ body{ --riel-h:53px; }
 .plato--foto.revelar .plato__cuerpo{ opacity:0; transform:translateY(var(--dist)); }
 .plato--foto.revelar.es-visible .plato__foto{
   clip-path:inset(0);
-  transition:clip-path 950ms var(--ease-out) var(--d, 0ms);
+  transition:clip-path 480ms var(--ease-out) var(--d, 0ms);
 }
 .plato--foto.revelar.es-visible .plato__cuerpo{
   opacity:1;
   transform:none;
   transition:
-    opacity 520ms var(--ease-out) calc(var(--d, 0ms) + 280ms),
-    transform 520ms var(--ease-out) calc(var(--d, 0ms) + 280ms);
+    opacity 260ms var(--ease-out) calc(var(--d, 0ms) + 90ms),
+    transform 260ms var(--ease-out) calc(var(--d, 0ms) + 90ms);
 }
 html[data-motion="calm"] .plato--foto.revelar .plato__foto{ clip-path:none; }
 .revelar .plato__foto img{ transform:scale(var(--zoom)); }

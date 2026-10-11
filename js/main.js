@@ -44,12 +44,19 @@
   }
 
   tabs.forEach((tab) => tab.addEventListener("click", () => elegir(tab.dataset.cat)));
+  function actualizarBordesRiel() {
+    const max = riel.scrollWidth - riel.clientWidth;
+    riel.dataset.inicio = String(riel.scrollLeft > 2);
+    riel.dataset.final = String(max > 2 && riel.scrollLeft < max - 2);
+  }
+  riel.addEventListener("scroll", actualizarBordesRiel, { passive: true });
+  actualizarBordesRiel();
   let rafResize = 0;
   window.addEventListener("resize", () => {
     cancelAnimationFrame(rafResize);
-    rafResize = requestAnimationFrame(() => colocarMarca(false));
+    rafResize = requestAnimationFrame(() => { colocarMarca(false); actualizarBordesRiel(); });
   });
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => colocarMarca(false));
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { colocarMarca(false); actualizarBordesRiel(); });
 
   /* ---------------------------------------------------------
      HTML de cada pieza
@@ -134,7 +141,7 @@
               el.style.removeProperty("--d");
             }, retraso + 1500);
           });
-      }, { rootMargin: "0px 0px -6% 0px", threshold: 0.06 })
+      }, { rootMargin: "12% 0px 12% 0px", threshold: 0.02 })
     : null;
 
   function observarEntradas() {
@@ -142,6 +149,23 @@
     if (!observador) { piezas.forEach((p) => p.classList.remove("revelar")); return; }
     piezas.forEach((p) => observador.observe(p));
   }
+
+  // Una pasada rápida puede saltar el umbral del IntersectionObserver. Si una pieza ya
+  // quedó detrás de la vista, quita su estado inicial oculto para que siga legible al volver.
+  let rafRecuperar = 0;
+  function recuperarPiezasOmitidas() {
+    rafRecuperar = 0;
+    grid.querySelectorAll(".revelar").forEach((pieza) => {
+      if (pieza.getBoundingClientRect().bottom > 0) return;
+      if (observador) observador.unobserve(pieza);
+      pieza.classList.remove("revelar", "es-visible");
+      pieza.style.removeProperty("--d");
+    });
+  }
+  window.addEventListener("scroll", () => {
+    if (rafRecuperar) return;
+    rafRecuperar = requestAnimationFrame(recuperarPiezasOmitidas);
+  }, { passive: true });
 
   /* ---------------------------------------------------------
      Salidas: lo que se ve sale rápido (y en cascada corta) antes

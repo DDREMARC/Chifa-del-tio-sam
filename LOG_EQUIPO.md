@@ -179,3 +179,14 @@ Rama de trabajo propia: `claude/stoic-archimedes-y1rvtt` (PR 1 hacia `main`: htt
   - Modo calmo comprobado.
   - El detector de impeccable no suma avisos nuevos: los 3 que da ya estaban en `main`.
 - **No verificado:** rendimiento del WebGL de la cabecera en un móvil real de gama media.
+
+
+## Revisión visual móvil y tipografía
+
+### 2026-10-11
+
+- **Hallazgos del video** (`WhatsApp Video 2026-10-11 at 5.51.55 PM.mp4`): durante desplazamientos rápidos algunas filas podían quedar transparentes si el navegador saltaba el umbral del `IntersectionObserver`; las tarjetas con foto mantenían una cortina larga y dejaban el texto oculto un momento; las pestañas laterales de la carta se veían cortadas sin indicar que el riel continuaba.
+- **Correcciones:** `js/main.js` amplía el margen de observación, recupera al desplazarse las piezas que quedaron atrás sin animarse y comunica el desborde del riel con fundidos laterales que se actualizan al moverlo, cambiar el tamaño o cargar la fuente. `css/carta.css` reduce la cortina de las fotos a 480 ms y el retraso del texto a 90 ms.
+- **Tipografía:** Newsreader reemplaza a Cormorant Garamond en títulos y nombres de platos; DM Sans se mantiene para lectura y controles. Se actualizaron los tres enlaces a Google Fonts, el fallback serif y la configuración de la portada. Detalles en `DESIGN.md`.
+- **Archivos:** `js/main.js`, `css/carta.css`, `css/style.css`, `css/experiencia.css`, `html/index.html`, `html/carta.html`, `html/contacto.html`, `DESIGN.md`, `CLAUDE.md`, `LOG_EQUIPO.md`.
+- **Verificación:** revisión del video en cuadros de móvil y comparación con el flujo de entrada de las tarjetas. No se ejecutaron pruebas automatizadas; falta confirmar la apariencia en un teléfono real y la carga de Google Fonts en producción.

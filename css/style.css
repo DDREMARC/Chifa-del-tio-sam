@@ -5,22 +5,12 @@
    dentro de una caja de laca oscura, iluminada por faroles de papel.
    - La profundidad se hace con planos de tono (noche 0 → 3), no con sombras.
    - El farol (ámbar) es la única luz. El bermellón solo vive en los faroles.
-   - Tipografía: Cormorant Garamond (serif de alto contraste) para los títulos y
+   - Tipografía: Newsreader (serif editorial) para los títulos y
      DM Sans para textos y botones. Sin cursivas: ninguna letra se inclina.
    Cada página suma su propia hoja: carta.css, contacto.css, experiencia.css.
    ========================================================= */
 
-/* Respaldos con las MEDIDAS de las fuentes reales: mientras Google Fonts entrega las tipografías
-   el texto ocupa el mismo espacio y no salta al cambiar (cifras de Capsize). Las letras del sistema
-   solo aparecen un instante y nunca son parte del diseño. */
-@font-face{
-  font-family:"Cormorant Garamond Fallback";
-  src:local("Times New Roman"), local("TimesNewRomanPSMT");
-  ascent-override:95.2728%;
-  descent-override:29.5923%;
-  line-gap-override:0%;
-  size-adjust:96.9846%;
-}
+/* Respaldo de DM Sans con medidas calibradas para evitar saltos al cargar. */
 @font-face{
   font-family:"DM Sans Fallback";
   src:local("Arial"), local("ArialMT");
@@ -52,7 +42,7 @@
   --linea:        oklch(0.945 0.022 88 / .10);
   --linea-fuerte: oklch(0.945 0.022 88 / .20);
 
-  --font-display: "Cormorant Garamond", "Cormorant Garamond Fallback", serif;
+  --font-display: "Newsreader", Georgia, serif;
   --font-body:    "DM Sans", "DM Sans Fallback", sans-serif;
 
   /* Escala de espaciado: 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128. Todo margen, relleno y hueco sale de aquí */
@@ -90,7 +80,7 @@
 --------------------------------------------------------- */
 *,*::before,*::after{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html{
-  font-variant-numeric:lining-nums;   /* Cormorant trae cifras "colgadas" por defecto: aquí siempre alineadas */
+  font-variant-numeric:lining-nums;   /* cifras de títulos alineadas con las del cuerpo */
   -webkit-text-size-adjust:100%;
   color-scheme:dark;
   scrollbar-gutter:stable;
