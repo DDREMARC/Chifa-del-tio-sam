@@ -35,7 +35,7 @@ Un chifa de barrio con sazón propia, gran variedad de arroz chaufa y una atenci
 
 - **Nombre fijo:** El Tío Sam Chifa no cambia.
 - **Logo oficial:** `img/logo_tio_sam.jpeg`. Reemplaza al antiguo `img/logo.jpg` (ya borrado); todas las páginas y el menú lateral apuntan a este.
-- **Ubicación:** https://maps.app.goo.gl/sFH6uKQQWRxwaUtH8 (enlace directo de Google Maps; usarlo en contacto y en cualquier botón "Cómo llegar").
+- **Ubicación:** https://maps.app.goo.gl/sFH6uKQQWRxwaUtH8 (enlace directo de Google Maps; todos los botones "Cómo llegar" de home, carta y contacto ya lo usan).
 
 ## Evidence on Hand
 
@@ -53,3 +53,10 @@ Un chifa de barrio con sazón propia, gran variedad de arroz chaufa y una atenci
 ## Assets en reserva
 
 - `img/mostrito.jpeg` y `img/orjita_china.jpeg`: reservadas para asignaciones especiales en la carta. Aún sin plato asignado; no usarlas en otro lugar ni inventarles nombre o precio.
+
+## Estado de la carta
+
+- En esta rama: 23 platos marcador en 4 categorías (`js/menu-data.js`), sin nombres ni precios reales.
+- Carta real: 38 platos en 5 secciones (sopas, chaufas, combinados y tallarines, salteados, dulces), tomada de la foto de la carta impresa (`img/carta_tio_sam.jpeg`). Está en la rama `origin/claude/stoic-hypatia-5pmjcf`, pendiente de unir. No son 6 categorías.
+- Precios: sin confirmar (la carta impresa no los muestra); se muestran como "S/ —".
+- Fotos reservadas, sin plato asignado hasta que el cliente confirme: `mostrito.jpeg`, `orjita_china.jpeg`.
