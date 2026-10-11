@@ -11,6 +11,8 @@
   --gold:       #F7D87F;   /* dorado, CTAs, estrellas, detalles */
   --cream:      #F8EBAB;   /* crema, texto sobre fondo oscuro */
   --paper:      #FFFBF0;   /* superficie de tarjetas / fondo claro */
+  --night:      #0D0D0D;   /* noche de la carta: base del cristal oscuro */
+  --gold-line:  #E5A93B;   /* dorado de filo: bordes y acentos sobre noche */
 
   /* ---- Tipografía ---- */
   --font-display: 'Fraunces', Georgia, serif;
@@ -25,6 +27,9 @@
 
   --shadow-card: 0 10px 30px -12px rgba(43,10,10,.35);
   --shadow-pop:  0 18px 40px -14px rgba(43,10,10,.5);
+
+  /* ---- Respuesta táctil ---- */
+  --ease-tactil: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ---------------------------------------------------------
@@ -102,9 +107,8 @@ p{ margin:0; }
   font-size:.92rem;
   letter-spacing:.02em;
   border:none;
-  transition:transform .18s ease, box-shadow .18s ease;
+  transition:transform .15s var(--ease-tactil), box-shadow .18s ease;
 }
-.btn:active{ transform:scale(.96); }
 .btn--gold{
   background:var(--gold);
   color:var(--ink);
@@ -122,10 +126,29 @@ p{ margin:0; }
 }
 .btn--block{ width:100%; justify-content:center; }
 /* Enlaces de texto a la ubicación: mismo área táctil que un botón */
-a[href*="maps.app.goo.gl"]:not(.btn){
+a[href*="maps.app.goo.gl"]:not(.btn):not(.maps-card):not(.foot-maps){
   display:inline-flex;
   align-items:center;
   min-height:48px;                    /* área táctil mínima */
+}
+
+/* ---------------------------------------------------------
+   Respuesta táctil: todo lo que se toca cede un poco al pulsarlo.
+   Solo transform (compuesto en GPU) para sostener 60fps.
+--------------------------------------------------------- */
+.sm-toggle,
+.clasicos__more{
+  transition:transform .15s var(--ease-tactil), color .3s ease;
+}
+.btn:active,
+.menu-item__order:active,
+.maps-card:active,
+.foot-maps:active,
+.wheel-trigger:active,
+.sm-toggle:active,
+.clasicos__more:active,
+.foot-social a:active{
+  transform:scale(0.96);
 }
 
 /* ---------------------------------------------------------
@@ -185,40 +208,72 @@ a[href*="maps.app.goo.gl"]:not(.btn){
   .menu-grid{ grid-template-columns:repeat(2,1fr); gap:12px; }
 }
 .menu-item{
+  position:relative;
   display:flex;
   flex-direction:column;
-  background:var(--paper);
-  border:1px solid rgba(43,10,10,.06);
+  /* cristal nocturno: deja pasar el resplandor de los farolillos del fondo */
+  background:rgba(13,13,13,.8);
+  -webkit-backdrop-filter:blur(12px) saturate(140%);
+  backdrop-filter:blur(12px) saturate(140%);
+  border:1px solid rgba(229,169,59,.25);
   border-radius:var(--radius-lg);
   overflow:hidden;
+  color:var(--cream);
   box-shadow:
-    0 1px 3px rgba(43,10,10,.04),
-    0 4px 12px rgba(43,10,10,.06);
-  transition:transform .3s ease, box-shadow .3s ease;
+    inset 0 1px 0 rgba(229,169,59,.10),
+    0 18px 40px -22px rgba(0,0,0,.8);
+  transition:border-color .4s var(--ease-tactil), box-shadow .4s var(--ease-tactil);
   cursor:default;
 }
-.menu-item:hover{
-  transform:translateY(-3px);
-  box-shadow:
-    0 4px 8px rgba(43,10,10,.06),
-    0 12px 28px rgba(43,10,10,.10);
+@media (hover:hover){
+  .menu-item:hover{
+    border-color:rgba(229,169,59,.5);
+    box-shadow:
+      inset 0 1px 0 rgba(229,169,59,.18),
+      0 24px 50px -20px rgba(0,0,0,.9),
+      0 0 0 1px rgba(229,169,59,.08);
+  }
 }
+/* Foto (o placeholder) con degradado nocturno superior */
 .menu-item__icon{
+  position:relative;
   width:100%;
   aspect-ratio:4/3;
   overflow:hidden;
+  background:linear-gradient(160deg, #1d1410 0%, var(--night) 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.menu-item__icon::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(120% 95% at 50% 42%, transparent 55%, rgba(13,13,13,.55) 100%),
+    linear-gradient(180deg, rgba(13,13,13,.6) 0%, rgba(13,13,13,.16) 28%, transparent 50%),
+    linear-gradient(0deg, rgba(13,13,13,.7) 0%, transparent 24%);
 }
 .menu-item__icon img{
   width:100%; height:100%;
   object-fit:cover;
   display:block;
-  transition:transform .4s ease;
+  filter:saturate(1.08) contrast(1.04);
+  transition:transform .8s var(--ease-tactil);
 }
-.menu-item:hover .menu-item__icon img{
-  transform:scale(1.05);
+@media (hover:hover){
+  .menu-item:hover .menu-item__icon img{ transform:scale(1.05); }
+}
+.menu-item__placeholder{
+  font-size:.7rem;
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(229,169,59,.55);
 }
 .menu-item__body{
-  padding:14px 14px 16px;
+  padding:16px 16px 18px;
   flex:1;
   display:flex;
   flex-direction:column;
@@ -227,65 +282,56 @@ a[href*="maps.app.goo.gl"]:not(.btn){
   display:flex;
   justify-content:space-between;
   align-items:baseline;
-  gap:6px;
+  gap:10px;
 }
 .menu-item__name{
+  margin:0;
   font-family:var(--font-display);
   font-weight:700;
-  font-size:.92rem;
+  font-size:1rem;
   line-height:1.25;
+  color:var(--cream);
 }
 .menu-item__price{
   font-family:var(--font-display);
   font-weight:700;
-  font-size:.82rem;
+  font-size:.85rem;
   white-space:nowrap;
-  color:var(--red-deep);
+  color:var(--gold-line);
 }
 .menu-item__desc{
-  font-size:.82rem;
-  color:rgba(43,10,10,.6);
-  margin-top:6px;
-  line-height:1.45;
+  font-size:.84rem;
+  color:rgba(248,235,171,.68);
+  margin:6px 0 14px;
+  line-height:1.5;
 }
-/* Tarjeta de plato: foto (o placeholder), nombre/precio, descripción y pedido */
-.menu-item__icon{
-  background:linear-gradient(160deg, #3a1212 0%, var(--ink) 100%);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.menu-item__placeholder{
-  font-size:.7rem;
-  font-weight:600;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:rgba(248,235,171,.55);
-}
-.menu-item__name{ margin:0; }
-.menu-item__body{ padding:16px 16px 18px; gap:0; }
 .menu-item__order{
-  margin-top:14px;
-  min-height:48px;                    /* área táctil mínima */
+  margin-top:auto;                    /* el botón se asienta al pie, alineado entre tarjetas */
+  min-height:48px;                    /* objetivo táctil */
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:8px;
   padding:0 16px;
   border-radius:999px;
-  background:var(--red);
-  color:var(--paper);
+  border:1px solid rgba(229,169,59,.55);
+  background:rgba(229,169,59,.10);
+  color:var(--gold-line);
   font-family:var(--font-body);
   font-size:.85rem;
   font-weight:600;
   text-decoration:none;
   -webkit-tap-highlight-color:transparent;
-  transition:transform .2s ease, background-color .2s ease;
+  transition:
+    transform .15s var(--ease-tactil),
+    background-color .3s var(--ease-tactil),
+    color .3s var(--ease-tactil);
 }
 .menu-item__order svg{ width:18px; height:18px; flex-shrink:0; }
-.menu-item__order:hover{ background:var(--red-deep); }
-.menu-item__order:active{ transform:scale(.98); }
-.menu-item__order:focus-visible{ outline:3px solid var(--gold); outline-offset:3px; }
+@media (hover:hover){
+  .menu-item__order:hover{ background:var(--gold-line); color:var(--night); }
+}
+.menu-item__order:focus-visible{ outline:3px solid var(--gold-line); outline-offset:3px; }
 
 /* Category title */
 .menu-category-title{
@@ -294,6 +340,32 @@ a[href*="maps.app.goo.gl"]:not(.btn){
   font-size:1.1rem;
   font-weight:700;
   color:var(--red-deep);
+}
+
+/* ── Carta de noche: fondo con resplandor de farolillos para el cristal ── */
+body.carta-noche{
+  background-color:var(--night);
+  background-image:
+    radial-gradient(60vmax 45vmax at 12% 18%, rgba(190,26,26,.22), transparent 60%),
+    radial-gradient(50vmax 40vmax at 92% 46%, rgba(229,169,59,.13), transparent 60%),
+    radial-gradient(55vmax 45vmax at 20% 88%, rgba(208,49,30,.16), transparent 62%);
+  background-attachment:fixed;
+  color:var(--cream);
+}
+body.carta-noche #menuGrid{ padding-bottom:48px; }
+body.carta-noche .menu-category-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:28px 0 6px;
+  color:var(--gold-line);
+  letter-spacing:.01em;
+}
+body.carta-noche .menu-category-title::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:linear-gradient(90deg, rgba(229,169,59,.45), transparent);
 }
 
 /* ===========================================================
@@ -310,6 +382,58 @@ a[href*="maps.app.goo.gl"]:not(.btn){
   width:100%;
   min-height:250px;
 }
+
+/* Acceso a Google Maps: tarjeta táctil de noche con filo dorado */
+.maps-card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-height:64px;                    /* supera el mínimo táctil de 48px */
+  margin-bottom:18px;
+  padding:12px 18px 12px 12px;
+  border-radius:var(--radius-md);
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(190,26,26,.35), transparent 55%),
+    var(--night);
+  border:1px solid rgba(229,169,59,.45);
+  color:var(--cream);
+  box-shadow:inset 0 1px 0 rgba(229,169,59,.15), var(--shadow-card);
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .15s var(--ease-tactil), border-color .3s ease, box-shadow .3s ease;
+}
+.maps-card__pin{
+  flex-shrink:0;
+  display:grid;
+  place-items:center;
+  width:44px; height:44px;
+  border-radius:12px;
+  background:rgba(229,169,59,.14);
+  color:var(--gold-line);
+}
+.maps-card__pin svg{ width:22px; height:22px; }
+.maps-card__text{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.maps-card__title{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:1.05rem;
+  line-height:1.2;
+}
+.maps-card__sub{
+  font-size:.8rem;
+  line-height:1.35;
+  color:rgba(248,235,171,.7);
+}
+.maps-card__arrow{
+  flex-shrink:0;
+  width:20px; height:20px;
+  color:var(--gold-line);
+  transition:transform .4s var(--ease-tactil);
+}
+@media (hover:hover){
+  .maps-card:hover{ border-color:var(--gold-line); box-shadow:inset 0 1px 0 rgba(229,169,59,.25), var(--shadow-pop); }
+  .maps-card:hover .maps-card__arrow{ transform:translate(3px,-3px); }
+}
+.maps-card:focus-visible{ outline:3px solid var(--gold-line); outline-offset:3px; }
 
 /* ── Reservas en línea: PRÓXIMAMENTE (php/reservar.php ya está listo) ── */
 .reserva{
@@ -641,7 +765,9 @@ a[href*="maps.app.goo.gl"]:not(.btn){
   background:rgba(248,235,171,.06);
   border:1px solid rgba(248,235,171,.1);
   color:var(--cream);
-  transition:all .25s ease;
+  transition:
+    transform .15s var(--ease-tactil),
+    background-color .25s ease, color .25s ease, border-color .25s ease;
 }
 .foot-social a svg{ width:18px; height:18px; }
 .foot-social a:hover{
@@ -665,7 +791,7 @@ a[href*="maps.app.goo.gl"]:not(.btn){
   align-items:center;
   gap:6px;
   font-size:.68rem;
-  color:rgba(248,235,171,.4);
+  color:rgba(248,235,171,.62);
   text-align:center;
 }
 .foot-bottom a{
@@ -674,10 +800,35 @@ a[href*="maps.app.goo.gl"]:not(.btn){
   transition:color .2s ease;
 }
 .foot-bottom a:hover{ color:var(--gold); }
+/* Acceso a Maps en el pie: botón táctil con filo dorado */
+.foot-bottom a.foot-maps{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:48px;
+  margin-top:6px;
+  padding:0 20px;
+  border-radius:999px;
+  border:1px solid rgba(229,169,59,.45);
+  background:rgba(13,13,13,.8);
+  color:var(--gold-line);
+  font-size:.82rem;
+  font-weight:600;
+  letter-spacing:.02em;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .15s var(--ease-tactil), background-color .3s ease, color .3s ease;
+}
+.foot-maps svg{ width:16px; height:16px; flex-shrink:0; }
+@media (hover:hover){
+  .foot-bottom a.foot-maps:hover{ background:var(--gold-line); color:var(--night); }
+}
+.foot-maps:focus-visible{ outline:3px solid var(--gold-line); outline-offset:3px; }
 
 @media (min-width:520px){
   .foot-cols{ grid-template-columns:repeat(2,1fr); }
-  .foot-bottom{ flex-direction:row; justify-content:center; gap:14px; }
+  .foot-bottom{ flex-direction:row; flex-wrap:wrap; justify-content:center; align-items:center; gap:14px; }
+  .foot-bottom a.foot-maps{ margin-top:0; }
 }
 
 /* ===========================================================
@@ -968,106 +1119,5 @@ html.telon-entrada::after{ content:""; }
   pointer-events:none;
 }
 
-/* ===========================================================
-   ACABADO NOCTURNO — cristal oscuro, filo dorado, toque orgánico
-=========================================================== */
-:root{
-  --night:      rgba(13,13,13,.92);
-  --gold-edge:  #E5A93B;
-  --tacto:      transform .15s cubic-bezier(.16,1,.3,1);
-}
-
-/* Tarjetas de la carta: cristal oscuro con filo dorado suave */
-.menu-item{
-  background:var(--night);
-  border:1px solid rgba(229,169,59,.28);
-  color:var(--cream);
-  content-visibility:auto;            /* fuera de pantalla no se pinta: 38 tarjetas a 60 fps */
-  contain-intrinsic-size:auto 380px;
-  box-shadow:0 10px 30px -14px rgba(0,0,0,.6), inset 0 1px 0 rgba(229,169,59,.12);
-  transition:transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s ease, border-color .3s ease;
-}
-.menu-item:hover{
-  border-color:rgba(229,169,59,.5);
-  box-shadow:0 18px 38px -14px rgba(0,0,0,.7), inset 0 1px 0 rgba(229,169,59,.2);
-}
-.menu-item__name{ color:var(--cream); }
-.menu-item__price{ color:var(--gold-edge); }
-.menu-item__desc{ color:rgba(248,235,171,.72); }
-
-/* Foto: degradado nocturno en la parte superior para que el plato resalte */
-.menu-item__icon{ position:relative; }
-.menu-item__icon::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(180deg, rgba(13,13,13,.62) 0%, rgba(13,13,13,.18) 38%, transparent 62%);
-  pointer-events:none;
-}
-
-/* Botón de pedido: mismo lenguaje de cristal con dorado */
-.menu-item__order{
-  background:rgba(229,169,59,.14);
-  color:var(--gold);
-  border:1px solid rgba(229,169,59,.55);
-}
-.menu-item__order:hover{ background:rgba(229,169,59,.26); }
-
-/* Toque táctil: todo lo clicable se hunde un poco al presionar */
-.btn,
-.menu-item__order,
-.menu-item,
-.foot-social a,
-.wheel-trigger,
-.clasicos__more,
-.ruta-card{
-  transition:var(--tacto), box-shadow .2s ease, background-color .2s ease, border-color .2s ease;
-}
-.btn:active,
-.menu-item__order:active,
-.menu-item:active,
-.foot-social a:active,
-.wheel-trigger:active,
-.clasicos__more:active,
-.ruta-card:active{
-  transform:scale(.96);
-}
-/* Los botones magnéticos mueven su transform con GSAP: usan la propiedad scale aparte */
-.magnetic:active{ transform:none; scale:.96; }
-.magnetic{ transition:scale .15s cubic-bezier(.16,1,.3,1), box-shadow .18s ease; }
-
-/* Tarjeta de acceso a Google Maps (mínimo 48px, táctil) */
-.ruta-card{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  min-height:64px;
-  margin-bottom:18px;
-  padding:14px 18px;
-  border-radius:var(--radius-md);
-  background:var(--night);
-  border:1px solid rgba(229,169,59,.45);
-  -webkit-backdrop-filter:blur(12px);
-  backdrop-filter:blur(12px);
-  color:var(--cream);
-  box-shadow:var(--shadow-card);
-}
-.ruta-card:hover{ border-color:var(--gold-edge); box-shadow:var(--shadow-pop); }
-.ruta-card:focus-visible{ outline:3px solid var(--gold); outline-offset:3px; }
-.ruta-card__icon{
-  flex-shrink:0;
-  display:grid;
-  place-items:center;
-  width:44px; height:44px;
-  border-radius:12px;
-  background:rgba(229,169,59,.16);
-  color:var(--gold-edge);
-}
-.ruta-card__icon svg{ width:22px; height:22px; }
-.ruta-card__text{ flex:1; display:flex; flex-direction:column; gap:2px; }
-.ruta-card__title{ font-family:var(--font-display); font-weight:700; font-size:1.05rem; }
-.ruta-card__sub{ font-size:.8rem; color:rgba(248,235,171,.7); }
-.ruta-card__go{ color:var(--gold-edge); font-size:1.3rem; transition:transform .3s cubic-bezier(.16,1,.3,1); }
-.ruta-card:hover .ruta-card__go{ transform:translateX(4px); }
-
+/* Platos sin descripción: no dejan hueco en la tarjeta */
 .menu-item__desc:empty{ display:none; }

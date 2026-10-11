@@ -58,7 +58,7 @@
   font-weight:700;
   border:none;
   cursor:pointer;
-  transition:background .2s ease;
+  transition:transform .15s var(--ease-tactil), background .2s ease;
 }
 .wheel-trigger:active{ background:rgba(43,10,10,.95); }
 .wheel-trigger svg{
