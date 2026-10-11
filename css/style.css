@@ -99,6 +99,7 @@ p{ margin:0; }
   display:inline-flex;
   align-items:center;
   gap:8px;
+  min-height:48px;                    /* área táctil mínima */
   padding:14px 28px;
   border-radius:999px;
   font-family:var(--font-body);
@@ -124,6 +125,12 @@ p{ margin:0; }
   color:var(--cream);
 }
 .btn--block{ width:100%; justify-content:center; }
+/* Enlaces de texto a la ubicación: mismo área táctil que un botón */
+a[href*="maps.app.goo.gl"]:not(.btn):not(.maps-card):not(.foot-maps){
+  display:inline-flex;
+  align-items:center;
+  min-height:48px;                    /* área táctil mínima */
+}
 
 /* ---------------------------------------------------------
    Respuesta táctil: todo lo que se toca cede un poco al pulsarlo.
@@ -649,6 +656,7 @@ body.carta-noche .menu-category-title::after{
   align-items:center;
   justify-content:center;
   gap:8px;
+  min-height:48px;                    /* área táctil mínima */
   padding:12px;
   border-radius:var(--radius-sm);
   background:var(--ink);
@@ -733,6 +741,9 @@ body.carta-noche .menu-category-title::after{
   opacity:.6;
 }
 .foot-col__item a{
+  display:inline-flex;
+  align-items:center;
+  min-height:48px;                    /* área táctil mínima */
   color:rgba(248,235,171,.72);
   text-decoration:none;
   transition:color .2s ease;
@@ -749,7 +760,7 @@ body.carta-noche .menu-category-title::after{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  width:42px; height:42px;
+  width:48px; height:48px;            /* área táctil mínima */
   border-radius:12px;
   background:rgba(248,235,171,.06);
   border:1px solid rgba(248,235,171,.1);

@@ -49,6 +49,7 @@
   justify-content:center;
   gap:6px;
   width:100%;
+  min-height:48px;                    /* área táctil mínima */
   padding:14px 20px;
   background:var(--ink);
   color:var(--gold);
