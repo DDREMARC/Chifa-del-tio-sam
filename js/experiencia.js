@@ -26,6 +26,7 @@
   const coarse = !!TS.coarse;
   const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
   const split = TS.split || (() => []);
+  const escapeHtml = TS.escapeHtml; // sin fallback: si falta, debe fallar a la vista
 
   /* Escenas del recorrido (orden = orden de la película).
      scroll = alto de scroll en viewports; linger = la cámara "se posa" a mitad de escena. */
@@ -90,12 +91,13 @@
     if (!nav) return;
     const arrow = '<svg class="item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
     nav.innerHTML = filasCarta().map(({ name, price, src, short }) => {
-      const img = src ? `<div class="marquee__img" style="background-image:url('${src}')"></div>` : '';
-      const part = `<div class="marquee__part"><span>${short}</span>${img}<div class="marquee__dot"></div></div>`;
+      const ruta = escapeHtml(src);
+      const img = src ? `<div class="marquee__img" style="background-image:url('${ruta}')"></div>` : '';
+      const part = `<div class="marquee__part"><span>${escapeHtml(short)}</span>${img}<div class="marquee__dot"></div></div>`;
       return `<div class="menu__item">
         <a class="menu__item-link" href="carta.html">
-          ${src ? `<span class="item-emoji"><img src="${src}" alt="" loading="lazy"></span>` : ''}
-          <span class="item-info"><span class="item-name">${name}</span><span class="item-price">${price}</span></span>
+          ${src ? `<span class="item-emoji"><img src="${ruta}" alt="" loading="lazy"></span>` : ''}
+          <span class="item-info"><span class="item-name">${escapeHtml(name)}</span><span class="item-price">${escapeHtml(price)}</span></span>
           ${arrow}
         </a>
         <div class="marquee" aria-hidden="true"><div class="marquee__inner-wrap"><div class="marquee__inner">${part.repeat(6)}</div></div></div>

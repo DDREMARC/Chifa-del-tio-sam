@@ -22,7 +22,18 @@
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const coarse = matchMedia("(hover: none) and (pointer: coarse)").matches;
   const hasGSAP = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined";
-  const TioSam = (window.TioSam = { reduce, coarse, hasGSAP, lenis: null, split });
+  /* Escapa texto antes de meterlo en innerHTML: nombres, precios y rutas
+     vienen de menu-data.js y pueden llevar & < > " ' */
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  const TioSam = (window.TioSam = { reduce, coarse, hasGSAP, lenis: null, split, escapeHtml });
 
   const SELLO = '<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2.6 4" opacity=".75"/><path fill="currentColor" d="M50,50 C50,34 63,25 76,31 C83,34 83,45 76,48 C70,50.5 64,47 63,52 C61,60 68,65 62,70 C55,75 48,64 50,50 Z"/><path fill="currentColor" transform="rotate(180 50 50)" d="M50,50 C50,34 63,25 76,31 C83,34 83,45 76,48 C70,50.5 64,47 63,52 C61,60 68,65 62,70 C55,75 48,64 50,50 Z"/></svg>';
 
