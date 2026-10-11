@@ -9,25 +9,24 @@ Al terminar cada tarea, añadir una entrada en tu sección: archivos modificados
 - Claude 3: UI/UX
 - Claude 4: lead QA
 
-**Rama de trabajo:** `claude/vibrant-wright-0n45bh`. No se escribe directamente en `main`.
+**Rama de integración:** `claude/funny-rubin-qqu1yz` (Lead QA). Aquí se unieron las ramas de Claude 1, 2 y 3; después pasa a `main`. Las ramas de herramientas antiguas (`install-7-skills`, `levoble-import`, `vibrant-einstein`) no se unen.
 
 ## Estado general (2026-10-11)
 
-- La rama de trabajo tiene: escape de texto en las tarjetas de la carta, los 38 platos reales, el logo nuevo, los enlaces de Google Maps y el área táctil de 48px. Está sincronizada con `main` (merge `7e98936`).
-- `main` (`fd058d8`) **no** tiene el escape de texto ni los 38 platos: sigue con 23 platos de marcador. Pasar estos cambios a `main` requiere autorización.
+- Unificado: 38 platos reales en **6 categorías** (Sopas, Chaufas, Aeropuertos, Combinados y Tallarines, Platos Saltados, Platos Dulces), cristal nocturno de Claude 3, `escapeHtml` y 48px de Claude 1, fotos reales de la portada y logo `logo_tio_sam.jpeg` de Claude 2.
+- Sin testimonios inventados (portada y Contacto). Todos los enlaces de Maps usan `https://maps.app.goo.gl/sFH6uKQQWRxwaUtH8`.
+- Panel móvil: si GSAP no carga, el menú lateral ya no bloquea los toques (ver Claude 4).
 
 ## Pendientes
 
 | Tema | Responsable sugerido | Estado |
 |---|---|---|
-| Imágenes rotas en la portada: `chaufa_carne.jpg`, `chaufa_pollo.jpg`, `chaufa_chancho.jpg` (borradas en `main`) | Claude 2 | Resuelto en la rama `claude/stoic-archimedes-y1rvtt` (PR 1 a `main`); falta unir |
-| Asignar `mostrito.jpeg` y `orjita_china.jpeg` a platos de la carta | Claude 2 / dueño | Pendiente: el cliente debe confirmar el plato |
-| `MENU_WHATSAPP = "51987654321"` es un número de prueba | Lead QA | Pendiente: número real |
-| Precios (`S/ —`) y descripciones de 38 platos | Claude 2 / dueño | Pendiente: datos reales |
-| Animaciones GSAP sin verificar: el CDN no carga en el entorno de prueba | Claude 3, Claude 4 | Pendiente: prueba con CDN |
-| Merge de la rama de trabajo a `main` | Lead QA | Pendiente de autorización |
-| Si el CDN de GSAP no carga, el panel del menú lateral (`.staggered-menu-panel`) queda encima de la página en el móvil y bloquea los toques. Solo GSAP lo oculta (`js/staggered-menu.js`, línea 107) | Claude 1 | Pendiente: ocultarlo por CSS por defecto |
-| Claude 2 (`claude/stoic-archimedes-y1rvtt`) cambió en paralelo el logo, Maps y las fotos de la portada: chocará con la rama de trabajo y con el PR #2 | Lead QA | Pendiente: decidir qué versión queda |
+| `MENU_WHATSAPP = "51987654321"` y el teléfono del pie parecen de prueba | Dueño / Lead QA | Pendiente: número real |
+| Precios (`S/ —`) y descripciones de la mayoría de los 38 platos | Dueño | Pendiente: datos reales |
+| `mostrito.jpeg` y `orjita_china.jpeg` sin plato asignado (no figuran en la carta impresa) | Dueño | Pendiente |
+| Animaciones GSAP sin verificar: el CDN no carga en el entorno de prueba | Claude 3, Claude 4 | Pendiente: prueba con CDN en un móvil real |
+| Horario "martes a domingo 12:00–10:00" y redes (`href="#"`) sin confirmar | Dueño | Pendiente |
+| Rama `claude/stoic-hypatia-5pmjcf` (solo carta, 38 platos con otra versión) | Lead QA | Superada por la carta unificada; no se une |
 
 ## Claude 1 — DOM y seguridad
 
@@ -101,4 +100,16 @@ Rama de trabajo propia: `claude/stoic-archimedes-y1rvtt` (PR 1 hacia `main`: htt
 
 ## Claude 4 — lead QA
 
-_Sin entradas todavía._
+### 2026-10-11
+
+- **Unificación en `claude/funny-rubin-qqu1yz`** (merge en orden: Claude 1, Claude 2, Claude 3).
+  - `js/menu-data.js`: se mantiene la carta de 6 categorías y 38 platos con fotos asignadas; no entró la carta de 23 platos.
+  - `css/style.css`: se mantiene el acabado de Claude 3 (`rgba(13,13,13,.8)`, borde `#E5A93B`, `blur(12px)`, `scale(.96)`). Se quitó el bloque duplicado propio y la tarjeta `.ruta-card` (queda `.maps-card`).
+  - `js/main.js`: `escapeHtml` de Claude 1 + `renderTimer` (si se cambia rápido de categoría, solo se pinta la última).
+  - HTML: logo, fotos de la portada y `rel="noopener noreferrer"` de Claude 1/2.
+- **Testimonios:** quitados el de "Carlos M." (portada) y las 3 reseñas inventadas de `html/contacto.html`.
+- **Fix panel móvil sin GSAP:** `css/staggered-menu.css` (`.staggered-menu-panel` con `pointer-events:none`, solo `.is-active` lo activa; modo `.sm-sin-gsap` con transición CSS) y `js/staggered-menu.js` (clase `is-active` y ruta sin GSAP en lugar de lanzar error).
+- **Limpieza:** se borraron de `img/` las copias de `chaufa_carne/pollo/chancho.jpg` (ya no se usan; siguen en `video/public/img/`). Tarjetas sin descripción: espacio de 14px antes del botón.
+- **Verificación (Chromium 390px, CDN bloqueado = sin GSAP):** las 3 páginas cargan sin errores; la carta pinta 38 tarjetas; sin scroll horizontal; con el menú cerrado el panel no intercepta toques y abierto sí; Maps correcto en todas; "Carlos" no aparece en la portada.
+- **No verificado:** animaciones con GSAP, filtro de las 6 categorías a 60 fps en un móvil real.
+

@@ -102,6 +102,22 @@ function createStaggeredMenu(rootEl, options = {}) {
   const textWrap = rootEl.querySelector('.sm-toggle-textWrap');
   const toggleBtn = rootEl.querySelector('.sm-toggle');
 
+  /* ── Sin GSAP (CDN caído, móvil con mala señal): panel por CSS, sin bloquear la página ── */
+  if (typeof gsap === 'undefined') {
+    rootEl.classList.add('sm-sin-gsap');
+    const setOpen = (v) => {
+      open = v;
+      rootEl.setAttribute('data-open', v || '');
+      panel.classList.toggle('is-active', v);
+      panel.setAttribute('aria-hidden', !v);
+      toggleBtn.setAttribute('aria-expanded', v);
+      toggleBtn.setAttribute('aria-label', v ? 'Close menu' : 'Open menu');
+    };
+    toggleBtn.addEventListener('click', () => setOpen(!open));
+    panel.querySelectorAll('.sm-panel-item').forEach(l => l.addEventListener('click', () => setOpen(false)));
+    return { toggle: () => setOpen(!open), close: () => setOpen(false), isOpen: () => open };
+  }
+
   /* ── Init GSAP positions ── */
   const offscreen = position === 'left' ? -100 : 100;
   gsap.set([panel, ...preLayers], { xPercent: offscreen, opacity: 1 });
@@ -264,6 +280,7 @@ function createStaggeredMenu(rootEl, options = {}) {
     panel.setAttribute('aria-hidden', !open);
     toggleBtn.setAttribute('aria-expanded', open);
     toggleBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    panel.classList.toggle('is-active', open);
 
     if (open) {
       onMenuOpen?.();
@@ -286,6 +303,7 @@ function createStaggeredMenu(rootEl, options = {}) {
     panel.setAttribute('aria-hidden', true);
     toggleBtn.setAttribute('aria-expanded', false);
     toggleBtn.setAttribute('aria-label', 'Open menu');
+    panel.classList.remove('is-active');
     onMenuClose?.();
     playClose();
     window.unlockBodyScroll?.();

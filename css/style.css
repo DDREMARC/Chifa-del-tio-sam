@@ -1121,3 +1121,4 @@ html.telon-entrada::after{ content:""; }
 
 /* Platos sin descripción: no dejan hueco en la tarjeta */
 .menu-item__desc:empty{ display:none; }
+.menu-item__body:has(.menu-item__desc:empty) .menu-item__top{ margin-bottom:14px; }

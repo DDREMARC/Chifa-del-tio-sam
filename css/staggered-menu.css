@@ -153,8 +153,22 @@
   padding: 6em 2em 2em 2em;
   overflow-y: auto;
   z-index: 10;
-  pointer-events: auto;
+  pointer-events: none;               /* cerrado (o sin GSAP): no intercepta toques de la página */
   opacity: 0;
+}
+.staggered-menu-panel.is-active { pointer-events: auto; }
+
+/* Sin GSAP: el panel entra y sale solo con CSS */
+.sm-sin-gsap .staggered-menu-panel {
+  opacity: 1;
+  visibility: hidden;
+  transform: translateX(100%);
+  transition: transform .35s cubic-bezier(.16,1,.3,1), visibility 0s .35s;
+}
+.sm-sin-gsap .staggered-menu-panel.is-active {
+  visibility: visible;
+  transform: translateX(0);
+  transition: transform .35s cubic-bezier(.16,1,.3,1), visibility 0s;
 }
 
 [data-position='left'] .staggered-menu-panel {
