@@ -48,7 +48,7 @@ function createStaggeredMenu(rootEl, options = {}) {
     </div>
     <header class="staggered-menu-header" aria-label="Main navigation header">
       <div class="sm-logo" aria-label="Logo">
-        <img class="sm-logo-img" src="../img/logo.jpg" alt="El Tío Sam Chifa" draggable="false">
+        <img class="sm-logo-img" src="../img/logo_tio_sam.jpeg" alt="El Tío Sam Chifa" draggable="false">
         <span class="sm-logo-text">El Tío Sam<small>Chifa</small></span>
       </div>
       <button class="sm-toggle" aria-label="Open menu" aria-expanded="false" type="button">

@@ -47,6 +47,7 @@ function setupMenuPage() {
 
   const categories = [{ id: "todos", label: "Todos" }, ...MENU_CATEGORIES];
   let currentCat = "todos";
+  let renderTimer = null;
 
   const BREAKPOINT = 720;
   let isMobile = window.innerWidth < BREAKPOINT;
@@ -125,7 +126,8 @@ function setupMenuPage() {
 
   function renderMenu(filter) {
     grid.style.opacity = "0";
-    setTimeout(() => {
+    clearTimeout(renderTimer);   // cambios rápidos de categoría: solo cuenta el último
+    renderTimer = setTimeout(() => {
       grid.innerHTML = "";
 
       if (filter === "todos") {

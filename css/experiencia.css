@@ -265,32 +265,6 @@ body.xp {
 .clasicos__more span { transition: transform .3s ease; }
 .clasicos__more:hover span { transform: translateX(6px); }
 
-/* ---- Testimonio ---- */
-.xp-quote {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: clamp(100px, 18vh, 200px) 22px;
-  text-align: center;
-}
-.xp-quote .eyebrow { justify-content: center; color: var(--gold); }
-.xp-quote__text {
-  margin: 18px 0 0;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 500;
-  font-size: clamp(1.7rem, 4.2vw, 3.4rem);
-  line-height: 1.22;
-  color: var(--cream);
-}
-.xp-quote__text .wd { display: inline-block; }
-.xp-quote__by {
-  margin-top: 26px;
-  font-size: .8rem;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-
 /* ---- CTA final ---- */
 .xp-cta {
   height: 100vh;
