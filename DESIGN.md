@@ -61,6 +61,7 @@ Tres capas, de la más ligera a la más pesada. Cada una degrada sola si falla l
 - **Menú lateral** (`css/staggered-menu.css`): dos capas de laca preceden al panel; abre lento, cierra rápido.
 - **Pestañas de categoría** (`.categorias`): fijas bajo la cabecera, marca ámbar que se desliza.
 - **Plato con foto** (`.plato--foto`) y **fila** (`.plato--fila`); el precio sin confirmar usa `data-sin-precio`. La foto se descubre de abajo hacia arriba como una cortina (`clip-path`, 950 ms) mientras un zoom leve se asienta; el texto llega 280 ms después. En `calm` solo funde.
+- **Letrero "Próximamente"** (`.letrero`, en `contacto.html`): una placa `--noche-2` con filete ámbar doble cuelga sobre el formulario de reservas mientras su `<fieldset>` tenga `disabled`, y en el celular acompaña a quien baja (`position: sticky`). Al quitar `disabled` se oculta solo (`:has()`). Es solo visual (`aria-hidden`): el aviso para lectores de pantalla va en el título y en el texto de arriba.
 - **Formulario de contacto** (hoy desactivado, "Próximamente"): el rótulo se enciende en ámbar al enfocar, un hilo de luz crece bajo el campo, el botón se hunde al pulsar (90 ms) y vuelve con muelle, el error solo aparece tras escribir (`:user-invalid`).
 - **Mapa** (`.mapa`): iframe de Google filtrado a tono noche; los datos van en lista (`.datos`), no en tarjetas.
 - **Logo oficial** `img/logo_tio_sam.jpeg`: portada, pie, telón y cabecera. Recortado en círculo.

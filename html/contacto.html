@@ -76,8 +76,9 @@
 
     <!-- ====== RESERVAS EN LÍNEA: PRÓXIMAMENTE ======
          El formulario queda listo pero desactivado. Para abrirlo:
-         1) quitar "disabled" del <fieldset>
-         2) poner RESERVAS_ACTIVAS = true en ../php/reservar.php -->
+         1) quitar "disabled" del <fieldset> (el letrero "Próximamente" se oculta solo)
+         2) poner RESERVAS_ACTIVAS = true en ../php/reservar.php
+         3) quitar la etiqueta "Próximamente" del título y cambiar el texto de debajo -->
     <section class="contenedor reserva" id="reservar" aria-labelledby="reserva-title">
       <div class="reserva__cuerpo">
       <h2 id="reserva-title" data-anim="subir">Reserva tu mesa <span class="etiqueta">Próximamente</span></h2>
@@ -87,6 +88,13 @@
       </p>
 
       <form class="reserva-form" action="../php/reservar.php" method="post" aria-describedby="reserva-estado">
+        <!-- Letrero: solo se ve mientras el <fieldset> siga con "disabled". Es visual; el aviso para lectores de pantalla ya está en el título y en el texto de arriba -->
+        <div class="letrero-capa" aria-hidden="true">
+          <div class="letrero" data-anim="subir">
+            <p class="letrero__titulo">Próximamente</p>
+            <p class="letrero__texto">Las reservas en línea abren muy pronto.</p>
+          </div>
+        </div>
         <fieldset disabled data-anim="cascada">
           <legend class="sr-only">Datos de la reserva (no disponible todavía)</legend>
           <div class="campo campo--full">

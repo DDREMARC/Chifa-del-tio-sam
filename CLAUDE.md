@@ -44,7 +44,7 @@ Asset pipeline (only when regenerating the film): `bash produccion/render.sh che
 
 **Social links.** Fill the `REDES` block in `js/sitio.js` with real URLs; icons and links appear only for the ones that are set (no `href="#"` placeholders).
 
-**Reservations are paused.** `php/reservar.php` has `RESERVAS_ACTIVAS = false`, and the form in `html/contacto.html` is visually disabled ("Próximamente"). Do not add or promise a booking flow. Reservations are by phone or WhatsApp.
+**Reservations are paused.** `php/reservar.php` has `RESERVAS_ACTIVAS = false`, and the form in `html/contacto.html` is visually disabled ("Próximamente"). A "Próximamente" sign (`.letrero-capa` in `html/contacto.html`, styled in `css/contacto.css`) hangs over the form and hides itself when the `<fieldset>` loses `disabled`. Do not add or promise a booking flow. Reservations are by phone or WhatsApp.
 
 **Content rules.** Prices, the final carta, and testimonials are not confirmed in this repo. Do not invent dishes, prices, hours, reviews, or awards. The official logo is `img/logo_tio_sam.jpeg` (it replaces the old `img/logo.jpg`, which was deleted; all pages and `js/staggered-menu.js` now point to the official one). Official location link: https://maps.app.goo.gl/sFH6uKQQWRxwaUtH8 — use it for contact/"Cómo llegar". The name "El Tío Sam Chifa" is fixed.
 
