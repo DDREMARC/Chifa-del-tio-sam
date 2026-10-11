@@ -25,7 +25,7 @@ const MENU_WHATSAPP = "51987654321";
 const MENU_ITEMS = [
   // ---- Chaufas ----
   { cat: "chaufas", img: "../img/chaufa_especial.jpeg", name: "Chaufa especial", desc: "Chancho, pollo y langostino salteados al wok a fuego vivo, con sillao, kion y cebolla china.", price: "S/ —" },
-  { cat: "chaufas", img: "../img/aeropuerto_especial.jpeg", name: "Aeropuerto especial", desc: "Chaufa y tallarín revueltos en el wok, con chancho, pollo y langostino.", price: "S/ —" },
+  { cat: "chaufas", img: "../img/aeropuerto_especial.jpeg", name: "Aeropuerto especial", desc: "Chaufa y tallarín revueltos al wok a fuego vivo, con chancho, pollo, langostino, sillao y cebolla china.", price: "S/ —" },
   { cat: "chaufas", img: "", name: "Plato 03", desc: "Arroz al wok a fuego vivo con sillao, kion y cebolla china. Detalle por confirmar.", price: "S/ —" },
   { cat: "chaufas", img: "", name: "Plato 04", desc: "Arroz al wok a fuego vivo con sillao, kion y cebolla china. Detalle por confirmar.", price: "S/ —" },
   { cat: "chaufas", img: "", name: "Plato 05", desc: "Arroz al wok a fuego vivo con sillao, kion y cebolla china. Detalle por confirmar.", price: "S/ —" },
@@ -48,7 +48,7 @@ const MENU_ITEMS = [
   { cat: "fondos", img: "", name: "Plato 18", desc: "Salteado al wok a fuego vivo con sillao y cebolla china. Detalle por confirmar.", price: "S/ —" },
 
   // ---- Especialidades ----
-  { cat: "especialidades", img: "../img/chancho_piña.jpeg", name: "Chancho con piña + chaufa", desc: "Chancho dorado en salsa agridulce de piña, servido con chaufa.", price: "S/ —" },
+  { cat: "especialidades", img: "../img/chancho_piña.jpeg", name: "Chancho con piña + chaufa", desc: "Chancho dorado al wok a fuego vivo en salsa agridulce de piña con kion, servido con chaufa.", price: "S/ —" },
   { cat: "especialidades", img: "", name: "Plato 20", desc: "Receta de la casa, al wok a fuego vivo. Detalle por confirmar.", price: "S/ —" },
   { cat: "especialidades", img: "", name: "Plato 21", desc: "Receta de la casa, al wok a fuego vivo. Detalle por confirmar.", price: "S/ —" },
   { cat: "especialidades", img: "", name: "Plato 22", desc: "Receta de la casa, al wok a fuego vivo. Detalle por confirmar.", price: "S/ —" },
