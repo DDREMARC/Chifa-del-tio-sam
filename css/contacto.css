@@ -1,0 +1,137 @@
+/* =========================================================
+   CONTACTO (html/contacto.html)
+   El mapa y la dirección son lo primero: mapa grande a la izquierda,
+   datos y acciones a la derecha. En móvil: mapa, datos, acciones.
+   ========================================================= */
+
+.visita{
+  display:grid;
+  gap:clamp(28px, 5vw, 56px);
+  padding-block:clamp(32px, 6vw, 72px);
+}
+@media (min-width:900px){
+  .visita{ grid-template-columns:minmax(0, 7fr) minmax(0, 5fr); align-items:start; }
+}
+
+/* ---- Mapa ---- */
+.mapa{
+  position:relative;
+  aspect-ratio:4 / 3;
+  overflow:hidden;
+  background:var(--noche-2);
+  border:1px solid var(--linea);
+  border-radius:var(--r-l);
+}
+.mapa iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+  /* El mapa de Google es claro: lo llevamos a la noche del resto del sitio */
+  filter:invert(.9) hue-rotate(180deg) saturate(.55) brightness(.9) contrast(.92) sepia(.18);
+}
+@media (max-width:520px){
+  .mapa{ aspect-ratio:1 / 1; }
+}
+
+/* ---- Datos ---- */
+.datos{ margin:0; border-top:1px solid var(--linea); }
+.datos > div{
+  display:grid;
+  gap:6px;
+  padding:20px 0;
+  border-bottom:1px solid var(--linea);
+}
+.datos dt{ font-size:.875rem; font-weight:600; color:var(--papel-3); }
+.datos dd{ margin:0; font-size:1.15rem; line-height:1.4; color:var(--papel); }
+.datos dd.datos__principal{
+  font-family:var(--font-display);
+  font-size:clamp(1.65rem, 3.2vw, 2.1rem);
+  line-height:1.15;
+}
+.datos a{
+  display:inline-flex;
+  align-items:center;
+  min-height:48px;
+  margin-block:-12px;
+  transition:color 180ms var(--ease-out);
+}
+@media (hover:hover){
+  .datos a:hover{ color:var(--farol); }
+}
+.visita__acciones{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:28px;
+}
+
+/* ---- Reservas (en pausa) ---- */
+.reserva{
+  padding-block:clamp(24px, 5vw, 56px) clamp(56px, 9vw, 112px);
+  scroll-margin-top:calc(var(--header-h) + 16px);
+}
+.reserva__cuerpo{ max-width:720px; }
+.reserva h2{ font-size:clamp(1.9rem, 4vw, 2.75rem); }
+.etiqueta{
+  display:inline-block;
+  margin-left:12px;
+  padding:5px 10px;
+  border:1px solid oklch(0.70 0.12 70 / .6);
+  border-radius:var(--r-s);
+  color:var(--farol);
+  font-family:var(--font-body);
+  font-size:.8rem;
+  font-weight:600;
+  letter-spacing:0;
+  vertical-align:middle;
+}
+.reserva__lede{ margin-top:14px; max-width:52ch; color:var(--papel-2); line-height:1.6; }
+.reserva-form{
+  margin-top:28px;
+  padding:clamp(20px, 4vw, 32px);
+  background:var(--noche-1);
+  border:1px solid var(--linea);
+  border-radius:var(--r-l);
+}
+.reserva-form fieldset{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px 16px;
+  min-width:0;
+  margin:0;
+  padding:0;
+  border:0;
+}
+.reserva-form fieldset:disabled{ opacity:.45; }
+.reserva-form fieldset:disabled :is(input, select, textarea, button){ cursor:not-allowed; }
+.campo{ display:flex; flex-direction:column; gap:8px; min-width:0; }
+.campo--full{ grid-column:1 / -1; }
+.campo label{ font-size:.875rem; font-weight:600; color:var(--papel-2); }
+.campo label span{ font-weight:400; color:var(--papel-3); }
+.campo input,
+.campo select,
+.campo textarea{
+  width:100%;
+  min-height:48px;
+  padding:12px 14px;
+  background:var(--noche-0);
+  border:1px solid var(--linea-fuerte);
+  border-radius:var(--r-m);
+  color:var(--papel);
+  font:inherit;
+  font-size:1rem;
+  transition:border-color 180ms var(--ease-out);
+}
+.campo textarea{ resize:vertical; }
+.campo input::placeholder,
+.campo textarea::placeholder{ color:var(--papel-3); }
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus{ outline:none; border-color:var(--farol); }
+.campo input:user-invalid{ border-color:var(--bermellon); }
+.reserva-form .btn{ margin-top:6px; }
+@media (max-width:520px){
+  .reserva-form fieldset{ grid-template-columns:1fr; }
+}

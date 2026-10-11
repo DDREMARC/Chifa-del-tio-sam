@@ -1,19 +1,17 @@
 /* =========================================================
    El Tío Sam Chifa — sitio.js
    Comportamiento común de TODAS las páginas (una sola copia):
-   1. Menú escalonado (su configuración vive solo aquí)
-   2. Smooth scroll (Lenis) + anclas internas
+   1. Redes sociales y menú de navegación
+   2. Smooth scroll (Lenis) + anclas internas + bloqueo de scroll
    3. Telón entre páginas
    4. Animaciones por atributos en el HTML:
         data-anim="letras"   titular letra por letra con máscara
         data-anim="subir"    el bloque sube y aparece
         data-anim="cascada"  sus hijos entran en escalera
-        data-anim="mascara"  revelado de abajo hacia arriba (+ zoom de la imagen)
-        data-anim="sello"    gira y baja con el scroll (decorativo)
+        data-anim="mascara"  revelado de abajo hacia arriba
         data-parallax="60"   parallax en px (positivo baja, negativo sube)
-   5. Carta: las tarjetas entran cada vez que se pintan
-   6. Botones .magnetic y barra de progreso
-   Expone window.TioSam para experiencia.js (portada).
+   5. Botones .magnetic y barra de progreso
+   Expone window.TioSam para experiencia.js (portada) y main.js (carta).
    Todo respeta "reducir movimiento" y funciona sin GSAP (sin animar).
    ========================================================= */
 (function () {
@@ -22,6 +20,18 @@
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const coarse = matchMedia("(hover: none) and (pointer: coarse)").matches;
   const hasGSAP = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined";
+
+  /* Redes sociales: pega aquí la dirección real de cada una (https://…).
+     Mientras estén vacías no se muestra ningún icono ni enlace muerto. */
+  const REDES = {
+    facebook: "",
+    instagram: "",
+    tiktok: "",
+    youtube: "",
+  };
+  const REDES_NOMBRE = { facebook: "Facebook", instagram: "Instagram", tiktok: "TikTok", youtube: "YouTube" };
+  const urlSegura = (u) => (/^https?:\/\//i.test(u) ? u : "");
+
   /* Escapa texto antes de meterlo en innerHTML: nombres, precios y rutas
      vienen de menu-data.js y pueden llevar & < > " ' */
   function escapeHtml(value) {
@@ -33,36 +43,57 @@
       .replace(/'/g, "&#39;");
   }
 
-  const TioSam = (window.TioSam = { reduce, coarse, hasGSAP, lenis: null, split, escapeHtml });
+  /* Bloqueo de scroll con contador: el menú y cualquier otra capa pueden
+     bloquear a la vez sin pisarse. También pausa Lenis. */
+  let bloqueos = 0;
+  function lockScroll() {
+    bloqueos += 1;
+    document.documentElement.classList.add("bloqueado");
+    if (TioSam.lenis) TioSam.lenis.stop();
+  }
+  function unlockScroll() {
+    bloqueos = Math.max(0, bloqueos - 1);
+    if (bloqueos) return;
+    document.documentElement.classList.remove("bloqueado");
+    if (TioSam.lenis) TioSam.lenis.start();
+  }
 
-  const SELLO = '<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2.6 4" opacity=".75"/><path fill="currentColor" d="M50,50 C50,34 63,25 76,31 C83,34 83,45 76,48 C70,50.5 64,47 63,52 C61,60 68,65 62,70 C55,75 48,64 50,50 Z"/><path fill="currentColor" transform="rotate(180 50 50)" d="M50,50 C50,34 63,25 76,31 C83,34 83,45 76,48 C70,50.5 64,47 63,52 C61,60 68,65 62,70 C55,75 48,64 50,50 Z"/></svg>';
+  const TioSam = (window.TioSam = { reduce, coarse, hasGSAP, lenis: null, split, escapeHtml, lockScroll, unlockScroll });
+
+  const LOGO = '<img src="../img/logo_tio_sam.jpeg" alt="" width="132" height="132" decoding="async">';
 
   /* ---------------------------------------------------------
-     1. Menú escalonado
+     1. Redes y menú
   --------------------------------------------------------- */
+  function initRedes() {
+    let alguna = false;
+    document.querySelectorAll("[data-red]").forEach((a) => {
+      const url = urlSegura(REDES[a.dataset.red]);
+      if (!url) return;
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.hidden = false;
+      alguna = true;
+    });
+    document.querySelectorAll("[data-redes]").forEach((bloque) => { bloque.hidden = !alguna; });
+  }
+
   function initMenu() {
     const el = document.getElementById("staggeredMenu");
     if (!el || typeof createStaggeredMenu !== "function") return;
     createStaggeredMenu(el, {
-      position: "right",
-      colors: ["#BE1A1A", "#2B0A0A"],
-      accentColor: "#F7D87F",
-      menuButtonColor: "#F7D87F",
-      openMenuButtonColor: "#F7D87F",
-      changeMenuColorOnOpen: true,
-      displaySocials: true,
-      displayItemNumbering: true,
+      actual: location.pathname.split("/").pop() || "index.html",
       items: [
         { label: "Inicio", ariaLabel: "Ir al inicio", link: "index.html" },
         { label: "Carta", ariaLabel: "Ver la carta", link: "carta.html" },
         { label: "Contacto", ariaLabel: "Contáctanos", link: "contacto.html" },
       ],
-      socialItems: [
-        { label: "Facebook", link: "#" },
-        { label: "Instagram", link: "#" },
-        { label: "TikTok", link: "#" },
-        { label: "WhatsApp", link: "https://wa.me/51987654321" },
-      ],
+      cta: { label: "Pedir por WhatsApp", href: "https://wa.me/51987654321" },
+      direccion: "Jr. Cantón 245, Barrios Altos, Lima",
+      socialItems: Object.keys(REDES)
+        .map((k) => ({ label: REDES_NOMBRE[k], link: urlSegura(REDES[k]) }))
+        .filter((s) => s.link),
     });
   }
 
@@ -132,7 +163,7 @@
       e.preventDefault();
       // El skip-link salta al instante (accesibilidad); el resto viaja suave.
       const instant = a.classList.contains("skip-link") || !TioSam.lenis;
-      if (TioSam.lenis) TioSam.lenis.scrollTo(target, { immediate: instant, duration: 1.8, offset: -70 });
+      if (TioSam.lenis) TioSam.lenis.scrollTo(target, { immediate: instant, duration: 1.4, offset: -70 });
       else target.scrollIntoView();
       if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
       target.focus({ preventScroll: true });
@@ -140,7 +171,7 @@
   }
 
   /* ---------------------------------------------------------
-     3. Telón entre páginas: cubre al salir, se retira al entrar
+     3. Telón entre páginas: cae la noche al salir, se retira al entrar
   --------------------------------------------------------- */
   function initTelon() {
     const root = document.documentElement;
@@ -150,23 +181,23 @@
     const telon = document.createElement("div");
     telon.className = "telon";
     telon.setAttribute("aria-hidden", "true");
-    telon.innerHTML = SELLO;
+    telon.innerHTML = LOGO;
     document.body.appendChild(telon);
-    const sello = telon.firstChild;
+    const logo = telon.firstChild;
 
     if (root.classList.contains("telon-entrada")) {
       // precarga.js ya pintó la página cubierta: tomamos el relevo y la descubrimos
       gsap.set(telon, { yPercent: 0, visibility: "visible" });
-      gsap.set(sello, { opacity: 0 });
+      gsap.set(logo, { opacity: 0 });
       root.classList.remove("telon-entrada");
       gsap.to(telon, {
-        yPercent: -100, duration: 0.9, ease: "expo.inOut", delay: 0.05,
+        yPercent: -100, duration: 0.7, ease: "expo.inOut", delay: 0.05,
         onComplete: () => gsap.set(telon, { visibility: "hidden" }),
       });
       // Red de seguridad: si el navegador pausa las animaciones, nunca dejar la página tapada
       setTimeout(() => {
         if (gsap.getProperty(telon, "yPercent") > -100) gsap.set(telon, { yPercent: -100, visibility: "hidden" });
-      }, 2500);
+      }, 2000);
     } else {
       gsap.set(telon, { yPercent: 100, visibility: "hidden" });
     }
@@ -180,13 +211,13 @@
       if (url.pathname === location.pathname && url.hash) return; // misma página: lo resuelve el ancla
       e.preventDefault();
       try { sessionStorage.setItem("tsTelon", "1"); } catch (err) { /* sin telón de entrada */ }
-      // Navega al terminar el telón, o a los 900 ms pase lo que pase (animaciones pausadas)
+      // Navega al terminar el telón, o a los 700 ms pase lo que pase (animaciones pausadas)
       let fue = false;
       const ir = () => { if (!fue) { fue = true; location.href = url.href; } };
-      setTimeout(ir, 900);
+      setTimeout(ir, 700);
       gsap.timeline({ onComplete: ir })
-        .fromTo(telon, { yPercent: 100, visibility: "visible" }, { yPercent: 0, duration: 0.65, ease: "expo.inOut" })
-        .fromTo(sello, { opacity: 0, scale: 0.6, rotation: -90 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(1.6)" }, 0.3);
+        .fromTo(telon, { yPercent: 100, visibility: "visible" }, { yPercent: 0, duration: 0.5, ease: "expo.inOut" })
+        .fromTo(logo, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.35, ease: "power3.out" }, 0.2);
     });
 
     // Al volver con "atrás" (bfcache) la página regresa con el telón puesto
@@ -196,44 +227,34 @@
   }
 
   /* ---------------------------------------------------------
-     4. Animaciones por atributos
+     4. Animaciones por atributos (sutiles: poco recorrido, salida fuerte)
   --------------------------------------------------------- */
-  function mascara(el, scrollTrigger) {
-    const img = el.querySelector("img");
-    const tl = gsap.timeline(scrollTrigger ? { scrollTrigger } : {});
-    tl.fromTo(el, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "expo.out" });
-    if (img) tl.fromTo(img, { scale: 1.2 }, { scale: 1, duration: 1.4, ease: "expo.out" }, 0);
-    return tl;
-  }
-
   function initAnimaciones() {
     document.querySelectorAll('[data-anim="letras"]').forEach((el) => {
       split(el, "chars");
       gsap.from(el.querySelectorAll(".c"), {
-        yPercent: 115, rotate: 5, duration: 1, ease: "expo.out", stagger: 0.025,
-        scrollTrigger: { trigger: el, start: "top 90%" },
+        yPercent: 105, duration: 0.9, ease: "expo.out", stagger: 0.02,
+        scrollTrigger: { trigger: el, start: "top 92%" },
       });
     });
     document.querySelectorAll('[data-anim="subir"]').forEach((el) => {
       gsap.from(el, {
-        y: 36, opacity: 0, duration: 0.9, ease: "power3.out",
-        scrollTrigger: { trigger: el, start: "top 90%" },
+        y: 18, opacity: 0, duration: 0.8, ease: "expo.out",
+        scrollTrigger: { trigger: el, start: "top 92%" },
       });
     });
     document.querySelectorAll('[data-anim="cascada"]').forEach((el) => {
       gsap.from(el.children, {
-        y: 36, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.09,
-        scrollTrigger: { trigger: el, start: "top 88%" },
+        y: 16, opacity: 0, duration: 0.7, ease: "expo.out", stagger: 0.06,
+        scrollTrigger: { trigger: el, start: "top 90%" },
       });
     });
     document.querySelectorAll('[data-anim="mascara"]').forEach((el) => {
-      mascara(el, { trigger: el, start: "top 88%" });
-    });
-    document.querySelectorAll('[data-anim="sello"]').forEach((el) => {
-      gsap.to(el, {
-        rotation: 140, yPercent: 35, ease: "none",
-        scrollTrigger: { trigger: el.parentElement, start: "top top", end: "bottom top", scrub: true },
-      });
+      gsap.fromTo(el,
+        { clipPath: "inset(100% 0% 0% 0%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "expo.out",
+          scrollTrigger: { trigger: el, start: "top 90%" },
+          onComplete: () => gsap.set(el, { clearProps: "clipPath" }) });
     });
     document.querySelectorAll("[data-parallax]").forEach((el) => {
       const d = parseFloat(el.dataset.parallax) * (coarse ? 0.5 : 1);
@@ -245,45 +266,7 @@
   }
 
   /* ---------------------------------------------------------
-     5. Carta: main.js avisa con "carta:render" cada vez que pinta
-  --------------------------------------------------------- */
-  function initCarta() {
-    let triggers = [];
-    document.addEventListener("carta:render", (e) => {
-      triggers.forEach((t) => t.kill());
-      triggers = [];
-      const grid = e.detail.grid;
-
-      grid.querySelectorAll(".menu-category-title").forEach((title) => {
-        const tw = gsap.from(title, {
-          x: -24, opacity: 0, duration: 0.8, ease: "power3.out",
-          scrollTrigger: { trigger: title, start: "top 92%" },
-        });
-        triggers.push(tw.scrollTrigger);
-      });
-
-      // La tarjeta tiene "transition: transform" para el hover: se apaga mientras anima
-      const cards = grid.querySelectorAll('.menu-item[data-anim="subir"]');
-      gsap.set(cards, { opacity: 0, y: 40, transition: "none" });
-      triggers = triggers.concat(ScrollTrigger.batch(cards, {
-        start: "top 94%",
-        onEnter: (batch) => {
-          gsap.to(batch, {
-            opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.08,
-            onComplete: () => gsap.set(batch, { clearProps: "transform,opacity,transition" }),
-          });
-          batch.forEach((card, i) => {
-            const icon = card.querySelector(".menu-item__icon");
-            if (icon) mascara(icon).delay(i * 0.08);
-          });
-        },
-      }));
-      ScrollTrigger.refresh();
-    });
-  }
-
-  /* ---------------------------------------------------------
-     6. Botones magnéticos (solo puntero fino) y barra de progreso
+     5. Botones magnéticos (solo puntero fino) y barra de progreso
   --------------------------------------------------------- */
   function initMagnetic() {
     if (coarse) return;
@@ -300,8 +283,8 @@
         const cy = r.top + r.height / 2 - gsap.getProperty(btn, "y");
         const dx = e.clientX - cx, dy = e.clientY - cy;
         const near = Math.hypot(dx, dy) < Math.max(r.width, r.height) * 0.95;
-        bx(near ? dx * 0.35 : 0); by(near ? dy * 0.35 : 0);
-        lx(near ? dx * 0.15 : 0); ly(near ? dy * 0.15 : 0);
+        bx(near ? dx * 0.3 : 0); by(near ? dy * 0.3 : 0);
+        lx(near ? dx * 0.12 : 0); ly(near ? dy * 0.12 : 0);
       });
       zone.addEventListener("pointerleave", () => { bx(0); by(0); lx(0); ly(0); });
     });
@@ -319,6 +302,7 @@
   /* ---------------------------------------------------------
      Arranque
   --------------------------------------------------------- */
+  initRedes();
   initMenu();
   initTelon();
   initAnchors();
@@ -327,7 +311,6 @@
   initSmoothScroll();
   if (reduce) return;
   initAnimaciones();
-  initCarta();
   initMagnetic();
   initProgreso();
 })();

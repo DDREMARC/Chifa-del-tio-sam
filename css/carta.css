@@ -1,0 +1,213 @@
+/* =========================================================
+   LA CARTA (html/carta.html)
+   Lectura de carta impresa: una sección por categoría, con sus platos
+   de foto como protagonistas y el resto en lista. El precio sin
+   confirmar ("S/ —") se atenúa para no gritar 38 veces.
+   ========================================================= */
+
+.cabecera--carta{ padding-block:clamp(28px, 6vh, 56px) clamp(24px, 5vh, 44px); }
+
+/* ---- Categorías: siempre visibles, un toque ---- */
+.categorias{
+  position:sticky;
+  top:var(--header-h);
+  z-index:30;
+  background:var(--noche-0);
+  border-bottom:1px solid var(--linea);
+}
+.categorias__riel{
+  position:relative;
+  display:flex;
+  gap:4px;
+  overflow-x:auto;
+  overscroll-behavior-x:contain;
+  scrollbar-width:none;
+  margin-inline:calc(var(--gutter) * -1);
+  padding-inline:calc(var(--gutter) - 14px);
+}
+.categorias__riel::-webkit-scrollbar{ display:none; }
+.categorias__tab{
+  flex:0 0 auto;
+  min-height:52px;
+  padding:0 14px;
+  background:none;
+  border:0;
+  color:var(--papel-3);
+  font-size:.95rem;
+  font-weight:600;
+  white-space:nowrap;
+  transition:color 180ms var(--ease-out), transform 160ms var(--ease-out);
+}
+.categorias__tab:active{ transform:scale(.96); }
+.categorias__tab[aria-pressed="true"]{ color:var(--papel); }
+@media (hover:hover){
+  .categorias__tab:hover{ color:var(--papel); }
+}
+/* Marca que se desliza hasta la categoría elegida */
+.categorias__marca{
+  position:absolute;
+  left:0; bottom:0;
+  width:var(--w, 0);
+  height:2px;
+  background:var(--farol);
+  transform:translateX(var(--x, 0));
+  pointer-events:none;
+}
+.categorias__riel.is-listo .categorias__marca{
+  transition:transform 380ms var(--ease-out), width 380ms var(--ease-out);
+}
+
+/* ---- Secciones ---- */
+.carta{ padding-bottom:clamp(64px, 10vw, 120px); }
+.seccion-carta{ padding-top:clamp(44px, 7vw, 80px); scroll-margin-top:calc(var(--header-h) + 60px); }
+.seccion-carta__cab{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:clamp(20px, 3vw, 32px);
+  padding-bottom:16px;
+  border-bottom:1px solid var(--linea);
+}
+.seccion-carta__cab h2{ font-size:clamp(2rem, 4.6vw, 3.25rem); }
+.seccion-carta__n{ color:var(--papel-3); font-size:.9rem; white-space:nowrap; }
+
+.seccion-carta__cuerpo{ display:grid; gap:clamp(24px, 4vw, 40px); }
+.fotos{ display:grid; gap:20px; align-content:start; }
+
+/* ---- Plato con foto ---- */
+.plato--foto{
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:var(--noche-1);
+  border:1px solid var(--linea);
+  border-radius:var(--r-l);
+  transition:border-color 240ms var(--ease-out);
+}
+@media (hover:hover){
+  .plato--foto:hover{ border-color:var(--linea-fuerte); }
+}
+.plato__foto{ aspect-ratio:4 / 3; overflow:hidden; background:var(--noche-2); }
+.plato__foto img{ width:100%; height:100%; object-fit:cover; }
+.plato--foto .plato__cuerpo{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  flex:1;
+  padding:20px 20px 20px;
+}
+.plato--foto .plato__nombre{ font-size:clamp(1.4rem, 2.4vw, 1.75rem); line-height:1.15; }
+.plato__nombre .mas{
+  padding-inline:.15em;
+  font-family:var(--font-body);
+  font-size:.75em;
+  font-weight:600;
+  color:var(--farol);
+  vertical-align:.1em;
+}
+.plato--foto .plato__desc{ color:var(--papel-2); line-height:1.5; }
+.plato--foto .plato__pie{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:auto;
+  padding-top:14px;
+}
+
+/* ---- Plato en lista ---- */
+.lista{ border-top:1px solid var(--linea); }
+.plato--fila{
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) auto auto;
+  align-items:center;
+  gap:0 16px;
+  padding:14px 4px;
+  border-bottom:1px solid var(--linea);
+  transition:background-color 160ms var(--ease-out);
+}
+@media (hover:hover){
+  .plato--fila:hover{ background:var(--noche-1); }
+}
+.plato--fila .plato__nombre{
+  font-family:var(--font-body);
+  font-size:1.05rem;
+  font-weight:600;
+  line-height:1.35;
+  letter-spacing:0;
+  text-wrap:pretty;
+}
+.plato--fila .plato__desc{ margin-top:2px; font-size:.925rem; line-height:1.45; color:var(--papel-2); }
+.plato__desc:empty{ display:none; }
+
+.plato__precio{
+  font-variant-numeric:tabular-nums;
+  font-weight:600;
+  color:var(--papel);
+  white-space:nowrap;
+}
+.plato__precio[data-sin-precio]{ font-weight:500; color:var(--papel-3); }
+
+.plato__pedir{
+  display:grid;
+  place-items:center;
+  width:48px; height:48px;
+  border:1px solid var(--linea-fuerte);
+  border-radius:var(--r-m);
+  color:var(--papel-2);
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 200ms var(--ease-out),
+    border-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+}
+.plato__pedir:active{ transform:scale(.94); }
+.plato__pedir svg{ width:20px; height:20px; }
+@media (hover:hover){
+  .plato__pedir:hover{ border-color:var(--farol); color:var(--farol); background:var(--noche-2); }
+}
+
+/* ---- Composición de cada sección ---- */
+@media (min-width:720px){
+  .seccion-carta--arriba .fotos{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .seccion-carta--arriba .plato__foto{ aspect-ratio:16 / 10; }
+  .seccion-carta--arriba .lista,
+  .seccion-carta--lista .lista{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    column-gap:clamp(32px, 5vw, 64px);
+    border-top:0;
+  }
+  .seccion-carta--arriba .plato--fila,
+  .seccion-carta--lista .plato--fila{ border-top:1px solid var(--linea); border-bottom:0; }
+}
+@media (min-width:960px){
+  .seccion-carta--lado .seccion-carta__cuerpo{
+    grid-template-columns:minmax(0, 5fr) minmax(0, 7fr);
+    gap:clamp(40px, 5vw, 72px);
+    align-items:start;
+  }
+}
+
+/* ---- Entradas: cada pieza sube y aparece; las salidas las hace main.js ---- */
+.revelar{
+  opacity:0;
+  transform:translateY(12px);
+}
+.revelar.es-visible{
+  opacity:1;
+  transform:none;
+  transition:
+    opacity 440ms var(--ease-out) var(--d, 0ms),
+    transform 440ms var(--ease-out) var(--d, 0ms);
+}
+.revelar .plato__foto img{ transform:scale(1.06); }
+.revelar.es-visible .plato__foto img{
+  transform:none;
+  transition:transform 900ms var(--ease-out) var(--d, 0ms);
+}
+@media (prefers-reduced-motion:reduce){
+  .revelar{ opacity:1; transform:none; }
+  .revelar .plato__foto img{ transform:none; }
+}

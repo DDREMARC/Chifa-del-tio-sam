@@ -113,3 +113,20 @@ Rama de trabajo propia: `claude/stoic-archimedes-y1rvtt` (PR 1 hacia `main`: htt
 - **Verificación (Chromium 390px, CDN bloqueado = sin GSAP):** las 3 páginas cargan sin errores; la carta pinta 38 tarjetas; sin scroll horizontal; con el menú cerrado el panel no intercepta toques y abierto sí; Maps correcto en todas; "Carlos" no aparece en la portada.
 - **No verificado:** animaciones con GSAP, filtro de las 6 categorías a 60 fps en un móvil real.
 
+
+## Rediseño nocturno (UI/UX)
+
+### 2026-10-11
+
+- **Dirección de arte:** diorama nocturno. Planos de laca oscura (`--noche-0…3`), texto papel de arroz, una sola luz ámbar (`--farol`), bermellón solo en los faroles. Se acabaron el rojo plano, el dorado plano y el cristal con blur. Detalle en `DESIGN.md`.
+- **Tipografía:** Gloock (títulos, un solo peso) + Hanken Grotesk (texto). Reemplazan a Fraunces + Work Sans.
+- **CSS reorganizado:** `style.css` (tokens, base, botones, pie), `staggered-menu.css`, y una hoja por página: `carta.css`, `contacto.css`, `experiencia.css`. Se borraron `option-wheel.css` y `js/option-wheel.js`.
+- **Carta:** la ruleta de categorías se cambió por pestañas siempre visibles con marca deslizante y enlace directo (`carta.html#chaufas`). Los platos con foto son tarjetas; el resto, filas de lista (se acabó el "Foto próximamente" repetido). Precio sin confirmar ("S/ —") atenuado. Botón de pedido de las filas: icono de 48px con `aria-label` por plato.
+- **Movimiento:** salida de 150 ms y entrada escalonada de 440 ms en la carta (Web Animations + IntersectionObserver, sin GSAP). Menú lateral 100 % CSS: se interrumpe sin saltos, con Escape, foco atrapado e `inert` cerrado. Todo respeta "reducir movimiento".
+- **Contacto:** mapa grande (tono noche) + datos en lista; se quitaron las tarjetas icono+título+texto, el velo girado de reservas y las redes con `href="#"`.
+- **Redes:** `REDES` en `js/sitio.js`. Mientras una dirección esté vacía, ese icono no se muestra. Para activarlas, pegar la URL real.
+- **Logo:** el sello dibujado se cambió por `img/logo_tio_sam.jpeg` en la portada, el pie y el telón de transición.
+- **Arreglo previo:** el telón entre páginas nunca llegaba a cubrir (un `transform` del CSS se sumaba al de GSAP). Corregido en `style.css`.
+- **Portada:** quitados rótulos sobre títulos y numeración del motor, textos "ESCENA PROVISIONAL" de los pósters (siguen siendo dibujos provisionales, ahora en la paleta nocturna). WebGL de los clásicos más sutil. Botones de acción en el hero (Ver la carta / Cómo llegar). Cierre sin pin: la luz del farol se abre al llegar.
+- **Verificación (Chromium, GSAP local):** 37 comprobaciones automáticas de carta, menú, teclado, clics rápidos, movimiento reducido, navegación y móvil (390 px sin scroll horizontal). **No verificado:** mapa de Google (bloqueado en el entorno; el filtro oscuro del iframe está sin ver), animaciones en un móvil real, rendimiento del WebGL.
+- **Pendiente heredado:** teléfono/WhatsApp `51987654321` y horario siguen sin confirmar.

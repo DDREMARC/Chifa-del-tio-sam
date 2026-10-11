@@ -1,10 +1,10 @@
 /* =========================================================
    El Tío Sam Chifa — experiencia.js (solo la portada, index.html)
    1. Monta el mundo scroll-world (vídeo pre-renderizado, scrubbeado por scroll)
-   2. Hero: título letra por letra que se desarma con el primer scroll
+   2. Hero: título letra por letra que se retira con el primer scroll
    3. Telón: la carta sube sobre el último cuadro de la película
-   4. Los clásicos: máscara + parallax asimétrico + distorsión WebGL
-   5. Testimonio palabra a palabra · CTA con disco dorado
+   4. Los clásicos: máscara + parallax asimétrico + distorsión WebGL suave
+   5. Carta rápida (una fila por categoría) y cierre con la luz del farol
    Lo común (menú, Lenis, anclas, split, botón magnético) viene de sitio.js.
    ========================================================= */
 (function () {
@@ -31,28 +31,28 @@
   /* Escenas del recorrido (orden = orden de la película).
      scroll = alto de scroll en viewports; linger = la cámara "se posa" a mitad de escena. */
   const SCENES = [
-    { id: 'barrio', label: 'El barrio', accent: '#F7D87F', scroll: 1.6, linger: 0.35 }, // copy = hero
+    { id: 'barrio', label: 'El barrio', accent: '#edb24d', scroll: 1.6, linger: 0.35 }, // copy = hero
     {
-      id: 'mercado', label: 'El mercado', accent: '#E9B949', scroll: 1.3,
-      eyebrow: 'Ingredientes del día', title: 'Todo empieza en el mercado.',
+      id: 'mercado', label: 'El mercado', accent: '#d9a441', scroll: 1.3,
+      title: 'Todo empieza en el mercado.',
       body: 'Kion, cebolla china, sillao y arroz: la base de todo buen chifa.',
       tags: ['Kion', 'Cebolla china', 'Sillao'],
     },
     {
-      id: 'wok', label: 'El wok', accent: '#FF7A3D', scroll: 1.6, linger: 0.45,
-      eyebrow: 'Preparado al momento', title: 'Wok a fuego vivo.',
+      id: 'wok', label: 'El wok', accent: '#e98a4a', scroll: 1.6, linger: 0.45,
+      title: 'Wok a fuego vivo.',
       body: 'Cada plato se saltea al momento, a fuego alto, y llega humeante a tu mesa.',
       tags: ['Al momento', 'Fuego alto'],
     },
     {
-      id: 'salon', label: 'El salón', accent: '#FF6B5A', scroll: 1.3,
-      eyebrow: 'Sabor de barrio', title: 'Con alma de hogar.',
+      id: 'salon', label: 'El salón', accent: '#d9694f', scroll: 1.3,
+      title: 'Con alma de hogar.',
       body: 'Mesas para compartir, platos al centro y la familia alrededor.',
       tags: ['Para compartir'],
     },
     {
-      id: 'plato', label: 'El plato', accent: '#F7D87F', scroll: 1.8, linger: 0.5,
-      eyebrow: 'El clásico de dos mundos', title: 'Y aterriza el aeropuerto.',
+      id: 'plato', label: 'El plato', accent: '#edb24d', scroll: 1.8, linger: 0.5,
+      title: 'Y aterriza el aeropuerto.',
       body: 'Chaufa y tallarín saltado en un solo plato. En Jr. Cantón 245, Barrios Altos.',
       tags: ['Martes a domingo', '12:00 – 22:00'],
       cta: {
@@ -65,12 +65,10 @@
   const worldEl = document.getElementById('world');
 
   /* ---------------------------------------------------------
-     1. Carta rápida (FlowingMenu). Sale de menu-data.js, la misma
-        fuente que carta.html: nombres y precios siempre coinciden.
-        Se pinta ANTES de que main.js corra setupFlowingMenu().
+     1. Carta rápida. Sale de menu-data.js, la misma fuente que
+        carta.html: nombres y cantidades siempre coinciden. Cada fila
+        lleva a su categoría (carta.html#chaufas).
   --------------------------------------------------------- */
-  // Una fila por categoría: no depende de nombres de platos concretos,
-  // así sigue funcionando mientras la carta tenga marcadores.
   function filasCarta() {
     if (typeof MENU_ITEMS === 'undefined' || typeof MENU_CATEGORIES === 'undefined') return [];
     return MENU_CATEGORIES.map((c) => {
@@ -78,10 +76,10 @@
       if (!items.length) return null;
       const conFoto = items.find((i) => i.img);
       return {
+        id: c.id,
         name: c.label,
-        price: items.length + (items.length === 1 ? ' plato' : ' platos'),
+        count: items.length + (items.length === 1 ? ' plato' : ' platos'),
         src: conFoto ? conFoto.img : '',
-        short: c.label,
       };
     }).filter(Boolean);
   }
@@ -89,20 +87,74 @@
   function renderFlowing() {
     const nav = document.getElementById('flowingMenu');
     if (!nav) return;
-    const arrow = '<svg class="item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
-    nav.innerHTML = filasCarta().map(({ name, price, src, short }) => {
+    const arrow = '<svg class="item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+    nav.innerHTML = filasCarta().map(({ id, name, count, src }) => {
       const ruta = escapeHtml(src);
-      const img = src ? `<div class="marquee__img" style="background-image:url('${ruta}')"></div>` : '';
-      const part = `<div class="marquee__part"><span>${escapeHtml(short)}</span>${img}<div class="marquee__dot"></div></div>`;
+      const img = src ? `<div class="marquee__img" data-bg="${ruta}"></div>` : '';
+      const part = `<div class="marquee__part"><span>${escapeHtml(name)}</span>${img}<div class="marquee__dot"></div></div>`;
       return `<div class="menu__item">
-        <a class="menu__item-link" href="carta.html">
-          ${src ? `<span class="item-emoji"><img src="${ruta}" alt="" loading="lazy"></span>` : ''}
-          <span class="item-info"><span class="item-name">${escapeHtml(name)}</span><span class="item-price">${escapeHtml(price)}</span></span>
+        <a class="menu__item-link" href="carta.html#${escapeHtml(id)}">
+          ${src ? `<span class="item-thumb"><img src="${ruta}" alt="" width="56" height="56" loading="lazy"></span>` : ''}
+          <span class="item-info"><span class="item-name">${escapeHtml(name)}</span><span class="item-count">${escapeHtml(count)}</span></span>
           ${arrow}
         </a>
         <div class="marquee" aria-hidden="true"><div class="marquee__inner-wrap"><div class="marquee__inner">${part.repeat(6)}</div></div></div>
       </div>`;
     }).join('');
+    nav.querySelectorAll('[data-bg]').forEach((el) => {
+      el.style.backgroundImage = 'url("' + el.dataset.bg.replace(/"/g, '%22') + '")';
+    });
+  }
+
+  /* La banda de cada fila entra por el borde más cercano al puntero (solo con ratón) */
+  function initFlowing() {
+    if (reduce || coarse) return;
+    document.querySelectorAll('.flowing .menu__item').forEach((item) => {
+      const link = item.querySelector('.menu__item-link');
+      const inner = item.querySelector('.marquee__inner');
+      if (!link || !inner) return;
+
+      const closestEdge = (mx, my, w, h) =>
+        ((mx - w / 2) ** 2 + my ** 2) < ((mx - w / 2) ** 2 + (my - h) ** 2) ? 'top' : 'bottom';
+
+      let raf = null, pos = 0;
+      const speed = 1.4;
+      function tick() {
+        pos -= speed;
+        const part = inner.querySelector('.marquee__part');
+        const w = part ? part.offsetWidth : 0;
+        if (w > 0 && Math.abs(pos) >= w) pos += w;
+        inner.style.transform = 'translateX(' + pos + 'px)';
+        raf = requestAnimationFrame(tick);
+      }
+      const start = () => { if (!raf) raf = requestAnimationFrame(tick); };
+      const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = null; } };
+
+      link.addEventListener('pointerenter', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        const r = item.getBoundingClientRect();
+        const edge = closestEdge(e.clientX - r.left, e.clientY - r.top, r.width, r.height);
+        item.classList.remove('marquee-from-bottom', 'is-leaving');
+        if (edge === 'bottom') item.classList.add('marquee-from-bottom');
+        void item.offsetWidth;
+        item.classList.add('is-entering');
+        start();
+      });
+      link.addEventListener('pointerleave', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        const r = item.getBoundingClientRect();
+        const edge = closestEdge(e.clientX - r.left, e.clientY - r.top, r.width, r.height);
+        item.classList.remove('is-entering');
+        item.classList.add('is-leaving');
+        item.classList.toggle('marquee-from-bottom', edge === 'bottom');
+        setTimeout(() => {
+          if (!item.classList.contains('is-entering')) {
+            item.classList.remove('is-leaving', 'marquee-from-bottom');
+            stop();
+          }
+        }, 560);
+      });
+    });
   }
 
   /* ---------------------------------------------------------
@@ -125,6 +177,7 @@
 
     mountScrollWorld(worldEl, {
       nav: false,
+      atmosphere: false,   // el cielo degradado del motor sobra: la escena ya trae su noche
       hint: 'Desliza para entrar al barrio',
       diveScroll: 1.3,
       connScroll: 0.9,
@@ -142,7 +195,7 @@
   }
 
   /* ---------------------------------------------------------
-     2. Hero — entra letra por letra; el primer scroll lo desarma
+     3. Hero — entra letra por letra; el primer scroll lo retira
   --------------------------------------------------------- */
   function initHero() {
     const hero = document.querySelector('.xp-hero');
@@ -162,23 +215,24 @@
 
     const title = hero.querySelector('[data-split]');
     const words = split(title, 'chars');
-    gsap.set(words, { transformPerspective: 700 });
+    const resto = hero.querySelectorAll('.xp-hero__tag, .xp-hero__lugar, .xp-hero__acciones');
+    const logo = hero.querySelector('.xp-hero__logo');
 
-    // Intro (al cargar): las letras suben desde su máscara
-    gsap.from(title.querySelectorAll('.c'), { yPercent: 115, rotate: 6, duration: 1.1, ease: 'expo.out', stagger: 0.035, delay: 0.35 });
-    gsap.from([hero.querySelector('.xp-hero__eyebrow'), hero.querySelector('.xp-hero__tag')],
-      { opacity: 0, y: 16, duration: 0.9, ease: 'power3.out', stagger: 0.15, delay: 0.7 });
+    // Intro (al cargar): las letras suben desde su máscara, luego el resto
+    gsap.from(title.querySelectorAll('.c'), { yPercent: 105, duration: 1, ease: 'expo.out', stagger: 0.03, delay: 0.3 });
+    gsap.from(logo, { opacity: 0, scale: 0.92, duration: 1, ease: 'expo.out', delay: 0.1 });
+    gsap.from(resto, { opacity: 0, y: 14, duration: 0.8, ease: 'expo.out', stagger: 0.1, delay: 0.65 });
 
-    // Scroll: palabras, sello y bloque se desarman mientras la cámara entra
+    // Scroll: el bloque se retira mientras la cámara entra
     gsap.timeline({ scrollTrigger: { start: 0, end, scrub: 0.6 } })
-      .to(words, { yPercent: -130, rotationX: 75, opacity: 0, stagger: 0.07, ease: 'power2.in' }, 0)
-      .to(hero.querySelector('.xp-hero__sealwrap'), { scale: 0.3, rotation: -120, opacity: 0, ease: 'power2.in' }, 0)
-      .to(inner, { y: -70, opacity: 0, ease: 'power1.in' }, 0.15)
+      .to(words, { yPercent: -60, opacity: 0, stagger: 0.04, ease: 'power2.in' }, 0)
+      .to(logo, { scale: 0.9, opacity: 0, ease: 'power1.in' }, 0)
+      .to(resto, { y: -24, opacity: 0, ease: 'power1.in' }, 0.1)
       .set(hero, { visibility: 'hidden' });
   }
 
   /* ---------------------------------------------------------
-     5. Telón — la carta sube sobre el último cuadro de la película
+     4. Telón — la carta sube sobre el último cuadro de la película
   --------------------------------------------------------- */
   function initCurtain() {
     const after = document.querySelector('.after-world');
@@ -191,8 +245,14 @@
         worldEl.style.setProperty('--curtain', self.progress.toFixed(4));
         worldEl.classList.toggle('sw-hold-last', self.progress > 0);
       },
-      onLeave: () => worldEl.classList.add('is-covered'),
-      onEnterBack: () => worldEl.classList.remove('is-covered'),
+      onLeave: () => {
+        worldEl.classList.add('is-covered');
+        document.documentElement.classList.add('sobre-carta');   // la cabecera deja de ser transparente
+      },
+      onEnterBack: () => {
+        worldEl.classList.remove('is-covered');
+        document.documentElement.classList.remove('sobre-carta');
+      },
       onLeaveBack() {
         worldEl.style.setProperty('--curtain', '0');
         worldEl.classList.remove('sw-hold-last');
@@ -201,7 +261,7 @@
   }
 
   /* ---------------------------------------------------------
-     6. Los clásicos — máscara, parallax asimétrico y captions
+     5. Los clásicos — máscara, parallax asimétrico y captions
   --------------------------------------------------------- */
   function initClasicos() {
     const h2 = document.querySelector('.clasicos__head h2');
@@ -210,11 +270,11 @@
 
     split(h2, 'chars');
     gsap.from(h2.querySelectorAll('.c'), {
-      yPercent: 115, duration: 1, ease: 'expo.out', stagger: 0.02,
+      yPercent: 105, duration: 1, ease: 'expo.out', stagger: 0.02,
       scrollTrigger: { trigger: h2, start: 'top 82%' },
     });
-    gsap.from(['.clasicos .eyebrow', '.clasicos__lede'], {
-      opacity: 0, y: 24, duration: 0.9, ease: 'power3.out', stagger: 0.12,
+    gsap.from('.clasicos__lede', {
+      opacity: 0, y: 18, duration: 0.8, ease: 'expo.out',
       scrollTrigger: { trigger: '.clasicos__head', start: 'top 80%' },
     });
 
@@ -227,12 +287,12 @@
       st.reveal = 0;
       media.style.setProperty('--reveal', '0');
       gsap.to(st, {
-        reveal: 1, duration: 1.6, ease: 'expo.out',
+        reveal: 1, duration: 1.5, ease: 'expo.out',
         onUpdate: () => media.style.setProperty('--reveal', st.reveal.toFixed(4)),
         scrollTrigger: { trigger: fig, start: 'top 85%' },
       });
       gsap.from(fig.querySelectorAll('.dish__cap > *'), {
-        y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.08, delay: 0.35,
+        y: 16, opacity: 0, duration: 0.8, ease: 'expo.out', stagger: 0.08, delay: 0.3,
         scrollTrigger: { trigger: fig, start: 'top 85%' },
       });
 
@@ -246,9 +306,10 @@
   }
 
   /* ---------------------------------------------------------
-     7. WebGL — un solo lienzo dibuja todas las fotos en la posición
-        de su <img>: curvatura por inercia del scroll, separación RGB
-        y onda al pasar el mouse. Si algo falla, queda el <img>.
+     6. WebGL — un solo lienzo dibuja todas las fotos en la posición
+        de su <img>: leve curvatura por inercia del scroll, un hilo de
+        separación de color y una onda suave al pasar el mouse.
+        Si algo falla, queda el <img>.
   --------------------------------------------------------- */
   function initGL() {
     const canvas = document.querySelector('.gl-stage');
@@ -266,7 +327,7 @@
       void main() {
         vUv = aPos;
         vec2 p = uRect.xy + aPos * uRect.zw;
-        p.y += sin(aPos.x * 3.14159265) * uVel * 48.0;   // la foto se curva con la inercia
+        p.y += sin(aPos.x * 3.14159265) * uVel * 20.0;   // la foto se curva apenas con la inercia
         vec2 clip = p / uView * 2.0 - 1.0;
         gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
       }`;
@@ -290,12 +351,12 @@
       void main() {
         if (vUv.y < 1.0 - uReveal) discard;                       // máscara: se descubre de abajo hacia arriba
         float edge = 1.0 - smoothstep(-1.0, 0.5, roundedBox((vUv - 0.5) * uRect.zw, uRect.zw * 0.5, uRadius));
-        float zoom = 1.0 - 0.15 * (1.0 - uReveal);                // entra con zoom 1.15 → 1
+        float zoom = 1.0 - 0.12 * (1.0 - uReveal);                // entra con zoom 1.12 → 1
         vec2 uv = (vUv - 0.5) * uCover * zoom + 0.5;
         vec2 m = vUv - uMouse;
         float d = length(m * vec2(uRect.z / uRect.w, 1.0));
-        uv += normalize(m + 1e-5) * sin(d * 26.0 - uTime * 4.0) * exp(-d * 5.0) * 0.014 * uHover;
-        float shift = uVel * 0.01;
+        uv += normalize(m + 1e-5) * sin(d * 26.0 - uTime * 4.0) * exp(-d * 5.0) * 0.006 * uHover;
+        float shift = uVel * 0.004;
         vec4 c = texture2D(uTex, clamp(uv, 0.0, 1.0));
         float r = texture2D(uTex, clamp(uv + vec2(0.0, shift), 0.0, 1.0)).r;
         float b = texture2D(uTex, clamp(uv - vec2(0.0, shift), 0.0, 1.0)).b;
@@ -420,7 +481,7 @@
       gl.uniform2f(U.uView, window.innerWidth, window.innerHeight);
       gl.uniform1f(U.uVel, vel);
       gl.uniform1f(U.uTime, time);
-      gl.uniform1f(U.uRadius, 24);
+      gl.uniform1f(U.uRadius, 16);   // = var(--r-l)
 
       active.forEach((it) => {
         const r = it.img.getBoundingClientRect();
@@ -443,34 +504,21 @@
   }
 
   /* ---------------------------------------------------------
-     8. Testimonio — las palabras se encienden con el scroll
+     7. Cierre — la luz del farol se abre sobre la mesa y suben
+        el titular y los botones (una sola vez, al llegar)
   --------------------------------------------------------- */
-  function initQuote() {
-    const q = document.querySelector('[data-words]');
-    if (!q || reduce) return;
-    const words = split(q, 'words');
-    gsap.fromTo(words, { opacity: 0.14 }, {
-      opacity: 1, stagger: 0.1, ease: 'none',
-      scrollTrigger: { trigger: q, start: 'top 80%', end: 'bottom 45%', scrub: true },
-    });
-  }
-
-  /* ---------------------------------------------------------
-     9. CTA final — sección fijada: un disco dorado se expande,
-        sube el titular y aparecen los botones
-  --------------------------------------------------------- */
-  function initCTA() {
-    const sec = document.querySelector('.xp-cta');
+  function initCena() {
+    const sec = document.querySelector('.cena');
     if (!sec || reduce) return;
     const h2 = sec.querySelector('h2');
     split(h2, 'chars');
-    gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top top', end: '+=120%', scrub: 0.8, pin: true, anticipatePin: 1 } })
-      .fromTo(sec.querySelector('.xp-cta__disc'),
-        { clipPath: 'circle(0% at 50% 60%)' },
-        { clipPath: 'circle(150% at 50% 60%)', ease: 'power2.inOut', duration: 1 })
-      .from(h2.querySelectorAll('.c'), { yPercent: 115, ease: 'expo.out', stagger: 0.025, duration: 0.5 }, 0.5)
-      .from([sec.querySelector('p'), sec.querySelector('.xp-cta__btns')],
-        { y: 30, opacity: 0, stagger: 0.1, duration: 0.3 }, 0.75);
+    gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 65%', once: true } })
+      .fromTo(sec.querySelector('.cena__luz'),
+        { clipPath: 'circle(0% at 50% 46%)' },
+        { clipPath: 'circle(150% at 50% 46%)', duration: 1.6, ease: 'expo.out' })
+      .from(sec.querySelectorAll('.farol'), { opacity: 0, duration: 1.2, ease: 'power2.out', stagger: 0.12 }, 0.1)
+      .from(h2.querySelectorAll('.c'), { yPercent: 105, duration: 0.9, ease: 'expo.out', stagger: 0.025 }, 0.15)
+      .from(sec.querySelectorAll('.cena__inner p, .cena__btns'), { y: 18, opacity: 0, duration: 0.8, ease: 'expo.out', stagger: 0.1 }, 0.4);
   }
 
   /* Sin GSAP (CDN caído): página usable, el hero se desvanece al bajar */
@@ -490,6 +538,7 @@
      Arranque
   --------------------------------------------------------- */
   renderFlowing();
+  initFlowing();
   mountWorld();
   if (!hasGSAP) { fallbackWithoutGSAP(); return; }
   gsap.registerPlugin(ScrollTrigger);
@@ -497,6 +546,5 @@
   initCurtain();
   initGL();
   initClasicos();
-  initQuote();
-  initCTA();
+  initCena();
 })();

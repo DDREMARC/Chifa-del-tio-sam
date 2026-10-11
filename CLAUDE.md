@@ -26,15 +26,22 @@ Asset pipeline (only when regenerating the film): `bash produccion/render.sh che
 
 **Entry and pages.** Root `index.html` only redirects to `html/index.html`. The real pages live in `html/` (`index.html` home, `carta.html` menu, `contacto.html` contact) and reference `../css`, `../js`, `../img`, `../assets` with relative paths. Keep that in mind when adding a page or moving a file.
 
-**Script layering.** Every page loads, in order: `js/precarga.js` (in `<head>`, blocking: reduced-motion override and the page-transition curtain), then GSAP + ScrollTrigger and Lenis from CDNs, then page-specific scripts, then `js/sitio.js`, then `js/main.js`.
-- `js/sitio.js` is the shared behavior for all pages: staggered menu config, Lenis smooth scroll, page curtain, and the `data-anim` attribute animations. It exposes `window.TioSam` for the home page. Shared behavior goes here, not copied per page.
-- `js/experiencia.js` + `js/scroll-world.js` are home-only. `scroll-world.js` is the scroll-scrubbed film engine.
-- `js/main.js` handles the carta page: rendering and filtering the menu, spotlight cards, and the FlowingMenu. The menu data itself is in `js/menu-data.js`, kept separate so content can change without touching logic.
-- `js/option-wheel.js` and `js/staggered-menu.js` are components used by the carta and the menu.
+**Script layering.** Every page loads, in order: `js/precarga.js` (in `<head>`, blocking: reduced-motion override and the page-transition curtain), then GSAP + ScrollTrigger and Lenis from CDNs, then page-specific scripts, then `js/sitio.js`, then the page's own script.
+- `js/sitio.js` is the shared behavior for all pages: the nav menu config, the `REDES` block (social URLs), Lenis smooth scroll, scroll lock, the page curtain, and the `data-anim` attribute animations. It exposes `window.TioSam` (`lockScroll`, `escapeHtml`, `split`, `lenis`…). Shared behavior goes here, not copied per page.
+- `js/staggered-menu.js` builds the nav panel. It has no GSAP: all its motion is CSS in `css/staggered-menu.css`, so it can be opened and closed mid-animation without jumps.
+- `js/experiencia.js` + `js/scroll-world.js` are home-only (`scroll-world.js` is the vendored scroll-scrubbed film engine; do not edit it, override its look in `css/experiencia.css`). `experiencia.js` also owns the home's quick-carta rows and their hover band.
+- `js/main.js` is carta-only: renders the carta from `js/menu-data.js` (one section per category, photo dishes as cards, the rest as list rows), the category tabs (`#chaufas` deep links work), and the exit/enter animations (Web Animations API + IntersectionObserver, no GSAP).
+- Each page loads only its own stylesheet next to the shared ones: `style.css` (tokens, base, buttons, footer) + `staggered-menu.css` + one of `carta.css`, `contacto.css`, `experiencia.css`.
 
-**Animations are declarative.** To animate a new element on any page, add a `data-anim` attribute in the HTML (`letras`, `subir`, `cascada`, `mascara`, `sello`) or `data-parallax="<px>"`. No new JS is needed. The full list is in the header comment of `js/sitio.js`.
+**Animations are declarative.** To animate a new element on any page, add a `data-anim` attribute in the HTML (`letras`, `subir`, `cascada`, `mascara`) or `data-parallax="<px>"`. No new JS is needed. The full list is in the header comment of `js/sitio.js`. Keep them subtle (short travel, strong ease-out); the carta cards use their own CSS/IO entrances in `main.js` + `carta.css`.
+
+**Design system.** Night diorama: warm lacquer-black planes (`--noche-0…3`), rice-paper text (`--papel…`), one lantern-amber light (`--farol`), vermilion only in the lanterns. Depth comes from tone steps and hairlines, not shadows or glass. Display type is Gloock (single weight: never set `font-weight` above 400 on it), body is Hanken Grotesk. See `DESIGN.md` for tokens and rules. No eyebrows above headings, no section numbers, no `backdrop-filter`.
 
 **Home film (scroll-world).** The home hero is a scroll-scrubbed video, with WebGL on the classics section. `js/experiencia.js` has an `ASSETS` block (around line 17) that switches between the provisional SVG posters in `assets/world/*.svg` and the rendered `.webp` stills and `.mp4` clips. Those flags stay `false` until `produccion/render.sh encode` has produced the files. Flipping them without the files present breaks the home page. `produccion/PROPUESTA.md` documents the scene and beat design.
+
+**Logo.** The big mark is the official image `img/logo_tio_sam.jpeg` (home hero, footer, page curtain, header), clipped to a circle. The old hand-drawn SVG seal is gone; do not bring it back.
+
+**Social links.** Fill the `REDES` block in `js/sitio.js` with real URLs; icons and links appear only for the ones that are set (no `href="#"` placeholders).
 
 **Reservations are paused.** `php/reservar.php` has `RESERVAS_ACTIVAS = false`, and the form in `html/contacto.html` is visually disabled ("Próximamente"). Do not add or promise a booking flow. Reservations are by phone or WhatsApp.
 
