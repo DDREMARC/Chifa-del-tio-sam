@@ -26,6 +26,7 @@
   const coarse = !!TS.coarse;
   const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
   const dividir = TS.dividir || (() => null);   // GSAP SplitText: null si la librería no cargó
+  const LETRA_ABAJO = TS.letraAbajo || 160;      // desde dónde suben las letras (ver sitio.js)
   const escapeHtml = TS.escapeHtml; // sin fallback: si falta, debe fallar a la vista
 
   /* Escenas del recorrido (orden = orden de la película).
@@ -225,7 +226,7 @@
     const logo = hero.querySelector('.xp-hero__logo');
 
     // Intro (al cargar): las letras suben desde su máscara, luego el resto
-    if (partes) gsap.from(partes.chars, { yPercent: 105, duration: 1, ease: 'expo.out', stagger: 0.03, delay: 0.3 });
+    if (partes) gsap.from(partes.chars, { yPercent: LETRA_ABAJO, duration: 1, ease: 'expo.out', stagger: 0.03, delay: 0.3 });
     else gsap.from(title, { opacity: 0, duration: 0.9, ease: 'power2.out', delay: 0.3 });
     gsap.from(logo, { opacity: 0, scale: 0.92, duration: 1, ease: 'expo.out', delay: 0.1 });
     gsap.from(resto, { opacity: 0, y: 14, duration: 0.8, ease: 'expo.out', stagger: 0.1, delay: 0.65 });
@@ -283,7 +284,7 @@
 
     const partesH2 = dividir(h2);
     if (partesH2) gsap.from(partesH2.chars, {
-      yPercent: 105, duration: 1, ease: 'expo.out', stagger: 0.02,
+      yPercent: LETRA_ABAJO, duration: 1, ease: 'expo.out', stagger: 0.02,
       scrollTrigger: { trigger: h2, start: 'top 82%' },
     });
     gsap.from('.clasicos__lede', {
@@ -535,7 +536,7 @@
         { clipPath: 'circle(150% at 50% 46%)', duration: 1.6, ease: 'expo.out' })
       .from(sec.querySelectorAll('.farol'), { opacity: 0, duration: 1.2, ease: 'power2.out', stagger: 0.12 }, 0.1)
       .from(partesH2 ? partesH2.chars : h2, partesH2
-        ? { yPercent: 105, duration: 0.9, ease: 'expo.out', stagger: 0.025 }
+        ? { yPercent: LETRA_ABAJO, duration: 0.9, ease: 'expo.out', stagger: 0.025 }
         : { opacity: 0, duration: 0.8, ease: 'power2.out' }, 0.15)
       .from(sec.querySelectorAll('.cena__inner p, .cena__btns'), { y: 18, opacity: 0, duration: 0.8, ease: 'expo.out', stagger: 0.1 }, 0.4);
   }

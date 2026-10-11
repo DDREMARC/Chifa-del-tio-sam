@@ -130,3 +130,17 @@ Rama de trabajo propia: `claude/stoic-archimedes-y1rvtt` (PR 1 hacia `main`: htt
 - **Portada:** quitados rótulos sobre títulos y numeración del motor, textos "ESCENA PROVISIONAL" de los pósters (siguen siendo dibujos provisionales, ahora en la paleta nocturna). WebGL de los clásicos más sutil. Botones de acción en el hero (Ver la carta / Cómo llegar). Cierre sin pin: la luz del farol se abre al llegar.
 - **Verificación (Chromium, GSAP local):** 37 comprobaciones automáticas de carta, menú, teclado, clics rápidos, movimiento reducido, navegación y móvil (390 px sin scroll horizontal). **No verificado:** mapa de Google (bloqueado en el entorno; el filtro oscuro del iframe está sin ver), animaciones en un móvil real, rendimiento del WebGL.
 - **Pendiente heredado:** teléfono/WhatsApp `51987654321` y horario siguen sin confirmar.
+
+
+## Movimiento v2 y tipografía premium
+
+### 2026-10-11
+
+- **Tipografía:** Cormorant Garamond (títulos, serif de alto contraste) + DM Sans (texto y botones), por Google Fonts. Reemplazan a Gloock + Hanken Grotesk. Sin cursivas ni fuentes del sistema; respaldos con métricas calzadas para que el texto no salte al cargar; cifras alineadas. Detalle en `DESIGN.md`.
+- **Portada:** el "CHIFA" bajo el título pasó de cursiva a rótulo en mayúsculas, con interletrado y en ámbar.
+- **Títulos animados (SplitText):** la máscara de cada palabra hereda el nombre de la clase de la palabra + `-mask` (`.split-word-mask`); no existe una opción `maskClass`. Con relleno de más ya no se cortan los acentos ni la "¿" ni la cola de la "j".
+- **Carta:** la foto de cada plato se descubre de abajo hacia arriba (cortina) y el texto llega después. El "+" de los nombres usa la letra de texto.
+- **Contacto (formulario, hoy desactivado):** rótulo ámbar al enfocar, hilo de luz bajo el campo, botón táctil (se hunde y vuelve con muelle), selector con flecha propia, error solo tras escribir.
+- **Movimiento:** modo `full`/`calm` (con "reducir animaciones" el sitio sigue vivo, solo funde), transición nativa entre páginas (View Transitions) con telón de GSAP solo de respaldo, animaciones ligadas al scroll con CSS, GSAP 3.15.0 + ScrollTrigger + SplitText y Lenis 1.3.26 con versión fijada en jsDelivr. Framer Motion no se usó: es para React, y su versión sin React (`motion`) sumaba unos 48 KB y repetía lo que ya hacen GSAP y CSS.
+- **Verificación (Chromium, librerías en local):** 29 comprobaciones de la carta, 8 de menú y navegación, 10 sin CDN; axe sin violaciones en las 3 páginas (escritorio y móvil); desplazamiento de diseño ≤ 0.01; scroll a 16.7 ms por cuadro (p95) con la CPU frenada 4×. **No verificado:** jsDelivr y Google Fonts en línea desde un navegador real (el entorno bloquea parte), el filtro oscuro del mapa, un móvil de verdad.
+- **Pendiente heredado:** teléfono/WhatsApp `51987654321` y horario siguen sin confirmar.

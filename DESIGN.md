@@ -16,12 +16,14 @@ Fuera de esto no se inventan colores. El bermellón no se usa para texto.
 
 ## Tipografía
 
-- **Gloock** (`--font-display`): un solo peso, 400. Nunca poner `font-weight` mayor (`font-synthesis:none`). Títulos, nombres de plato en tarjeta, menú.
-- **Hanken Grotesk** (`--font-body`): 400–700. Texto, filas de la carta, botones, números tabulares en precios.
+- **Cormorant Garamond** (`--font-display`): serif de alto contraste, variable 500–700 (Google Fonts). Títulos, nombres de plato, menú y datos grandes. Trae cifras de caja baja por defecto: `font-variant-numeric: lining-nums` las alinea. Sus acentos y signos (¿ ¡ ,) sobresalen mucho de la línea, así que las máscaras de los títulos animados llevan relleno de más (`.split-word-mask`).
+- **DM Sans** (`--font-body`): sans geométrica limpia, 400–700 con eje óptico 9–40 (Google Fonts). Texto, filas de la carta, botones y números tabulares en los precios.
+- **Sin cursivas ni letras del sistema.** `em, i, cite, dfn, var, address` quedan en `font-style: normal` y `font-synthesis: none`; el énfasis sale de peso, tamaño o color (el "CHIFA" de la portada es un rótulo en mayúsculas con interletrado, en ámbar). Los respaldos `Cormorant Garamond Fallback` y `DM Sans Fallback` existen solo para que el texto no salte mientras carga la fuente: llevan las métricas calzadas (`size-adjust`, `ascent-override`, `descent-override`).
 - Máximo 6rem en pantalla; sin rótulos sobre los títulos ni numeración de secciones; interletrado entre −0.015em y 0.
 
 ## Forma y espacio
 
+- Espaciado: una sola escala, `--s-1…--s-10` = 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128 px. Padding y margen salen de ahí; no se inventan valores sueltos.
 - Radios: 8 (etiquetas), 12 (botones, campos), 16 (tarjetas, mapa, fotos). Sin píldoras.
 - Área táctil mínima de 48 px. Contenedor máximo 1120 px, `--gutter` fluido.
 - Más aire sobre un título que debajo; secciones de la carta separadas por 44–80 px.
@@ -58,7 +60,8 @@ Tres capas, de la más ligera a la más pesada. Cada una degrada sola si falla l
 - **Cabecera de página** (`.cabecera`) con faroles que cuelgan y se mecen apenas.
 - **Menú lateral** (`css/staggered-menu.css`): dos capas de laca preceden al panel; abre lento, cierra rápido.
 - **Pestañas de categoría** (`.categorias`): fijas bajo la cabecera, marca ámbar que se desliza.
-- **Plato con foto** (`.plato--foto`) y **fila** (`.plato--fila`); el precio sin confirmar usa `data-sin-precio`.
+- **Plato con foto** (`.plato--foto`) y **fila** (`.plato--fila`); el precio sin confirmar usa `data-sin-precio`. La foto se descubre de abajo hacia arriba como una cortina (`clip-path`, 950 ms) mientras un zoom leve se asienta; el texto llega 280 ms después. En `calm` solo funde.
+- **Formulario de contacto** (hoy desactivado, "Próximamente"): el rótulo se enciende en ámbar al enfocar, un hilo de luz crece bajo el campo, el botón se hunde al pulsar (90 ms) y vuelve con muelle, el error solo aparece tras escribir (`:user-invalid`).
 - **Mapa** (`.mapa`): iframe de Google filtrado a tono noche; los datos van en lista (`.datos`), no en tarjetas.
 - **Logo oficial** `img/logo_tio_sam.jpeg`: portada, pie, telón y cabecera. Recortado en círculo.
 

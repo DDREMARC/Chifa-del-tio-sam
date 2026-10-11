@@ -12,8 +12,8 @@
   --sw-ink: #f3ecdd;
   --sw-ink-soft: #c6bdac;
   --sw-accent: #edb24d;
-  --sw-font-display: 'Gloock', 'Iowan Old Style', Georgia, serif;
-  --sw-font-body: 'Hanken Grotesk', system-ui, sans-serif;
+  --sw-font-display: 'Cormorant Garamond', 'Cormorant Garamond Fallback', serif;
+  --sw-font-body: 'DM Sans', 'DM Sans Fallback', sans-serif;
 }
 
 body.xp{ padding-top:0; background:var(--noche-0); }
@@ -44,8 +44,8 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 .sw-copy__eyebrow{ display:none; }          /* sin numeración ni rótulos sobre el título */
 .sw-copy__title{
   margin-top:0;
-  font-weight:400;
-  font-size:clamp(2rem, 6.5vw, 3.75rem);
+  font-weight:500;
+  font-size:clamp(2.4rem, 7vw, 4.25rem);
   line-height:1.04;
   letter-spacing:-.01em;
   text-shadow:none;
@@ -144,16 +144,19 @@ body.xp{ padding-top:0; background:var(--noche-0); }
   background:#000;
 }
 .xp-hero__title{
-  font-size:clamp(3.25rem, 11vw, 6rem);
+  font-size:clamp(3.5rem, 12vw, 6rem);
   line-height:.95;
   letter-spacing:-.015em;
 }
 .xp-hero__title em{
   display:block;
-  margin-top:.08em;
-  font-style:normal;
-  font-size:.5em;
-  letter-spacing:.01em;
+  margin-top:.5em;
+  font-family:var(--font-body);
+  font-size:.2em;
+  font-weight:600;
+  letter-spacing:.42em;
+  text-indent:.42em;                 /* compensa el interletrado para que quede centrado */
+  text-transform:uppercase;
   color:var(--farol);
 }
 .xp-hero__tag{
@@ -203,7 +206,7 @@ body.xp{ padding-top:0; background:var(--noche-0); }
   padding:clamp(var(--s-9), 14vh, 160px) var(--gutter) clamp(var(--s-9), 12vh, var(--s-10));
   outline:none;
 }
-.clasicos__head h2{ font-size:clamp(2.5rem, 6vw, 4.5rem); line-height:1; max-width:14ch; }
+.clasicos__head h2{ font-size:clamp(2.9rem, 7vw, 5rem); line-height:1; max-width:14ch; }
 .clasicos__lede{
   margin-top:var(--s-5);
   max-width:42ch;
@@ -246,7 +249,7 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 .has-gl .dish__media img{ opacity:0; }
 
 .dish__cap{ display:flex; flex-direction:column; gap:var(--s-2); margin-top:var(--s-4); }
-.dish__name{ font-family:var(--font-display); font-size:clamp(1.5rem, 2.4vw, 2rem); line-height:1.1; }
+.dish__name{ font-family:var(--font-display); font-size:clamp(1.8rem, 2.8vw, 2.4rem); font-weight:600; line-height:1.08; }
 .dish__desc{ max-width:36ch; font-size:.975rem; line-height:1.5; color:var(--papel-2); }
 .clasicos__mas{ margin-top:clamp(var(--s-7), 8vh, var(--s-9)); }
 
@@ -261,7 +264,7 @@ body.xp{ padding-top:0; background:var(--noche-0); }
   width:min(100% - 2 * var(--gutter), var(--ancho));
   margin:0 auto clamp(var(--s-6), 5vw, var(--s-7));
 }
-.flowing__title h2{ font-size:clamp(2.25rem, 5vw, 3.75rem); }
+.flowing__title h2{ font-size:clamp(2.6rem, 5.8vw, 4.5rem); }
 .flowing .menu{ border-top:1px solid var(--linea); }
 .flowing .menu__item{
   position:relative;
@@ -288,7 +291,8 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 .flowing .item-info{ flex:1; display:flex; flex-direction:column; gap:2px; min-width:0; }
 .flowing .item-name{
   font-family:var(--font-display);
-  font-size:clamp(1.5rem, 3.6vw, 2.5rem);
+  font-size:clamp(1.8rem, 4vw, 2.9rem);
+  font-weight:500;
   line-height:1.1;
 }
 .flowing .item-count{ font-size:.9rem; color:var(--papel-3); }
@@ -336,7 +340,8 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 }
 .flowing .marquee__part span{
   font-family:var(--font-display);
-  font-size:clamp(2rem, 4.4vw, 3.25rem);
+  font-size:clamp(2.2rem, 4.8vw, 3.5rem);
+  font-weight:500;
   color:var(--farol);
   white-space:nowrap;
 }
@@ -379,7 +384,7 @@ body.xp{ padding-top:0; background:var(--noche-0); }
 .cena .farol{ width:clamp(40px, 7vw, 64px); }
 .cena .farol--chico{ width:clamp(30px, 5vw, 48px); }
 .cena__inner{ position:relative; z-index:1; max-width:760px; }
-.cena h2{ font-size:clamp(2.75rem, 8vw, 5.5rem); line-height:1; }
+.cena h2{ font-size:clamp(3rem, 9vw, 6rem); line-height:1; }
 .cena p{
   max-width:38ch;
   margin:var(--s-5) auto 0;

@@ -25,6 +25,10 @@
   const hasGSAP = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined";
   /* ¿El navegador hace la transición entre páginas por sí mismo (View Transitions)? */
   const nativeNav = document.documentElement.classList.contains("vt-nativo");
+  /* Las letras de un título parten por debajo de su máscara. La máscara lleva relleno de más
+     (css/style.css, .split-word-mask: .4em abajo) para no cortar acentos ni colas, así que partir
+     de 105 % dejaría ver las puntas antes de subir: 160 % las deja fuera de la ventana. */
+  const LETRA_ABAJO = 160;
 
   /* Redes sociales: pega aquí la dirección real de cada una (https://…).
      Mientras estén vacías no se muestra ningún icono ni enlace muerto. */
@@ -63,7 +67,7 @@
     if (TioSam.lenis) TioSam.lenis.start();
   }
 
-  const TioSam = (window.TioSam = { calm, coarse, hasGSAP, nativeNav, lenis: null, dividir, escapeHtml, lockScroll, unlockScroll });
+  const TioSam = (window.TioSam = { calm, coarse, hasGSAP, nativeNav, lenis: null, dividir, letraAbajo: LETRA_ABAJO, escapeHtml, lockScroll, unlockScroll });
 
   const LOGO = '<img src="../img/logo_tio_sam.jpeg" alt="" width="132" height="132" decoding="async">';
 
@@ -110,7 +114,7 @@
   const hasSplit = hasGSAP && typeof SplitText !== "undefined";
   function dividir(el, opciones) {
     if (!el || !hasSplit) return null;
-    return SplitText.create(el, Object.assign({ type: "words,chars", mask: "words", maskClass: "split-mask" }, opciones));
+    return SplitText.create(el, Object.assign({ type: "words,chars", mask: "words", wordsClass: "split-word" }, opciones));   // la máscara hereda la clase: "split-word-mask"
   }
 
   /* ---------------------------------------------------------
@@ -205,6 +209,17 @@
   /* ---------------------------------------------------------
      4. Animaciones por atributos (sutiles: poco recorrido, salida fuerte)
   --------------------------------------------------------- */
+  /* Aparición de uno o varios elementos. Dos cuidados que evitan fallos sutiles:
+     1) mientras GSAP mueve el elemento se apaga su "transition" de CSS (si no, las dos mueven el
+        mismo transform y el elemento puede quedarse desplazado);
+     2) al terminar se limpian las propiedades en línea, para que :hover y :active (el "se hunde
+        al pulsar" de los botones) vuelvan a mandar. */
+  function aparecer(objetivos, desde, extra) {
+    const els = gsap.utils.toArray(objetivos);
+    els.forEach((el) => { el.style.transition = "none"; });
+    return gsap.from(els, Object.assign({}, desde, extra, { clearProps: "transform,opacity,transition" }));
+  }
+
   function initAnimaciones() {
     // En modo calmo todo es un fundido: sin desplazamiento, sin letras sueltas, sin parallax
     const dy = calm ? 0 : 18;
@@ -218,21 +233,16 @@
         return;
       }
       gsap.from(partes.chars, {
-        yPercent: 105, duration: 0.9, ease: "expo.out", stagger: 0.02,
+        yPercent: LETRA_ABAJO, duration: 0.9, ease: "expo.out", stagger: 0.02,
         scrollTrigger: { trigger: el, start: "top 92%" },
       });
     });
     document.querySelectorAll('[data-anim="subir"]').forEach((el) => {
-      gsap.from(el, {
-        y: dy, opacity: 0, duration: dur, ease,
-        scrollTrigger: { trigger: el, start: "top 92%" },
-      });
+      aparecer(el, { y: dy, opacity: 0, duration: dur, ease }, { scrollTrigger: { trigger: el, start: "top 92%" } });
     });
     document.querySelectorAll('[data-anim="cascada"]').forEach((el) => {
-      gsap.from(el.children, {
-        y: dy * 0.9, opacity: 0, duration: dur * 0.9, ease, stagger: calm ? 0.05 : 0.06,
-        scrollTrigger: { trigger: el, start: "top 90%" },
-      });
+      aparecer(el.children, { y: dy * 0.9, opacity: 0, duration: dur * 0.9, ease, stagger: calm ? 0.05 : 0.06 },
+        { scrollTrigger: { trigger: el, start: "top 90%" } });
     });
     document.querySelectorAll('[data-anim="mascara"]').forEach((el) => {
       if (calm) {

@@ -61,7 +61,7 @@
   const precioHtml = (precio) =>
     `<span class="plato__precio"${/\d/.test(precio) ? "" : " data-sin-precio"}>${escapeHtml(precio)}</span>`;
 
-  // El "+" de los nombres ("Lomo saltado + chaufa") se dibuja con la letra de texto: en Gloock sale diminuto
+  // El "+" de los nombres ("Lomo saltado + chaufa") se dibuja con la letra de texto: en la serif de títulos el + sale fino y diminuto
   const conMas = (nombre) => escapeHtml(nombre).replace(/ \+ /g, ' <span class="mas">+</span> ');
 
   function platoFoto(item) {
@@ -132,7 +132,7 @@
             setTimeout(() => {
               el.classList.remove("revelar", "es-visible");
               el.style.removeProperty("--d");
-            }, retraso + 1100);
+            }, retraso + 1500);
           });
       }, { rootMargin: "0px 0px -6% 0px", threshold: 0.06 })
     : null;
