@@ -56,7 +56,6 @@ Un chifa de barrio con sazón propia, gran variedad de arroz chaufa y una atenci
 
 ## Estado de la carta
 
-- En esta rama: 23 platos marcador en 4 categorías (`js/menu-data.js`), sin nombres ni precios reales.
-- Carta real: 38 platos en 5 secciones (sopas, chaufas, combinados y tallarines, salteados, dulces), tomada de la foto de la carta impresa (`img/carta_tio_sam.jpeg`). Está en la rama `origin/claude/stoic-hypatia-5pmjcf`, pendiente de unir. No son 6 categorías.
+- Carta real en `js/menu-data.js`: 38 platos en 6 categorías (Sopas, Chaufas, Aeropuertos, Combinados y Tallarines, Platos Saltados, Platos Dulces), tomada de la foto de la carta impresa (`img/carta_tio_sam.jpeg`).
 - Precios: sin confirmar (la carta impresa no los muestra); se muestran como "S/ —".
 - Fotos reservadas, sin plato asignado hasta que el cliente confirme: `mostrito.jpeg`, `orjita_china.jpeg`.

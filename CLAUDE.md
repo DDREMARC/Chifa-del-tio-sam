@@ -46,5 +46,5 @@ Asset pipeline (only when regenerating the film): `bash produccion/render.sh che
 - `php/tiosam_chifa.sql` is the reservations schema for the paused module. It does nothing for the static site.
 - Reserved assets: `img/mostrito.jpeg` and `img/orjita_china.jpeg` are held for special assignments in the carta. Don't use them elsewhere until assigned.
 - Home "clásicos" use real photos: `chaufa_especial.jpeg`, `lomo_saltado.jpeg`, `aeropuerto_especial.jpeg`.
-- Carta status: this branch's `js/menu-data.js` still holds 23 placeholder dishes in 4 categories (chaufas, sopas, fondos, especialidades). The real carta (38 dishes, taken from the printed menu photo `img/carta_tio_sam.jpeg`) lives in `origin/claude/stoic-hypatia-5pmjcf` and uses 5 sections (sopas, chaufas, combinados, salteados, dulces) — not 6. Merge it before documenting the carta as final. Prices stay "S/ —" until confirmed.
+- Carta status: `js/menu-data.js` holds the real carta, 38 dishes in 6 categories (Sopas, Chaufas, Aeropuertos, Combinados y Tallarines, Platos Saltados, Platos Dulces), taken from the printed menu photo `img/carta_tio_sam.jpeg`. Prices stay "S/ —" until confirmed.
 - All "Cómo llegar" links (home, carta, contacto) point to the official Maps URL with `target="_blank" rel="noopener noreferrer"`.
