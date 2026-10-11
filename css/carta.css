@@ -83,7 +83,7 @@ body{ --riel-h:53px; }
 .seccion-carta__n{ color:var(--papel-3); font-size:.9rem; white-space:nowrap; }
 
 .seccion-carta__cuerpo{ display:grid; gap:clamp(var(--s-5), 4vw, var(--s-7)); }
-.fotos{ display:grid; gap:var(--s-5); align-content:start; }
+.fotos{ display:grid; gap:var(--s-5); align-content:start; perspective:1100px; }
 
 /* ---- Plato con foto ---- */
 .plato--foto{
@@ -98,6 +98,23 @@ body{ --riel-h:53px; }
 @media (hover:hover){
   .plato--foto:hover{ border-color:var(--linea-fuerte); }
 }
+/* Plato inclinado (TiltedCard, js/reactbits.js): la tarjeta gira hacia el ratón con
+   `rotate`/`scale` en línea y la luz del farol la recorre siguiendo el cursor.
+   soft-light solo aviva lo que ya está iluminado: la comida brilla, el fondo de laca no. */
+.plato--foto{ position:relative; }
+.plato--foto::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  border-radius:inherit;
+  pointer-events:none;
+  background:radial-gradient(55% 45% at var(--luz-x, 50%) var(--luz-y, 30%), oklch(0.85 0.12 82 / .55), transparent 72%);
+  mix-blend-mode:soft-light;
+  opacity:0;
+  transition:opacity 500ms var(--ease-out);
+}
+.plato--foto.is-inclinado::after{ opacity:1; }
 .plato__foto{ position:relative; aspect-ratio:4 / 3; overflow:hidden; background:var(--noche-2); }
 .plato__foto img{
   width:100%;

@@ -49,7 +49,10 @@
   <!-- ====== HERO: gancho sobre la primera escena ====== -->
   <section class="xp-hero" aria-labelledby="xp-title">
     <div class="xp-hero__inner">
-      <img class="xp-hero__logo" src="../img/logo_tio_sam.jpeg" alt="" width="132" height="132" decoding="async">
+      <div class="xp-hero__sello">
+        <img class="xp-hero__logo" src="../img/logo_tio_sam.jpeg" alt="" width="132" height="132" decoding="async">
+        <div class="xp-hero__anillo"></div>
+      </div>
       <h1 id="xp-title" class="xp-hero__title" data-split>El Tío Sam <em>Chifa</em></h1>
       <p class="xp-hero__tag">Comida china-peruana preparada al momento, wok a fuego vivo.</p>
       <p class="xp-hero__lugar">Jr. Cantón 245 · Barrios Altos, Lima</p>
@@ -105,6 +108,9 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
       </section>
+
+      <!-- Letrero de platos: nombres de la carta que corren con el scroll (los pone experiencia.js) -->
+      <div class="letrero-platos" id="letreroPlatos"></div>
 
       <!-- Carta rápida: una fila por categoría (las filas las genera experiencia.js) -->
       <section class="flowing" aria-labelledby="flowing-title">
@@ -184,6 +190,7 @@
   <script src="../js/menu-data.js"></script>
   <script src="../js/staggered-menu.js"></script>
   <!-- Común a todas las páginas, luego lo propio de la portada -->
+  <script src="../js/reactbits.js"></script>
   <script src="../js/sitio.js"></script>
   <script src="../js/experiencia.js"></script>
 </body>
