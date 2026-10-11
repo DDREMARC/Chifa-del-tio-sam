@@ -34,7 +34,7 @@ Un chifa de barrio con sazón propia, gran variedad de arroz chaufa y una atenci
 ## Brand Commitments
 
 - **Nombre fijo:** El Tío Sam Chifa no cambia.
-- **Logo oficial:** `img/logo_tio_sam.jpeg`. Reemplaza al provisional `img/logo.jpg`, que sigue enlazado en las páginas hasta migrarlas.
+- **Logo oficial:** `img/logo_tio_sam.jpeg`. Reemplaza al antiguo `img/logo.jpg` (ya borrado); todas las páginas y el menú lateral apuntan a este.
 - **Ubicación:** https://maps.app.goo.gl/sFH6uKQQWRxwaUtH8 (enlace directo de Google Maps; usarlo en contacto y en cualquier botón "Cómo llegar").
 
 ## Evidence on Hand

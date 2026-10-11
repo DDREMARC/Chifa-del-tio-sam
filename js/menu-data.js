@@ -5,7 +5,7 @@
 
    MARCADOR: los 23 platos son espacios en blanco (placeholder).
    Para un plato real: poner name, desc, price y, si hay foto,
-   img (ruta relativa a html/, p. ej. "../img/chaufa_pollo.jpg").
+   img (ruta relativa a html/, p. ej. "../img/lomo_saltado.jpeg").
    ========================================================= */
 
 const MENU_CATEGORIES = [
