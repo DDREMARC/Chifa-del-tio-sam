@@ -38,9 +38,11 @@ Asset pipeline (only when regenerating the film): `bash produccion/render.sh che
 
 **Reservations are paused.** `php/reservar.php` has `RESERVAS_ACTIVAS = false`, and the form in `html/contacto.html` is visually disabled ("Próximamente"). Do not add or promise a booking flow. Reservations are by phone or WhatsApp.
 
-**Content rules.** Prices, the final carta, and testimonials are not confirmed in this repo. Do not invent dishes, prices, hours, reviews, or awards. The logo `img/logo.jpg` is temporary: don't build the visual identity around it. The name "El Tío Sam Chifa" is fixed.
+**Content rules.** Prices, the final carta, and testimonials are not confirmed in this repo. Do not invent dishes, prices, hours, reviews, or awards. The official logo is `img/logo_tio_sam.jpeg` (it replaces the temporary `img/logo.jpg`, still referenced by the pages until migrated). Official location link: https://maps.app.goo.gl/sFH6uKQQWRxwaUtH8 — use it for contact/"Cómo llegar". The name "El Tío Sam Chifa" is fixed.
 
 ## Other notes
 
 - The `.claude/` directory and `PRODUCT.md` are untracked in git. `PRODUCT.md` is the product brief (users, positioning, constraints) and is worth reading before design or copy changes.
 - `php/tiosam_chifa.sql` is the reservations schema for the paused module. It does nothing for the static site.
+- Reserved assets: `img/mostrito.jpeg` and `img/orjita_china.jpeg` are held for special assignments in the carta. Don't use them elsewhere until assigned.
+- Home "clásicos" use real photos: `chaufa_especial.jpeg`, `lomo_saltado.jpeg`, `aeropuerto_especial.jpeg`.
