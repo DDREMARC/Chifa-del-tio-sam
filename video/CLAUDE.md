@@ -33,7 +33,7 @@ Todos se ejecutan dentro de `video/`, con las dependencias locales (no instalar 
 ## Reglas de marca
 
 - Paleta: granate `#2B0A0A`, rojo `#BE1A1A`, bermellón `#D0311E`, dorado `#F7D87F`, crema `#F8EBAB`. Usar solo estos colores; no inventar otros.
-- El nombre "El Tío Sam Chifa" no cambia. El logo (`../img/logo.jpg`) es provisional: no usarlo como marca fija en los vídeos; si hace falta, dejarlo como parámetro de props.
+- El nombre "El Tío Sam Chifa" no cambia. El logo (`../img/logo_tio_sam.jpeg`) es provisional: no usarlo como marca fija en los vídeos; si hace falta, dejarlo como parámetro de props.
 - Sin reservas en línea mientras el módulo esté en pausa: no prometer ni mostrar un flujo de reserva.
 - No inventar precios, platos, testimonios ni datos. Si la carta no está confirmada, dejar el texto como prop para que el dueño lo cambie.
 - Fotos reales de la carta en `../img/` antes que ilustraciones genéricas.

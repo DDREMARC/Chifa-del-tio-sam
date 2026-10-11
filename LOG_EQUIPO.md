@@ -20,7 +20,8 @@ Al terminar cada tarea, añadir una entrada en tu sección: archivos modificados
 
 | Tema | Responsable sugerido | Estado |
 |---|---|---|
-| Imágenes rotas en la portada: `chaufa_carne.jpg`, `chaufa_pollo.jpg`, `chaufa_chancho.jpg` (borradas en `main`) | Claude 2 | Pendiente: elegir foto nueva para cada tarjeta |
+| Imágenes rotas en la portada: `chaufa_carne.jpg`, `chaufa_pollo.jpg`, `chaufa_chancho.jpg` (borradas en `main`) | Claude 2 | Resuelto en la rama `claude/stoic-archimedes-y1rvtt` (PR 1 a `main`); falta unir |
+| Asignar `mostrito.jpeg` y `orjita_china.jpeg` a platos de la carta | Claude 2 / dueño | Pendiente: el cliente debe confirmar el plato |
 | `MENU_WHATSAPP = "51987654321"` es un número de prueba | Lead QA | Pendiente: número real |
 | Precios (`S/ —`) y descripciones de 38 platos | Claude 2 / dueño | Pendiente: datos reales |
 | Animaciones GSAP sin verificar: el CDN no carga en el entorno de prueba | Claude 3, Claude 4 | Pendiente: prueba con CDN |
@@ -50,7 +51,22 @@ Al terminar cada tarea, añadir una entrada en tu sección: archivos modificados
 
 ## Claude 2 — assets y documentación
 
-_Sin entradas todavía._
+### 2026-10-11
+
+Rama de trabajo propia: `claude/stoic-archimedes-y1rvtt` (PR 1 hacia `main`: https://github.com/DDREMARC/Chifa-del-tio-sam/pull/1). No se escribió en `main`.
+
+- **Sincronización:** `git checkout main` y `git pull origin main` (ya estaba en `fd058d8`). `LOG_EQUIPO.md` no existe en `main`; lo copié desde `origin/claude/vibrant-wright-0n45bh`.
+- **`ac2c2f0`:** portada con fotos reales.
+  - Archivos: `html/index.html` (sección "clásicos": `chaufa_especial.jpeg`, `lomo_saltado.jpeg`, `aeropuerto_especial.jpeg`; título "Tres clásicos de la casa"), `CLAUDE.md`, `PRODUCT.md`.
+- **`2e778d1`:** logo oficial en todas partes.
+  - Archivos: `html/index.html`, `html/carta.html`, `html/contacto.html`, `index.html`, `js/staggered-menu.js`, `video/CLAUDE.md` (de `logo.jpg` a `logo_tio_sam.jpeg`); `js/menu-data.js` (solo un comentario de ejemplo).
+- **`94bcde0`:** Maps y estado de la carta.
+  - Archivos: `html/index.html`, `html/carta.html`, `html/contacto.html` (5 enlaces a `https://maps.app.goo.gl/sFH6uKQQWRxwaUtH8` con `rel="noopener noreferrer"`), `CLAUDE.md`, `PRODUCT.md`.
+- **Documentación vigente** (`CLAUDE.md`, `PRODUCT.md`): logo oficial `img/logo_tio_sam.jpeg`, ubicación de Maps, imágenes en reserva `mostrito.jpeg` y `orjita_china.jpeg`, y estado de la carta (38 platos en 5 secciones, no 6).
+- **Funciones:** ninguna añadida ni cambiada (solo HTML y documentación).
+- **Para el lead QA:** esta rama y `claude/vibrant-wright-0n45bh` cambian las mismas líneas de logo y Maps en los HTML. Al unirlas habrá conflictos menores; el resultado debe quedarse con `logo_tio_sam.jpeg` y la URL `sFH6uKQQWRxwaUtH8`. Mi rama no tiene los 38 platos ni el escape de texto: vienen de la otra.
+- **No verificado:** no se probó en navegador; solo se comprobó que cada ruta de imagen apunte a un archivo existente.
+- **Commit de esta entrada:** ver `git log` (queda después de este archivo).
 
 ## Claude 3 — UI/UX
 

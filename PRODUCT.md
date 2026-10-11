@@ -34,11 +34,12 @@ Un chifa de barrio con sazón propia, gran variedad de arroz chaufa y una atenci
 ## Brand Commitments
 
 - **Nombre fijo:** El Tío Sam Chifa no cambia.
-- **Logo provisional:** `img/logo.jpg` es temporal y va a cambiar. No construir la identidad visual alrededor de este logo ni darle un tratamiento de marca definitivo.
+- **Logo oficial:** `img/logo_tio_sam.jpeg`. Reemplaza al antiguo `img/logo.jpg` (ya borrado); todas las páginas y el menú lateral apuntan a este.
+- **Ubicación:** https://maps.app.goo.gl/sFH6uKQQWRxwaUtH8 (enlace directo de Google Maps; todos los botones "Cómo llegar" de home, carta y contacto ya lo usan).
 
 ## Evidence on Hand
 
-- Fotos de platos en `img/` (chaufa de pollo, chancho y carne; un lantern) y ilustraciones de escena en `assets/world/`.
+- Fotos reales de platos en `img/` (`chaufa_especial.jpeg`, `lomo_saltado.jpeg`, `aeropuerto_especial.jpeg`, `sopa_especial.jpeg`, `tallarin_saltado.jpeg`, `chancho_piña.jpeg`; `carta_tio_sam.jpeg` es la carta impresa; un lantern) y ilustraciones de escena en `assets/world/`.
 - Vídeos y stills de la película aún provisionales; se generan con `produccion/render.sh`.
 - Ausentes: testimonios, reseñas, premios o datos de clientes. No añadirlos sin evidencia real.
 
@@ -47,4 +48,15 @@ Un chifa de barrio con sazón propia, gran variedad de arroz chaufa y una atenci
 - Sabor y atención son la promesa: el contenido debe sonar a casa, no a marketing.
 - La carta es la herramienta principal: llegar a los platos debe ser rápido en móvil.
 - No prometer lo que no existe: sin reservas en línea mientras el módulo esté en pausa.
-- El nombre es estable, el logo no: el sistema visual debe poder cambiar de logo sin rehacerse.
+- El nombre es estable; el logo puede cambiar: el sistema visual no debe depender de él.
+
+## Assets en reserva
+
+- `img/mostrito.jpeg` y `img/orjita_china.jpeg`: reservadas para asignaciones especiales en la carta. Aún sin plato asignado; no usarlas en otro lugar ni inventarles nombre o precio.
+
+## Estado de la carta
+
+- En esta rama: 23 platos marcador en 4 categorías (`js/menu-data.js`), sin nombres ni precios reales.
+- Carta real: 38 platos en 5 secciones (sopas, chaufas, combinados y tallarines, salteados, dulces), tomada de la foto de la carta impresa (`img/carta_tio_sam.jpeg`). Está en la rama `origin/claude/stoic-hypatia-5pmjcf`, pendiente de unir. No son 6 categorías.
+- Precios: sin confirmar (la carta impresa no los muestra); se muestran como "S/ —".
+- Fotos reservadas, sin plato asignado hasta que el cliente confirme: `mostrito.jpeg`, `orjita_china.jpeg`.
