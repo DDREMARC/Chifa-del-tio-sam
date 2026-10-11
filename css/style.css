@@ -450,5 +450,16 @@ html.telon-entrada::after{ content:""; }
 }
 
 /* Botón magnético: el movimiento lo pone GSAP */
+/* Botón magnético: con puntero fino GSAP pone su transform en cada cuadro (sitio.js agrega .magnetic--gsap).
+   Sin transición CSS sobre transform: se encadenaría con la de GSAP y el botón iría con retraso.
+   La pulsación también la hace GSAP (escala dentro del mismo transform); el CSS no puede: GSAP deja
+   `scale:none` en línea. Sin GSAP o en táctil se queda la pulsación normal de .btn. */
 .magnetic{ will-change:transform; }
+.magnetic--gsap,
+.magnetic--gsap:active{
+  transition:
+    background-color 200ms var(--ease-out),
+    border-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+}
 .magnetic__label{ display:inline-block; pointer-events:none; }

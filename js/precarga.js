@@ -47,7 +47,16 @@
      Va en el <head> porque "pagereveal" se dispara antes del primer pintado. */
   if (vtNativo) {
     var ultimo = null;
-    addEventListener("click", function (e) { ultimo = [Math.round(e.clientX), Math.round(e.clientY)]; }, true);
+    addEventListener("click", function (e) {
+      var x = e.clientX, y = e.clientY;
+      if (e.detail === 0 || (!x && !y)) {
+        // Clic hecho con el teclado: el navegador da 0,0 y la luz saldría de la esquina. Sale del centro del enlace.
+        var a = e.target && e.target.closest ? e.target.closest("a") : null;
+        if (a) { var r = a.getBoundingClientRect(); x = r.left + r.width / 2; y = r.top + r.height / 2; }
+        else { x = innerWidth / 2; y = innerHeight * 0.6; }
+      }
+      ultimo = [Math.round(x), Math.round(y)];
+    }, true);
     addEventListener("pageswap", function (e) {
       try {
         var tipo = e.activation && e.activation.navigationType;

@@ -254,6 +254,17 @@
 @media (max-width:720px){
   .staggered-menu-wrapper{ --sm-w:100%; }
 }
+/* Pantallas bajas (móvil acostado, ventana pequeña): títulos y espacios más compactos para que el botón
+   de WhatsApp quede a la vista; si aun así no cabe, el panel se desplaza (lleva data-lenis-prevent). */
+@media (max-height:560px){
+  .sm-panel{
+    gap:var(--s-4);
+    padding-top:calc(var(--header-h) + var(--s-3));
+    padding-bottom:max(var(--s-4), env(safe-area-inset-bottom));
+  }
+  .sm-item{ font-size:clamp(2rem, 11vh, 3.25rem); }
+  .sm-pie{ gap:var(--s-3); padding-top:var(--s-4); }
+}
 
 /* ---- Modo calmo: el panel funde en lugar de deslizar; sin capas ni máscaras ---- */
 html[data-motion="calm"] .sm-capa{ display:none; }

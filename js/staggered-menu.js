@@ -26,9 +26,12 @@ function createStaggeredMenu(rootEl, options = {}) {
   rootEl.dataset.open = "false";
 
   const redes = socialItems.filter((s) => s.link);
-  rootEl.innerHTML = `
-    <div class="sm-scrim"></div>
-    <div class="sm-capas" aria-hidden="true"><span class="sm-capa"></span><span class="sm-capa"></span></div>
+
+  /* La cabecera (logo + botón) ya viene escrita en el HTML de cada página: así existe desde el primer
+     cuadro y la transición entre páginas del navegador la ve en la página nueva (si la creara este
+     script, que corre al final, la cabecera se apagaría y volvería a aparecer). Esta copia solo se usa
+     si una página nueva olvida ponerla: debe quedar igual a la del HTML. */
+  const cabeceraHtml = `
     <header class="sm-header">
       <a class="sm-logo" href="index.html" aria-label="El Tío Sam Chifa, ir al inicio">
         <img class="sm-logo-img" src="../img/logo_tio_sam.jpeg" alt="" width="40" height="40" draggable="false">
@@ -40,8 +43,12 @@ function createStaggeredMenu(rootEl, options = {}) {
         </span>
         <span class="sm-icon" aria-hidden="true"><i></i><i></i></span>
       </button>
-    </header>
-    <aside class="sm-panel" id="smPanel" aria-label="Navegación principal" inert>
+    </header>`;
+  const capasHtml = `
+    <div class="sm-scrim"></div>
+    <div class="sm-capas" aria-hidden="true"><span class="sm-capa"></span><span class="sm-capa"></span></div>`;
+  const panelHtml = `
+    <aside class="sm-panel" id="smPanel" aria-label="Navegación principal" data-lenis-prevent inert>
       <nav aria-label="Páginas">
         <ul class="sm-lista">
           ${items.map((it, i) => `
@@ -53,8 +60,15 @@ function createStaggeredMenu(rootEl, options = {}) {
         ${direccion ? `<p class="sm-direccion">${esc(direccion)}</p>` : ""}
         ${redes.length ? `<div class="sm-redes">${redes.map((s) => `<a href="${esc(s.link)}" target="_blank" rel="noopener noreferrer">${esc(s.label)}</a>`).join("")}</div>` : ""}
       </div>
-    </aside>
-  `;
+    </aside>`;
+
+  const cabeceraPrevia = rootEl.querySelector(".sm-header");
+  if (cabeceraPrevia) {
+    cabeceraPrevia.insertAdjacentHTML("beforebegin", capasHtml);   // el orden del DOM es: velo, capas, cabecera, panel
+    cabeceraPrevia.insertAdjacentHTML("afterend", panelHtml);
+  } else {
+    rootEl.innerHTML = capasHtml + cabeceraHtml + panelHtml;
+  }
 
   const panel = rootEl.querySelector(".sm-panel");
   const scrim = rootEl.querySelector(".sm-scrim");

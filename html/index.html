@@ -26,7 +26,22 @@
   <a class="skip-link" href="#clasicos">Saltar el recorrido e ir a la carta</a>
 
   <!-- ====== MENÚ (lo monta js/sitio.js) ====== -->
-  <div id="staggeredMenu"></div>
+  <div id="staggeredMenu" class="staggered-menu-wrapper" data-open="false">
+    <!-- La cabecera va escrita aquí (no la crea el JS) para que exista desde el primer cuadro y la transición
+         entre páginas la vea en la página nueva. Debe quedar igual a la copia de js/staggered-menu.js. -->
+    <header class="sm-header">
+      <a class="sm-logo" href="index.html" aria-label="El Tío Sam Chifa, ir al inicio">
+        <img class="sm-logo-img" src="../img/logo_tio_sam.jpeg" alt="" width="40" height="40" draggable="false">
+        <span class="sm-logo-text">El Tío Sam<small>Chifa</small></span>
+      </a>
+      <button class="sm-toggle" type="button" aria-expanded="false" aria-controls="smPanel" aria-label="Abrir menú">
+        <span class="sm-toggle-textWrap" aria-hidden="true">
+          <span class="sm-toggle-textInner"><span>Menú</span><span>Cerrar</span></span>
+        </span>
+        <span class="sm-icon" aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </header>
+  </div>
 
   <!-- ====== MUNDO: película scrubbeada por scroll (scroll-world) ====== -->
   <div id="world" role="region" aria-label="Recorrido por el barrio"></div>

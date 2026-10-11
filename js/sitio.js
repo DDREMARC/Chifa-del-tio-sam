@@ -274,7 +274,12 @@
       const zone = btn.closest("section") || btn.parentElement;
       const label = btn.querySelector(".magnetic__label");
       const opt = { duration: 0.6, ease: "power3" };
+      btn.classList.add("magnetic--gsap");
       const bx = gsap.quickTo(btn, "x", opt), by = gsap.quickTo(btn, "y", opt);
+      // Pulsar: se hunde rápido (90 ms) y al soltar vuelve más despacio, igual que el resto de botones
+      const pulsar = (escala, dur, ease) => gsap.to(btn, { scale: escala, duration: dur, ease, overwrite: "auto" });
+      btn.addEventListener("pointerdown", (e) => { if (e.button === 0) pulsar(0.97, 0.09, "power2.out"); });
+      ["pointerup", "pointercancel", "pointerleave"].forEach((ev) => btn.addEventListener(ev, () => pulsar(1, 0.45, "power3.out")));
       const lx = label ? gsap.quickTo(label, "x", opt) : () => {};
       const ly = label ? gsap.quickTo(label, "y", opt) : () => {};
       zone.addEventListener("pointermove", (e) => {

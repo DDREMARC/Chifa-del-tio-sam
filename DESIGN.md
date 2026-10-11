@@ -58,7 +58,7 @@ Tres capas, de la más ligera a la más pesada. Cada una degrada sola si falla l
 ## Componentes clave
 
 - **Cabecera de página** (`.cabecera`) con faroles que cuelgan y se mecen apenas.
-- **Menú lateral** (`css/staggered-menu.css`): dos capas de laca preceden al panel; abre lento, cierra rápido.
+- **Menú lateral** (`css/staggered-menu.css`): dos capas de laca preceden al panel; abre lento, cierra rápido. En pantallas bajas (menos de 560 px de alto, p. ej. el móvil acostado) se compacta para que el botón de WhatsApp quede a la vista, y si no cabe el panel se desplaza.
 - **Pestañas de categoría** (`.categorias`): fijas bajo la cabecera, marca ámbar que se desliza.
 - **Plato con foto** (`.plato--foto`) y **fila** (`.plato--fila`); el precio sin confirmar usa `data-sin-precio`. La foto se descubre de abajo hacia arriba como una cortina (`clip-path`, 950 ms) mientras un zoom leve se asienta; el texto llega 280 ms después. En `calm` solo funde.
 - **Letrero "Próximamente"** (`.letrero`, en `contacto.html`): una placa `--noche-2` con filete ámbar doble cuelga sobre el formulario de reservas mientras su `<fieldset>` tenga `disabled`, y en el celular acompaña a quien baja (`position: sticky`). Al quitar `disabled` se oculta solo (`:has()`). Es solo visual (`aria-hidden`): el aviso para lectores de pantalla va en el título y en el texto de arriba.
